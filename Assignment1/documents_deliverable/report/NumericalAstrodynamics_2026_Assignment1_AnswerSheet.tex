@@ -1,0 +1,152 @@
+\documentclass{report}
+
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=xkcdBlue, citecolor=xkcdRed, urlcolor=xkcdGreen]{hyperref}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{xcolor}
+\usepackage{xkcdcolors}
+
+
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{.6in}
+
+
+\begin{document}
+
+
+\Large
+\textbf{AE4868-II (2025/2026) - Assignment 1} \\
+\normalsize \\
+
+\emph{\textbf{Last update: \today}}\\
+
+Name: Ismael Gallo López \\
+
+Student number: 6541356 \\
+
+Github link: \textit{\href{https://github.com/ismaelgallolopez/numerical-astrodynamics}{https://github.com/ismaelgallolopez/numerical-astrodynamics}} \\
+
+Time spent per exercise:
+\begin{enumerate}
+    \item \ldots
+    \item \ldots
+    \item \ldots
+    \item \ldots
+\end{enumerate} 
+
+People you worked with (if none, state this):
+
+\clearpage
+
+\noindent\textit{Use this \LaTeX~file as a template for your report. All text that is not italic should be kept. All text that is italic, and all \ldots~should be removed and replaced by your answers. Only text that replaces \textbf{bold text} counts towards your line limit.}
+% KC: bold text here > bold text?
+
+\section*{Question 1}
+
+\subsection*{a}
+\textit{Insert figure}
+\subsection*{b}
+${\left(\mathbf{a}_{s}\right)_{G}}=\ldots$
+\subsection*{c}
+Positions from environment: \ldots \\
+Positions from numerical propagation: \ldots
+
+\subsection*{d}
+\textit{Insert figure(s) with Cartesian element error.} \\
+\textit{Insert figure(s) with Kepler element error.}
+
+\clearpage
+\section*{Question 2}
+
+\subsection*{a}
+$\left(\mathbf{a}_{G,s}\right)_{G}=$ \ldots \\
+$\left(\mathbf{a}_{J,s}\right)_{G}=$ \ldots \\
+$\left(\mathbf{a}_{I,s}\right)_{G}=$ \ldots
+
+\subsection*{b}
+Positions from environment: \ldots \\
+Positions from numerical propagation: \ldots
+
+\subsection*{c.i}
+
+\textit{Insert figure}
+
+\subsection*{c.ii}
+
+$T_{\text{max,Io}}\approx\ldots$ hr \\
+$T_{\text{max,Sun}}\approx\ldots$ hr\\
+\textit{Insert figure(s) to support your explanation, and \textbf{explain briefly why this figure leads to the answer you fill in above}}
+
+
+\subsection*{c.iii}
+
+$T_{\text{max,Io}}=K_{1} T_{\text{JUICE}} + K_{2} T_{I} + K_{3} T_{J}+\ldots.$ (\textit{replace right-hand side with relevant terms/coefficients}) \\
+$T_{\text{max,Sun}}=K_{1} T_{\text{JUICE}} + K_{2} T_{I} + K_{3} T_{J}+\ldots.$ (\textit{replace right-hand side with relevant terms/coefficients})
+
+\subsection*{c.iv}
+\textit{\textbf{Answer on physical reason for Io-induced period.} (be brief)}  \\
+\textit{\textbf{Answer on physical reason for Sun-induced period.}}  
+\subsection*{c.v}
+\textit{Provide derivation:}\\
+\\
+$\left(\mathbf{a}_{S,s}\right)_{G}=...$ (where $S$ is the Sun and $s$ is the spacecraft; write out the full acceleration, as you did for Io, Jupiter and Ganymede in 2a)\\
+\\
+{Assumption 1 (math only):}\\
+{Assumption 1 (explanation of validity, max. 1 line):}\\
+...
+\\
+{Assumption N (math only):}\\
+{Assumption N (explanation of validity, max. 1 line):}\\
+\\
+Provide your derivation below. When going from step $i$ to step $i+1$, explicitly state which (if any) of the assumptions above are used:\\
+\\
+{Derivation step 1 (new assumptions introduced, give number):}\\
+{Derivation step 1 (math only):}\\
+{Derivation step 1 (explanation, max. 1 line):}\\
+...
+\\
+{Derivation step M (new assumptions introduced, give number):}\\
+{Derivation step M (math only):}\\
+{Derivation step M (explanation, max. 1 line):}\\
+\\
+\textbf{\textit{Write 2 lines explaining {why} your final equation confirms this predicted behaviour}}
+
+\clearpage
+
+\section*{Question 3}
+\subsection*{a}
+$\mathbf{a}_{\text{Aero}}=...$ \\
+$\mathbf{a}_{\text{SRP}}=...$ \\
+\textit{Insert figures validating acceleration implementation}.
+\textit{\textbf{Explain (briefly!) why the figures validate the implementation}}.
+
+\subsection*{b}
+\textit{Insert figures with accelerations in RSW frame.}
+
+\subsection*{c.i}
+\textit{Insert figure}
+\subsection*{c.ii}
+\textit{\textbf{Explanation for stronger relative influence of aerodynamic acceleration on $||\Delta \mathbf{r}_{G,s}(t)||$}}.
+\clearpage
+
+
+
+\section*{Question 4}
+\subsection*{a}
+${\left(\mathbf{a}_{s}\right)_{J}}=\ldots$
+
+\subsection*{b}
+$\left(\mathbf{a}_{G,s}\right)_{J}=$ \ldots \\
+$\left(\mathbf{a}_{J,s}\right)_{J}=$ \ldots \\
+$\left(\mathbf{a}_{I,s}\right)_{J}=$ \ldots
+
+\subsection*{c}
+\textit{\textbf{Provide physical and mathematical explanation for the observed behavior}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+\subsection*{d}
+\textit{\textbf{Explain why your results here (dis)prove the hypothesis you formulated in question c}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+\end{document}
