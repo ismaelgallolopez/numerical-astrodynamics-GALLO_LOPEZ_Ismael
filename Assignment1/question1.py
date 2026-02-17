@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# # Numerical Astrodynamics 2024/2025
+# # Numerical Astrodynamics 2025/2026
 #
 # # Assignment 1 - Propagation Settings
 #
@@ -31,9 +31,9 @@ from tudatpy.dynamics import environment_setup, propagation_setup, simulator
 current_directory = os.getcwd()
 
 # # student number: 1244779 --> 1244ABC
-A = XXXX
-B = XXXX
-C = XXXX
+A = 3
+B = 5
+C = 6
 
 simulation_start_epoch = (
     35.4 * constants.JULIAN_YEAR
@@ -52,7 +52,7 @@ spice.load_standard_kernels()
 spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 
 # Create settings for celestial bodies
-bodies_to_create = XXXX
+bodies_to_create = "Ganymede"
 global_frame_origin = "Ganymede"
 global_frame_orientation = "ECLIPJ2000"
 body_settings = environment_setup.get_default_body_settings(
@@ -78,7 +78,7 @@ bodies_to_propagate = ["JUICE"]
 central_bodies = ["Ganymede"]
 
 # Define accelerations acting on vehicle.
-acceleration_settings_on_vehicle = dict(XXXX)
+acceleration_settings_on_vehicle = dict(Ganymede=[propagation_setup.acceleration.point_mass_gravity()])
 
 # Create global accelerations dictionary.
 acceleration_settings = {"JUICE": acceleration_settings_on_vehicle}
@@ -102,7 +102,9 @@ system_initial_state = spice.get_body_cartesian_state_at_epoch(
 )
 
 # Define required outputs
-dependent_variables_to_save = XXXX
+dependent_variables_to_save = [
+    propagation_setup.dependent_variable.t
+]
 
 # Create numerical integrator settings.
 fixed_step_size = 10.0
