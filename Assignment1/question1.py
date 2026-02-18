@@ -52,7 +52,7 @@ spice.load_standard_kernels()
 spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 
 # Create settings for celestial bodies
-bodies_to_create = "Ganymede"
+bodies_to_create = ["Ganymede"]
 global_frame_origin = "Ganymede"
 global_frame_orientation = "ECLIPJ2000"
 body_settings = environment_setup.get_default_body_settings(
@@ -103,7 +103,7 @@ system_initial_state = spice.get_body_cartesian_state_at_epoch(
 
 # Define required outputs
 dependent_variables_to_save = [
-    propagation_setup.dependent_variable.t
+    propagation_setup.dependent_variable.keplerian_state( "JUICE", "Ganymede" )
 ]
 
 # Create numerical integrator settings.
