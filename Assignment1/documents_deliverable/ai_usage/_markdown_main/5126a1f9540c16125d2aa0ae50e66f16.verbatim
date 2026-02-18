@@ -1,0 +1,31 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\usepackage[
+  hybrid,
+  fencedCode,
+  smartEllipses
+]{markdown}
+
+\begin{filecontents*}{general_chat.md}
+**User:** Hi Gemini, I need help understanding orbital elements.
+
+**Gemini:** Sure! The six Keplerian elements are:
+1. Semi-major axis ($a$)
+2. Eccentricity ($e$)
+...
+\end{filecontents*}
+
+\begin{filecontents*}{question1_chat.md}
+**User:** Can you help me plot this in Python?
+
+**Gemini:**
+```python
+import matplotlib.pyplot as plt
+plt.plot(x, y)

@@ -1,0 +1,58 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+
+\usepackage[
+  hybrid,   theme=bw  ]{markdown}
+
+\newtcolorbox{chatbox}{
+  colback=gray!5,      colframe=gray!50,    title=\textbf{AI Chat Transcript (Rendered from Markdown)},
+  fonttitle=\sffamily\small,
+  coltitle=black,
+  breakable,           enhanced,
+  boxrule=0.5pt,
+  left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+\title{AI Appendix - AE4868}
+\author{Your Name} \date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{AI Usage Summary}
+
+\subsection*{Description of Usage}
+I used Gemini to help visualize the orbital elements... (Write your general description here).
+
+\subsection*{General Chat Transcript}
+\begin{chatbox}
+    \markdownInput{general_chat.md} 
+\end{chatbox}
+
+\newpage
+
+\section*{Question 1 - AI Usage}
+
+\subsection*{Description of Usage}
+For Question 1, I used AI to debug the plotting library...
+
+\subsection*{Chat Transcript}
+\begin{chatbox}
+    \markdownInput{question1_chat.md}
+\end{chatbox}
+
+\newpage
+
+\section*{Question 2 - AI Usage}
+
+\subsection*{Description of Usage}
+I did not use AI for this question.
+
+
+
+\end{document}

@@ -1,0 +1,3 @@
+\begin{chatbox}
+    \small \markdownInput{question1_chat.md}
+\end{chatbox}

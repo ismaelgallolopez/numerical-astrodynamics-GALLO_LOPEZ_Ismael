@@ -1,0 +1,95 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% 1. Setup the Markdown Package
+% This package renders external .md files
+\usepackage[
+  hybrid,   % Allows standard LaTeX commands inside markdown
+  fencedCode,
+  smartEllipses,
+%   theme=bw  % Black and white theme (cleaner for reports)
+]{markdown}
+
+% 2. Define Visual Styles for the Chat
+% Note: Cannot wrap \markdownInput in tcolorbox - commented out for now
+% If you want styling, use markdown's built-in features or CSS-style options
+% \newtcolorbox{chatbox}{
+%   colback=gray!5,      % Light gray background
+%   colframe=gray!50,    % Darker gray border
+%   title=\textbf{AI Chat Transcript (Rendered from Markdown)},
+%   fonttitle=\sffamily\small,
+%   coltitle=black,
+%   breakable,           % Allows the chat to split across pages
+%   enhanced,
+%   boxrule=0.5pt,
+%   left=10pt, right=10pt, top=10pt, bottom=10pt
+% }
+
+\title{AI Appendix - AE4868}
+\author{Ismael Gallo López} % Replace with your name
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+% ---------------------------------------------------------
+% SECTION 1: AI USAGE SUMMARY
+% Requirement: Description of overall assignment usage [cite: 18, 19]
+% Requirement: Description of usage for understanding course material [cite: 20]
+% Requirement: Unredacted record of general (non-question specific) chats 
+% ---------------------------------------------------------
+\section*{AI Usage Summary}
+
+\subsection*{Description of Usage}
+% REPLACE THIS TEXT:
+I used Gemini to help visualize the orbital elements... (Write your general description here).
+
+\subsection*{General Chat Transcript}
+% TODO: Replace template_markdown.md with your actual general AI chat export (general_chat.md)
+% Note: markdownInput cannot be wrapped in tcolorbox - it must be used directly
+\markdownInput{markdown_files/template_markdown.md}
+
+\newpage
+
+% ---------------------------------------------------------
+% SECTION 2: QUESTION 1 - AI USAGE
+% Requirement: Description of usage for this specific question [cite: 23]
+% Requirement: Unredacted record of chats for this question [cite: 24]
+% ---------------------------------------------------------
+\section*{Question 1 - AI Usage}
+
+\subsection*{Description of Usage}
+% REPLACE THIS TEXT:
+For Question 1, I used AI to debug the plotting library...
+
+% \subsection*{Chat Transcript}
+% Uncomment and create markdown_files/question1_chat.md when ready
+% \begin{chatbox}
+%     \markdownInput{markdown_files/question1_chat.md}
+% \end{chatbox}
+
+\newpage
+
+% ---------------------------------------------------------
+% SECTION 3: QUESTION 2 - AI USAGE
+% Repeat for all questions [cite: 25, 26]
+% ---------------------------------------------------------
+\section*{Question 2 - AI Usage}
+
+\subsection*{Description of Usage}
+% REPLACE THIS TEXT:
+I did not use AI for this question.
+
+% If no AI was used, state it explicitly[cite: 12].
+% You can comment out the chatbox below if empty.
+% \begin{chatbox}
+%    \markdownInput{markdown_files/question2_chat.md}
+% \end{chatbox}
+
+\end{document}

@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages} \usepackage{hyperref}
+
+\title{AI Appendix - AE4868}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{AI Usage Summary}
+I used Gemini to visualize the orbital trajectory... 
+
+\section*{Question 1 - AI Usage}
+For this question, I used AI to generate the plotting code...
+
+\subsection*{Chat Transcript}
+\includepdf[pages=-, scale=0.9, pagecommand={}]{chat_log_q1.pdf}
+
+\end{document}

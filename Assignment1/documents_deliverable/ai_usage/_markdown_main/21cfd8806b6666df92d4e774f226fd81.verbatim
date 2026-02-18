@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\definecolor{usercolor}{RGB}{240, 240, 240} \definecolor{aicolor}{RGB}{230, 240, 255}   
+
+\newtcolorbox{prompt}{
+    colback=usercolor,
+    colframe=gray!50,
+    title=\textbf{User},
+    coltitle=black,
+    fonttitle=\sffamily,
+    breakable,
+    enhanced,
+    sharp corners,
+    boxrule=0.5pt,
+    left=5pt, right=5pt, top=5pt, bottom=5pt
+}
+
+\newtcolorbox{response}{
+    colback=aicolor,
+    colframe=blue!30,
+    title=\textbf{Gemini},
+    coltitle=black,
+    fonttitle=\sffamily,
+    breakable,
+    enhanced,
+    sharp corners,
+    boxrule=0.5pt,
+    left=5pt, right=5pt, top=5pt, bottom=5pt
+}
+
+\begin{document}
+
+\section*{Question 1 - AI Usage}
+
+\begin{prompt}
+    Can you write a Python script to plot the Hohmann transfer orbit?
+\end{prompt}
+
+\begin{response}
+    Certainly. Here is the Python code using matplotlib...
+    
+    \begin{verbatim}
+    import numpy as np
+    import matplotlib.pyplot as plt
+    ...
+    \end{verbatim}
+\end{response}
+
+\end{document}

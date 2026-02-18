@@ -1,0 +1,5 @@
+
+### Next Steps
+1.  **Compile this file once.** It should run without errors because it generates its own `.md` files.
+2.  **Replace the content:** Go to the folder where `main.tex` is located. You will now see `general_chat.md` and `question1_chat.md`. Open them and paste your actual Gemini chat logs there.
+3.  **Recompile:** Run LaTeX again to see your actual chats in the PDF.
