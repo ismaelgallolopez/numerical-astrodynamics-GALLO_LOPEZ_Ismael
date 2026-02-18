@@ -166,8 +166,78 @@ save2txt(
 
 # Extract time and Kepler elements from dependent variables
 kepler_elements = np.vstack(list(dependent_variables.values()))
+# print(kepler_elements.shape)
 time = dependent_variables.keys()
 time_days = [
     t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
     for t in time
 ]
+
+# Ensure the 'figures' directory exists
+output_dir = os.path.join(current_directory, "figures")
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# Extract time and Kepler elements from dependent variables
+# Note: Ensure the dictionary is sorted by time before stacking
+sorted_indices = np.argsort(list(dependent_variables.keys()))
+# kepler_elements = np.vstack(list(dependent_variables.values()))[sorted_indices]
+
+# time = np.array(list(dependent_variables.keys()))[sorted_indices]
+# time_days = (time - simulation_start_epoch) / constants.JULIAN_DAY
+
+# 1. Get the initial Kepler elements (at t0)
+initial_state = kepler_elements[0, :]
+
+# 2. Calculate the change w.r.t t0 (Element(t) - Element(t0))
+delta_kepler = kepler_elements - initial_state
+
+# 3. Prepare labels and unit conversions for the 6 Kepler elements
+# Tudat Order: a, e, i, omega, Omega, theta
+titles = [
+    "Semi-major Axis (a)",
+    "Eccentricity (e)",
+    "Inclination (i)",
+    "Argument of Periapsis (\u03C9)",
+    "Longitude of Ascending Node (\u03A9)",
+    "True Anomaly (\u03B8)"
+]
+
+y_labels = [
+    "$\Delta a$ [m]",
+    "$\Delta e$ [-]",
+    "$\Delta i$ [deg]",
+    "$\Delta \omega$ [deg]",
+    "$\Delta \Omega$ [deg]",
+    "$\Delta \\theta$ [deg]"
+]
+
+# Convert angular differences (indices 2 to 5) from Radians to Degrees for readability
+delta_kepler[:, 2:6] = np.rad2deg(delta_kepler[:, 2:6])
+
+# 4. Generate the plot
+fig, axs = plt.subplots(3, 2, figsize=(15, 12))
+# fig.suptitle(f'Change in JUICE Kepler Elements w.r.t $t_0$ (Frame: {global_frame_orientation})', fontsize=16)
+
+# Flatten the axes array for easy iteration (0 to 5)
+axs_flat = axs.flatten()
+
+for i in range(6):
+    axs_flat[i].plot(time_days, delta_kepler[:, i])
+    axs_flat[i].set_title(titles[i])
+    axs_flat[i].set_xlabel('Time since $t_0$ [days]')
+    axs_flat[i].set_ylabel(y_labels[i])
+    axs_flat[i].grid(True)
+    axs_flat[i].ticklabel_format(useOffset=False) # Prevents confusing scientific notation offsets
+
+# Improve layout spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+# 5. Save the figure
+output_path = os.path.join(output_dir, "change_in_kepler_elements_q1.pdf")
+plt.savefig(output_path)
+print(f"Plot saved to: {output_path}")
+
+# Optional: Show plot if running interactively
+# plt.show()
+plt.close()
