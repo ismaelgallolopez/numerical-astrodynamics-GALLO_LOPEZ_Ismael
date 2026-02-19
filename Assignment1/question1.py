@@ -21,11 +21,13 @@ http://tudat.tudelft.nl/LICENSE.
 import os
 
 import numpy as np
+from scipy.optimize import fsolve
 from matplotlib import pyplot as plt
 from tudatpy import constants
 from tudatpy.data import save2txt
 from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, propagation_setup, simulator
+from tudatpy.astro import element_conversion
 
 # Retrieve current directory
 current_directory = os.getcwd()
@@ -100,6 +102,13 @@ system_initial_state = spice.get_body_cartesian_state_at_epoch(
     aberration_corrections="NONE",
     ephemeris_time=simulation_start_epoch,
 )
+# Get Ganymede gravitational parameter
+ganymede_grav_param = bodies.get("Ganymede").gravitational_parameter
+# print(ganymede_grav_param) # debugging
+# Transform initial state to keplerian
+system_initial_state_keplerian = element_conversion.cartesian_to_keplerian(system_initial_state, ganymede_grav_param)
+
+# print(system_initial_state) # debugging
 
 # Define required outputs
 dependent_variables_to_save = [
@@ -147,17 +156,59 @@ state_history = propagation_results.state_history
 dependent_variables = propagation_results.dependent_variable_history
 
 ###########################################################################
-# SAVE RESULTS ############################################################
+# ANALYTICAL PROPAGATION ##################################################
 ###########################################################################
 
+time = dependent_variables.keys()
+time_array = np.array(list(time))
+time_days = [
+    t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
+    for t in time
+]
+# print(type(time)) # debugging
+# print(f"Start epoch: {simulation_start_epoch} s") # debugging
+# print(list(time)[0] - simulation_start_epoch) # debugging
+
+sma = system_initial_state_keplerian[0]
+eccentricity = system_initial_state_keplerian[1]
+
+initial_true_anomaly = system_initial_state_keplerian[5]
+initial_eccentric_anomaly = 2* np.arctan( ((1-eccentricity)/(1+eccentricity))**0.5 * np.tan(initial_true_anomaly/2) )
+initial_mean_anomaly = initial_eccentric_anomaly - eccentricity*np.sin(initial_eccentric_anomaly)
+# print(eccentricity) # debugging
+
+# calculation of the mean anomaly through the mean motion
+mean_motion = (ganymede_grav_param/sma**3)**0.5
+mean_anomaly = initial_mean_anomaly + mean_motion * (time_array - simulation_start_epoch)
+
+# solver for the Eccentric anomaly
+def solve_E(M):
+    func = lambda E: E - eccentricity * np.sin(E) - M
+    return fsolve(func, M)[0]
+
+solve_kepler_vectorized = np.vectorize(solve_E)
+eccentric_anomaly = solve_kepler_vectorized(mean_anomaly)
+
+# true anomaly from the eccentric anomaly
+true_anomaly = 2* np.arctan( ((1+eccentricity)/(1-eccentricity))**0.5 * np.tan(eccentric_anomaly/2) ) # [-pi, pi]
+
+# print(f'Maximum true anomaly {max(true_anomaly) / np.pi} pi') # debugging
+# print(f'Minimum true anomaly {min(true_anomaly) / np.pi} pi') # debugging
+
+
+###########################################################################
+# SAVE RESULTS ############################################################
+###########################################################################
+results_directory = "./results"
+
 save2txt(
-    solution=state_history, filename="JUICEPropagationHistory_Q1.dat", directory="./"
+    solution=state_history, filename="JUICEPropagationHistory_Q1.dat", directory=results_directory
 )
 
 save2txt(
     solution=dependent_variables,
     filename="JUICEPropagationHistory_DependentVariables_Q1.dat",
-    directory="./",
+    directory=results_directory,
 )
 
 ###########################################################################
@@ -167,11 +218,6 @@ save2txt(
 # Extract time and Kepler elements from dependent variables
 kepler_elements = np.vstack(list(dependent_variables.values()))
 # print(kepler_elements.shape)
-time = dependent_variables.keys()
-time_days = [
-    t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
-    for t in time
-]
 
 # Ensure the 'figures' directory exists
 output_dir = os.path.join(current_directory, "figures")
@@ -186,7 +232,7 @@ sorted_indices = np.argsort(list(dependent_variables.keys()))
 # time = np.array(list(dependent_variables.keys()))[sorted_indices]
 # time_days = (time - simulation_start_epoch) / constants.JULIAN_DAY
 
-# 1. Get the initial Kepler elements (at t0)
+# 1. Get the initial Kepler elements (at t0)pyt
 initial_state = kepler_elements[0, :]
 
 # 2. Calculate the change w.r.t t0 (Element(t) - Element(t0))
@@ -216,7 +262,7 @@ y_labels = [
 delta_kepler[:, 2:6] = np.rad2deg(delta_kepler[:, 2:6])
 
 # 4. Generate the plot
-fig, axs = plt.subplots(3, 2, figsize=(15, 12))
+fig, axs = plt.subplots(3, 2, figsize=(10, 8))
 # fig.suptitle(f'Change in JUICE Kepler Elements w.r.t $t_0$ (Frame: {global_frame_orientation})', fontsize=16)
 
 # Flatten the axes array for easy iteration (0 to 5)
@@ -224,9 +270,9 @@ axs_flat = axs.flatten()
 
 for i in range(6):
     axs_flat[i].plot(time_days, delta_kepler[:, i])
-    axs_flat[i].set_title(titles[i])
-    axs_flat[i].set_xlabel('Time since $t_0$ [days]')
-    axs_flat[i].set_ylabel(y_labels[i])
+    axs_flat[i].set_title(titles[i], fontsize=14)
+    axs_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+    axs_flat[i].set_ylabel(y_labels[i], fontsize=12)
     axs_flat[i].grid(True)
     axs_flat[i].ticklabel_format(useOffset=False) # Prevents confusing scientific notation offsets
 
@@ -240,4 +286,77 @@ print(f"Plot saved to: {output_path}")
 
 # Optional: Show plot if running interactively
 # plt.show()
+plt.close()
+
+###########################################################################
+# PLOT COMPARISON #########################################################
+###########################################################################
+
+# 1. Construct the Analytical Kepler Elements Array
+# a, e, i, omega, Omega are constant in the unperturbed analytical solution
+# We use the initial state for the first 5 elements
+analytical_kepler = np.zeros_like(kepler_elements)
+for i in range(5):
+    analytical_kepler[:, i] = initial_state[i]
+
+# The 6th element is your analytically propagated true anomaly
+analytical_kepler[:, 5] = np.unwrap(true_anomaly)
+
+# print(np.unwrap(true_anomaly)[1000:1500]) # debugging
+# print(max(analytical_kepler[:, 5]) / np.pi) # debugging
+# print(min(analytical_kepler[:, 5]) / np.pi) # debugging
+print(max(kepler_elements[:, 5]) / np.pi) # debugging
+print(min(kepler_elements[:, 5]) / np.pi) # debugging
+
+# # debugging
+# plt.plot(true_anomaly, label='Wrapped')
+# plt.plot(np.unwrap(true_anomaly), label='Unwrapped')
+# plt.plot(kepler_elements[:, 5], label='Numerical wrapped')
+# plt.plot(np.unwrap(kepler_elements[:, 5]), label='Numerical unwrappped')
+# plt.legend()
+# plt.show()
+
+# also unwrap the numerical propagated true anomaly
+kepler_elements[:, 5] = np.unwrap(kepler_elements[:, 5])
+
+# 2. Calculate the Error (Numerical - Analytical)
+kepler_error = kepler_elements - analytical_kepler
+
+# 3. Convert angular errors (indices 2 to 5) from Radians to Degrees
+kepler_error[:, 2:6] = np.rad2deg(kepler_error[:, 2:6])
+
+# 4. Define labels for the error plot
+error_y_labels = [
+    "Error in $a$ [m]",
+    "Error in $e$ [-]",
+    "Error in $i$ [deg]",
+    "Error in $\omega$ [deg]",
+    "Error in $\Omega$ [deg]",
+    "Error in $\\theta$ [deg]"
+]
+
+# 5. Generate the comparison plot
+fig_err, axs_err = plt.subplots(3, 2, figsize=(12, 10))
+fig_err.suptitle('Numerical Integration Error vs Analytical Solution (Keplerian)', fontsize=16)
+
+axs_err_flat = axs_err.flatten()
+
+for i in range(6):
+    axs_err_flat[i].plot(time_days, kepler_error[:, i], color='tab:red')
+    axs_err_flat[i].set_title(titles[i], fontsize=14)
+    axs_err_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+    axs_err_flat[i].set_ylabel(error_y_labels[i], fontsize=12)
+    axs_err_flat[i].grid(True)
+    
+    # Use scientific notation for the y-axis if the errors are very small
+    axs_err_flat[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+# 6. Save the figure
+error_output_path = os.path.join(output_dir, "keplerian_integration_error.pdf")
+plt.savefig(error_output_path)
+print(f"Comparison plot saved to: {error_output_path}")
+
 plt.close()
