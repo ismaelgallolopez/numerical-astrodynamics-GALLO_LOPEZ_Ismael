@@ -292,6 +292,8 @@ plt.close()
 # PLOT COMPARISON #########################################################
 ###########################################################################
 
+# KEPLERIAN ERROR ANALYSIS
+
 # 1. Construct the Analytical Kepler Elements Array
 # a, e, i, omega, Omega are constant in the unperturbed analytical solution
 # We use the initial state for the first 5 elements
@@ -299,14 +301,14 @@ analytical_kepler = np.zeros_like(kepler_elements)
 for i in range(5):
     analytical_kepler[:, i] = initial_state[i]
 
-# The 6th element is your analytically propagated true anomaly
-analytical_kepler[:, 5] = np.unwrap(true_anomaly)
+analytical_kepler[:, 5] = true_anomaly
+
 
 # print(np.unwrap(true_anomaly)[1000:1500]) # debugging
 # print(max(analytical_kepler[:, 5]) / np.pi) # debugging
 # print(min(analytical_kepler[:, 5]) / np.pi) # debugging
-print(max(kepler_elements[:, 5]) / np.pi) # debugging
-print(min(kepler_elements[:, 5]) / np.pi) # debugging
+# print(max(kepler_elements[:, 5]) / np.pi) # debugging
+# print(min(kepler_elements[:, 5]) / np.pi) # debugging
 
 # # debugging
 # plt.plot(true_anomaly, label='Wrapped')
@@ -316,11 +318,14 @@ print(min(kepler_elements[:, 5]) / np.pi) # debugging
 # plt.legend()
 # plt.show()
 
+# The 6th element is your analytically propagated true anomaly
+analytical_true_anom_unwrap = np.unwrap(true_anomaly)
 # also unwrap the numerical propagated true anomaly
-kepler_elements[:, 5] = np.unwrap(kepler_elements[:, 5])
+true_anom_unwrap = np.unwrap(kepler_elements[:, 5])
 
 # 2. Calculate the Error (Numerical - Analytical)
 kepler_error = kepler_elements - analytical_kepler
+kepler_error[:, 5] = true_anom_unwrap - analytical_true_anom_unwrap
 
 # 3. Convert angular errors (indices 2 to 5) from Radians to Degrees
 kepler_error[:, 2:6] = np.rad2deg(kepler_error[:, 2:6])
@@ -337,7 +342,7 @@ error_y_labels = [
 
 # 5. Generate the comparison plot
 fig_err, axs_err = plt.subplots(3, 2, figsize=(12, 10))
-fig_err.suptitle('Numerical Integration Error vs Analytical Solution (Keplerian)', fontsize=16)
+# fig_err.suptitle('Numerical Integration Error vs Analytical Solution (Keplerian)', fontsize=16)
 
 axs_err_flat = axs_err.flatten()
 
@@ -355,8 +360,96 @@ for i in range(6):
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
 # 6. Save the figure
-error_output_path = os.path.join(output_dir, "keplerian_integration_error.pdf")
+error_output_path = os.path.join(output_dir, "keplerian_integration_error_q1.pdf")
 plt.savefig(error_output_path)
 print(f"Comparison plot saved to: {error_output_path}")
+
+plt.close()
+
+
+# CARTESIAN ERROR ANALYSIS
+
+# 1. coordinate transform from keplerian to cartesian for the analytical solution
+analytical_cartesian = np.zeros((len(time_days), 6))
+for i in range(len(time_days)):
+    analytical_cartesian[i,:] = element_conversion.keplerian_to_cartesian(analytical_kepler[i,:], ganymede_grav_param)
+
+# 2. Extract the numerical Cartesian states
+# Extract states from state_history, ensuring it is sorted by time to match the analytical arrays
+numerical_cartesian = np.vstack(list(state_history.values()))[sorted_indices]
+
+# 3. Calculate the Error (Numerical - Analytical)
+cartesian_error = numerical_cartesian - analytical_cartesian
+
+# 4. Define labels for the error plot
+cartesian_titles = [
+    "Error in Position $X$", "Error in Position $Y$", "Error in Position $Z$",
+    "Error in Velocity $v_x$", "Error in Velocity $v_y$", "Error in Velocity $v_z$"
+]
+
+cartesian_y_labels = [
+    "$\Delta X$ [m]", "$\Delta Y$ [m]", "$\Delta Z$ [m]",
+    "$\Delta v_x$ [m/s]", "$\Delta v_y$ [m/s]", "$\Delta v_z$ [m/s]"
+]
+
+# 5. Generate the comparison plot
+fig_cart, axs_cart = plt.subplots(3, 2, figsize=(12, 10))
+# fig_cart.suptitle('Numerical Integration Error vs Analytical Solution (Cartesian)', fontsize=16)
+
+axs_cart_flat = axs_cart.flatten()
+
+for i in range(6):
+    axs_cart_flat[i].plot(time_days, cartesian_error[:, i], color='tab:green')
+    axs_cart_flat[i].set_title(cartesian_titles[i], fontsize=14)
+    axs_cart_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+    axs_cart_flat[i].set_ylabel(cartesian_y_labels[i], fontsize=12)
+    axs_cart_flat[i].grid(True)
+    
+    # Use scientific notation for the y-axis if the errors are very small
+    axs_cart_flat[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+# 6. Save the figure
+cartesian_output_path = os.path.join(output_dir, "cartesian_integration_error_q1.pdf")
+plt.savefig(cartesian_output_path)
+print(f"Cartesian comparison plot saved to: {cartesian_output_path}")
+
+plt.close()
+
+# MAGNITUDE OF CARTESIAN ERROR ANALYSIS
+
+# 1. Calculate the magnitude (Euclidean norm) of the error at each time step
+# axis=1 ensures the norm is calculated across the columns for each row (epoch)
+pos_error_mag = np.linalg.norm(cartesian_error[:, 0:3], axis=1)
+vel_error_mag = np.linalg.norm(cartesian_error[:, 3:6], axis=1)
+
+# 2. Generate the plot
+fig_mag, axs_mag = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+fig_mag.suptitle('Magnitude of Cartesian Integration Error', fontsize=16)
+
+# Position Error Magnitude
+axs_mag[0].plot(time_days, pos_error_mag, color='tab:orange', linewidth=2)
+axs_mag[0].set_title('Position Error Magnitude (RSS)', fontsize=14)
+axs_mag[0].set_ylabel('$\|\Delta \mathbf{r}\|$ [m]', fontsize=12)
+axs_mag[0].grid(True)
+axs_mag[0].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Velocity Error Magnitude
+axs_mag[1].plot(time_days, vel_error_mag, color='tab:purple', linewidth=2)
+axs_mag[1].set_title('Velocity Error Magnitude (RSS)', fontsize=14)
+axs_mag[1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+axs_mag[1].set_ylabel('$\|\Delta \mathbf{v}\|$ [m/s]', fontsize=12)
+axs_mag[1].grid(True)
+axs_mag[1].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+# 3. Save the figure
+mag_output_path = os.path.join(output_dir, "magnitude_integration_error_q1.pdf")
+plt.savefig(mag_output_path)
+print(f"Error magnitude plot saved to: {mag_output_path}")
 
 plt.close()

@@ -127,6 +127,8 @@ INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman1
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-italic.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bolditalic.luc
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+INPUT ../../figures/change_in_kepler_elements_q1.pdf
+INPUT ../../figures/change_in_kepler_elements_q1.pdf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr5.tfm
@@ -139,10 +141,13 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy5.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
-INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-italic.luc
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
+INPUT ../../figures/keplerian_integration_error_q1.pdf
+INPUT ../../figures/keplerian_integration_error_q1.pdf
+INPUT ../../figures/cartesian_integration_error_q1.pdf
+INPUT ../../figures/cartesian_integration_error_q1.pdf
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-regular.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman5-regular.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc

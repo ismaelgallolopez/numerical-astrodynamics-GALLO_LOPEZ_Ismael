@@ -1,5 +1,8 @@
 # Fdb version 4
-["lualatex"] 1771346555.77508 "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf" "NumericalAstrodynamics_2026_Assignment1_AnswerSheet" 1771346562.1264 0
+["lualatex"] 1771509115.18638 "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf" "NumericalAstrodynamics_2026_Assignment1_AnswerSheet" 1771509118.9515 0
+  "../../figures/cartesian_integration_error_q1.pdf" 1771509102.71413 100430 7158d95ef18cb595d0bca8e9954d812e ""
+  "../../figures/change_in_kepler_elements_q1.pdf" 1771509098.00213 89164 80b541b19399ad4b04fc077457d36d87 ""
+  "../../figures/keplerian_integration_error_q1.pdf" 1771509099.70213 112887 59c275589c0fc8057c72c811af735e0c ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc" 1771346326.78002 128392 cc9893d1631ce94f31c1896bb041be89 ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bolditalic.luc" 1771346325.29802 136473 5b9cae8284919413f715c1372f2710a1 ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-italic.luc" 1771346325.02936 136294 b20655adeff86618736b3a30e93973df ""
@@ -7,10 +10,9 @@
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman12-bold.luc" 1771346324.80836 128281 c6f80f39b6b4f903e4339f6819ec2ecc ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman12-regular.luc" 1771346324.62636 127652 a5bcc9609cb60f4b11aae93e79c7a0c6 ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman5-regular.luc" 1771346326.56769 125949 77481c3f38dbf8f1d1c3d431f8f2c5f7 ""
-  "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-italic.luc" 1771346325.96535 135973 867c5f3ee68416593fc7a9f7780ec05e ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-regular.luc" 1771346326.27735 128357 7927b6e898300280eee1561ad78bd0e8 ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1771346325.40971 399319 9aa8d0544ddee621b1079c8678d84505 ""
-  "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" 1771346554.42188 4960 9996504cb7e5758d0554123924ebf777 ""
+  "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" 1771509114.26213 5403 04c531d8e3ae4f1291b0d87c58d5fab8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm" 1136768653 1332 f817c21a1ba54560425663374f1b651a ""
@@ -139,13 +141,12 @@
   "/usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf" 1255129361 118828 4d461c73423fe2666dad2ff0dfc3ca68 ""
   "/usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf" 1255129361 111536 ae9d1b331000d544f47e5223081b7b54 ""
   "/usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf" 1255129361 110496 b9c8767d4cc3bf3f4b21f676bf89aa78 ""
-  "/usr/share/texmf/fonts/opentype/public/lm/lmroman7-italic.otf" 1255129361 117960 0d66730bd21e5e084f11b2b3f18ea9e1 ""
   "/usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf" 1255129361 110792 5c4b6a3d7f194f073a529b5124a181af ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1771345484.23214 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/luahbtex/lualatex.fmt" 1771345782 12240970 04c7b2dfb2c63d905f553a766ef1f07a ""
-  "NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" 1771346554.42188 4960 9996504cb7e5758d0554123924ebf777 ""
-  "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux" 1771346561.40971 162 f042405b684a8c860cba07045d113040 "lualatex"
-  "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out" 1771346560.62346 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
+  "NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex" 1771509114.26213 5403 04c531d8e3ae4f1291b0d87c58d5fab8 ""
+  "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux" 1771509118.51013 686 b6b1650efa046bc89ff305a3b255a52a "lualatex"
+  "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out" 1771509118.06613 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
   (generated)
   "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux"
   "build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.log"

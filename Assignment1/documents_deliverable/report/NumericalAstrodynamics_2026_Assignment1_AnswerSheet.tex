@@ -31,32 +31,52 @@ Github link: \textit{\href{https://github.com/ismaelgallolopez/numerical-astrody
 
 Time spent per exercise:
 \begin{enumerate}
-    \item \ldots
+    \item 7h
     \item \ldots
     \item \ldots
     \item \ldots
 \end{enumerate} 
 
-People you worked with (if none, state this):
+People you worked with (if none, state this): 
+\begin{itemize}
+    \item Gemini 3
+\end{itemize}
 
 \clearpage
 
-\noindent\textit{Use this \LaTeX~file as a template for your report. All text that is not italic should be kept. All text that is italic, and all \ldots~should be removed and replaced by your answers. Only text that replaces \textbf{bold text} counts towards your line limit.}
 % KC: bold text here > bold text?
 
 \section*{Question 1}
 
 \subsection*{a}
-\textit{Insert figure}
+% \textit{Insert figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/change_in_kepler_elements_q1.pdf}
+    \caption{Change in Kepler elements of JUICE w.r.t $t_0$ (Frame: J2000)}
+\end{figure}
+
 \subsection*{b}
-${\left(\mathbf{a}_{s}\right)_{G}}=\ldots$
+\begin{align}
+    {\left(\mathbf{a}_{s}\right)_{G}}= -\frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs}
+\end{align}
+
 \subsection*{c}
-Positions from environment: \ldots \\
-Positions from numerical propagation: \ldots
+Positions from environment: initial position $\mathbf{r}_{Gs}(t=0)$ \\
+Positions from numerical propagation: every other position $\mathbf{r}_{Gs}(t>0)$
 
 \subsection*{d}
-\textit{Insert figure(s) with Cartesian element error.} \\
-\textit{Insert figure(s) with Kepler element error.}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/keplerian_integration_error_q1.pdf}
+    \caption{Numerical Integration Error vs Analytical Solution (Keplerian)}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/cartesian_integration_error_q1.pdf}
+    \caption{Numerical Integration Error vs Analytical Solution (Cartesian)}
+\end{figure}
 
 \clearpage
 \section*{Question 2}
