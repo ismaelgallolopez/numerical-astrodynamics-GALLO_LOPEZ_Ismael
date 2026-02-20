@@ -19,6 +19,7 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import os
+from pathlib import Path
 
 import numpy as np
 from scipy.optimize import fsolve
@@ -453,3 +454,27 @@ plt.savefig(mag_output_path)
 print(f"Error magnitude plot saved to: {mag_output_path}")
 
 plt.close()
+
+# Write to results file
+os.makedirs('documents_deliverable', exist_ok=True)
+results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_6541356.txt")
+
+final_time = time_array[-1]
+final_cartesian_state = numerical_cartesian[-1, :]
+
+try:
+    with open(results_path, 'r') as file:
+        lines = file.readlines()
+except FileNotFoundError:
+    lines = []
+
+line_to_replace = 0  # (change between questions)
+while len(lines) <= line_to_replace:
+    lines.append('\n')
+
+output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
+lines[line_to_replace] = output_line
+
+with open(results_path, 'w') as file:
+    file.writelines(lines)
+
