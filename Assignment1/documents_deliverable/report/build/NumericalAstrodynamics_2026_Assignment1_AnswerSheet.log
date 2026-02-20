@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  19 FEB 2026 14:51
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  20 FEB 2026 18:08
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex
@@ -361,12 +361,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--31
 <../../figures/change_in_kepler_elements_q1.pdf, id=19, 722.7pt x 578.16pt>
 File: ../../figures/change_in_kepler_elements_q1.pdf Graphic file (type pdf)
 <use ../../figures/change_in_kepler_elements_q1.pdf>
-Package luatex.def Info: ../../figures/change_in_kepler_elements_q1.pdf  used on input line 55.
+Package luatex.def Info: ../../figures/change_in_kepler_elements_q1.pdf  used on input line 56.
 (luatex.def)             Requested size: 345.0pt x 275.99626pt.
 <../../figures/keplerian_integration_error_q1.pdf, id=20, 867.24pt x 722.7pt>
 File: ../../figures/keplerian_integration_error_q1.pdf Graphic file (type pdf)
 <use ../../figures/keplerian_integration_error_q1.pdf>
-Package luatex.def Info: ../../figures/keplerian_integration_error_q1.pdf  used on input line 71.
+Package luatex.def Info: ../../figures/keplerian_integration_error_q1.pdf  used on input line 72.
 (luatex.def)             Requested size: 345.0pt x 287.49794pt.
 
 
@@ -375,7 +375,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <../../figures/cartesian_integration_error_q1.pdf, id=21, 867.24pt x 722.7pt>
 File: ../../figures/cartesian_integration_error_q1.pdf Graphic file (type pdf)
 <use ../../figures/cartesian_integration_error_q1.pdf>
-Package luatex.def Info: ../../figures/cartesian_integration_error_q1.pdf  used on input line 77.
+Package luatex.def Info: ../../figures/cartesian_integration_error_q1.pdf  used on input line 78.
 (luatex.def)             Requested size: 345.0pt x 287.49794pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -383,27 +383,27 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [2
 
 <../../figures/change_in_kepler_elements_q1.pdf>] [3<../../figures/keplerian_integration_error_q1.pdf>] [4<../../figures/cartesian_integration_error_q1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 113--136
+Underfull \hbox (badness 10000) in paragraph at lines 122--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--136
+Underfull \hbox (badness 10000) in paragraph at lines 122--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--136
+Underfull \hbox (badness 10000) in paragraph at lines 122--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--136
+Underfull \hbox (badness 10000) in paragraph at lines 122--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--136
+Underfull \hbox (badness 10000) in paragraph at lines 122--145
 
  []
 
@@ -423,19 +423,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment1_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 11001 strings out of 476553
+ 11003 strings out of 476553
  125027,1977958 words of node,token memory allocated
  512 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 7 attribute, 55 glue_spec, 7 attribute_list, 1 write nodes
-   avail lists: 2:400,3:215,4:53,5:208,6:38,7:3026,8:24,9:272,10:6,11:163
- 32765 multiletter control sequences out of 65536+600000
+   avail lists: 2:494,3:222,4:59,5:215,6:40,7:3204,8:24,9:331,10:6,11:158
+ 32767 multiletter control sequences out of 65536+600000
  39 fonts using 2840503 bytes
  72i,11n,75p,488b,340s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (8 pages, 373583 bytes).
+</usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (8 pages, 404667 bytes).
 
-PDF statistics: 322 PDF objects out of 1000 (max. 8388607)
- 142 compressed objects within 2 object streams
+PDF statistics: 338 PDF objects out of 1000 (max. 8388607)
+ 154 compressed objects within 2 object streams
  40 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 
