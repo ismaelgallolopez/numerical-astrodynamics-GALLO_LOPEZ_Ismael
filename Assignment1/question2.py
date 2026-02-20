@@ -193,46 +193,6 @@ propagation_results = dynamics_simulator.propagation_results
 state_history = propagation_results.state_history
 dependent_variables = propagation_results.dependent_variable_history
 
-###########################################################################
-# ANALYTICAL PROPAGATION ##################################################
-###########################################################################
-
-time = dependent_variables.keys()
-time_array = np.array(list(time))
-time_days = [
-    t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
-    for t in time
-]
-# print(type(time)) # debugging
-# print(f"Start epoch: {simulation_start_epoch} s") # debugging
-# print(list(time)[0] - simulation_start_epoch) # debugging
-
-sma = system_initial_state_keplerian[0]
-eccentricity = system_initial_state_keplerian[1]
-
-initial_true_anomaly = system_initial_state_keplerian[5]
-initial_eccentric_anomaly = 2* np.arctan( ((1-eccentricity)/(1+eccentricity))**0.5 * np.tan(initial_true_anomaly/2) )
-initial_mean_anomaly = initial_eccentric_anomaly - eccentricity*np.sin(initial_eccentric_anomaly)
-# print(eccentricity) # debugging
-
-# calculation of the mean anomaly through the mean motion
-mean_motion = (ganymede_grav_param/sma**3)**0.5
-mean_anomaly = initial_mean_anomaly + mean_motion * (time_array - simulation_start_epoch)
-
-# solver for the Eccentric anomaly
-def solve_E(M):
-    func = lambda E: E - eccentricity * np.sin(E) - M
-    return fsolve(func, M)[0]
-
-solve_kepler_vectorized = np.vectorize(solve_E)
-eccentric_anomaly = solve_kepler_vectorized(mean_anomaly)
-
-# true anomaly from the eccentric anomaly
-true_anomaly = 2* np.arctan( ((1+eccentricity)/(1-eccentricity))**0.5 * np.tan(eccentric_anomaly/2) ) # [-pi, pi]
-
-# print(f'Maximum true anomaly {max(true_anomaly) / np.pi} pi') # debugging
-# print(f'Minimum true anomaly {min(true_anomaly) / np.pi} pi') # debugging
-
 
 ###########################################################################
 # SAVE RESULTS ############################################################
@@ -255,7 +215,7 @@ save2txt(
 
 # Extract time and Kepler elements from dependent variables
 kepler_elements = np.vstack(list(dependent_variables.values()))
-# print(kepler_elements.shape)
+# print(kepler_elements.shape) # debugging
 
 # Ensure the 'figures' directory exists
 output_dir = os.path.join(current_directory, "figures")
@@ -265,256 +225,82 @@ if not os.path.exists(output_dir):
 # Extract time and Kepler elements from dependent variables
 # Note: Ensure the dictionary is sorted by time before stacking
 sorted_indices = np.argsort(list(dependent_variables.keys()))
-# kepler_elements = np.vstack(list(dependent_variables.values()))[sorted_indices]
+# kepler_elements = np.vstack(list(dependent_variables.values()))[sorted_indices] # debugging
 
-# time = np.array(list(dependent_variables.keys()))[sorted_indices]
-# time_days = (time - simulation_start_epoch) / constants.JULIAN_DAY
-
-# 1. Get the initial Kepler elements (at t0)pyt
-initial_state = kepler_elements[0, :]
-
-# 2. Calculate the change w.r.t t0 (Element(t) - Element(t0))
-delta_kepler = kepler_elements - initial_state
-
-# 3. Prepare labels and unit conversions for the 6 Kepler elements
-# Tudat Order: a, e, i, omega, Omega, theta
-titles = [
-    "Semi-major Axis (a)",
-    "Eccentricity (e)",
-    "Inclination (i)",
-    "Argument of Periapsis (\u03C9)",
-    "Longitude of Ascending Node (\u03A9)",
-    "True Anomaly (\u03B8)"
+# Extract time arrays
+time = dependent_variables.keys()
+time_array = np.array(list(time))
+time_days = [
+    t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
+    for t in time
 ]
 
-y_labels = [
-    "$\Delta a$ [m]",
-    "$\Delta e$ [-]",
-    "$\Delta i$ [deg]",
-    "$\Delta \omega$ [deg]",
-    "$\Delta \Omega$ [deg]",
-    "$\Delta \\theta$ [deg]"
-]
+# Extract the numerical Cartesian states
+numerical_cartesian = np.vstack(list(state_history.values()))[sorted_indices]
 
-# Convert angular differences (indices 2 to 5) from Radians to Degrees for readability
-delta_kepler[:, 2:6] = np.rad2deg(delta_kepler[:, 2:6])
+###########################################################################
+# PLOT THIRD-BODY ACCELERATION NORMS ######################################
+###########################################################################
 
-# 4. Generate the plot
-fig, axs = plt.subplots(3, 2, figsize=(10, 8))
-# fig.suptitle(f'Change in JUICE Kepler Elements w.r.t $t_0$ (Frame: {global_frame_orientation})', fontsize=16)
+# Ensure we have the full dependent variables matrix sorted by time
+dep_vars_matrix = np.vstack(list(dependent_variables.values()))[sorted_indices]
 
-# Flatten the axes array for easy iteration (0 to 5)
-axs_flat = axs.flatten()
+# Extract the 3D acceleration vectors based on the dependent_variables_to_save order
+accel_io_vector = dep_vars_matrix[:, 9:12]
+accel_sun_vector = dep_vars_matrix[:, 12:15]
 
-for i in range(6):
-    axs_flat[i].plot(time_days, delta_kepler[:, i])
-    axs_flat[i].set_title(titles[i], fontsize=14)
-    axs_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
-    axs_flat[i].set_ylabel(y_labels[i], fontsize=12)
-    axs_flat[i].grid(True)
-    axs_flat[i].ticklabel_format(useOffset=False) # Prevents confusing scientific notation offsets
+# Calculate the magnitudes (Euclidean norm) at each time step
+norm_accel_io = np.linalg.norm(accel_io_vector, axis=1)
+norm_accel_sun = np.linalg.norm(accel_sun_vector, axis=1)
+
+# Generate the plot
+fig_accel, ax_accel = plt.subplots(figsize=(10, 6))
+
+# Plotting on a logarithmic y-axis
+ax_accel.semilogy(time_days, norm_accel_sun, label='Sun Third-Body Gravity', color='tab:orange', linewidth=2)
+ax_accel.semilogy(time_days, norm_accel_io, label='Io Third-Body Gravity', color='tab:purple', linewidth=2)
+
+ax_accel.set_title('Magnitudes of Third-Body Gravitational Accelerations on JUICE', fontsize=14, fontweight='bold')
+ax_accel.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_accel.set_ylabel('Acceleration Norm [$\mathrm{m/s}^2$]', fontsize=12)
+
+# Grid formatting for log scale
+ax_accel.grid(True, which="major", linestyle="-", alpha=0.6)
+ax_accel.grid(True, which="minor", linestyle="--", alpha=0.3)
+ax_accel.legend(fontsize=12)
 
 # Improve layout spacing
-plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.tight_layout()
 
-# 5. Save the figure
-output_path = os.path.join(output_dir, "change_in_kepler_elements_q1.pdf")
-plt.savefig(output_path)
-print(f"Plot saved to: {output_path}")
+# Save the figure
+accel_output_path = os.path.join(output_dir, "third_body_accelerations.pdf")
+plt.savefig(accel_output_path)
+print(f"Acceleration norms plot saved to: {accel_output_path}")
 
-# Optional: Show plot if running interactively
-# plt.show()
 plt.close()
 
-# ###########################################################################
-# # PLOT COMPARISON #########################################################
-# ###########################################################################
+###########################################################################
+# WRITE TO RESULTS FILE ###################################################
+###########################################################################
+os.makedirs('documents_deliverable', exist_ok=True)
+results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_6541356.txt")
 
-# # KEPLERIAN ERROR ANALYSIS
+final_time = time_array[-1]
+final_cartesian_state = numerical_cartesian[-1, :]
 
-# # 1. Construct the Analytical Kepler Elements Array
-# # a, e, i, omega, Omega are constant in the unperturbed analytical solution
-# # We use the initial state for the first 5 elements
-# analytical_kepler = np.zeros_like(kepler_elements)
-# for i in range(5):
-#     analytical_kepler[:, i] = initial_state[i]
+try:
+    with open(results_path, 'r') as file:
+        lines = file.readlines()
+except FileNotFoundError:
+    lines = []
 
-# analytical_kepler[:, 5] = true_anomaly
+line_to_replace = 1  # (change between questions)
+while len(lines) <= line_to_replace:
+    lines.append('\n')
 
+output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
+lines[line_to_replace] = output_line
 
-# # print(np.unwrap(true_anomaly)[1000:1500]) # debugging
-# # print(max(analytical_kepler[:, 5]) / np.pi) # debugging
-# # print(min(analytical_kepler[:, 5]) / np.pi) # debugging
-# # print(max(kepler_elements[:, 5]) / np.pi) # debugging
-# # print(min(kepler_elements[:, 5]) / np.pi) # debugging
-
-# # # debugging
-# # plt.plot(true_anomaly, label='Wrapped')
-# # plt.plot(np.unwrap(true_anomaly), label='Unwrapped')
-# # plt.plot(kepler_elements[:, 5], label='Numerical wrapped')
-# # plt.plot(np.unwrap(kepler_elements[:, 5]), label='Numerical unwrappped')
-# # plt.legend()
-# # plt.show()
-
-# # The 6th element is your analytically propagated true anomaly
-# analytical_true_anom_unwrap = np.unwrap(true_anomaly)
-# # also unwrap the numerical propagated true anomaly
-# true_anom_unwrap = np.unwrap(kepler_elements[:, 5])
-
-# # 2. Calculate the Error (Numerical - Analytical)
-# kepler_error = kepler_elements - analytical_kepler
-# kepler_error[:, 5] = true_anom_unwrap - analytical_true_anom_unwrap
-
-# # 3. Convert angular errors (indices 2 to 5) from Radians to Degrees
-# kepler_error[:, 2:6] = np.rad2deg(kepler_error[:, 2:6])
-
-# # 4. Define labels for the error plot
-# error_y_labels = [
-#     "Error in $a$ [m]",
-#     "Error in $e$ [-]",
-#     "Error in $i$ [deg]",
-#     "Error in $\omega$ [deg]",
-#     "Error in $\Omega$ [deg]",
-#     "Error in $\\theta$ [deg]"
-# ]
-
-# # 5. Generate the comparison plot
-# fig_err, axs_err = plt.subplots(3, 2, figsize=(12, 10))
-# # fig_err.suptitle('Numerical Integration Error vs Analytical Solution (Keplerian)', fontsize=16)
-
-# axs_err_flat = axs_err.flatten()
-
-# for i in range(6):
-#     axs_err_flat[i].plot(time_days, kepler_error[:, i], color='tab:red')
-#     axs_err_flat[i].set_title(titles[i], fontsize=14)
-#     axs_err_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
-#     axs_err_flat[i].set_ylabel(error_y_labels[i], fontsize=12)
-#     axs_err_flat[i].grid(True)
-    
-#     # Use scientific notation for the y-axis if the errors are very small
-#     axs_err_flat[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
-
-# # Improve layout spacing
-# plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-# # 6. Save the figure
-# error_output_path = os.path.join(output_dir, "keplerian_integration_error_q1.pdf")
-# plt.savefig(error_output_path)
-# print(f"Comparison plot saved to: {error_output_path}")
-
-# plt.close()
-
-
-# # CARTESIAN ERROR ANALYSIS
-
-# # 1. coordinate transform from keplerian to cartesian for the analytical solution
-# analytical_cartesian = np.zeros((len(time_days), 6))
-# for i in range(len(time_days)):
-#     analytical_cartesian[i,:] = element_conversion.keplerian_to_cartesian(analytical_kepler[i,:], ganymede_grav_param)
-
-# # 2. Extract the numerical Cartesian states
-# # Extract states from state_history, ensuring it is sorted by time to match the analytical arrays
-# numerical_cartesian = np.vstack(list(state_history.values()))[sorted_indices]
-
-# # 3. Calculate the Error (Numerical - Analytical)
-# cartesian_error = numerical_cartesian - analytical_cartesian
-
-# # 4. Define labels for the error plot
-# cartesian_titles = [
-#     "Error in Position $X$", "Error in Position $Y$", "Error in Position $Z$",
-#     "Error in Velocity $v_x$", "Error in Velocity $v_y$", "Error in Velocity $v_z$"
-# ]
-
-# cartesian_y_labels = [
-#     "$\Delta X$ [m]", "$\Delta Y$ [m]", "$\Delta Z$ [m]",
-#     "$\Delta v_x$ [m/s]", "$\Delta v_y$ [m/s]", "$\Delta v_z$ [m/s]"
-# ]
-
-# # 5. Generate the comparison plot
-# fig_cart, axs_cart = plt.subplots(3, 2, figsize=(12, 10))
-# # fig_cart.suptitle('Numerical Integration Error vs Analytical Solution (Cartesian)', fontsize=16)
-
-# axs_cart_flat = axs_cart.flatten()
-
-# for i in range(6):
-#     axs_cart_flat[i].plot(time_days, cartesian_error[:, i], color='tab:green')
-#     axs_cart_flat[i].set_title(cartesian_titles[i], fontsize=14)
-#     axs_cart_flat[i].set_xlabel('Time since $t_0$ [days]', fontsize=12)
-#     axs_cart_flat[i].set_ylabel(cartesian_y_labels[i], fontsize=12)
-#     axs_cart_flat[i].grid(True)
-    
-#     # Use scientific notation for the y-axis if the errors are very small
-#     axs_cart_flat[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
-
-# # Improve layout spacing
-# plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-# # 6. Save the figure
-# cartesian_output_path = os.path.join(output_dir, "cartesian_integration_error_q1.pdf")
-# plt.savefig(cartesian_output_path)
-# print(f"Cartesian comparison plot saved to: {cartesian_output_path}")
-
-# plt.close()
-
-# # MAGNITUDE OF CARTESIAN ERROR ANALYSIS
-
-# # 1. Calculate the magnitude (Euclidean norm) of the error at each time step
-# # axis=1 ensures the norm is calculated across the columns for each row (epoch)
-# pos_error_mag = np.linalg.norm(cartesian_error[:, 0:3], axis=1)
-# vel_error_mag = np.linalg.norm(cartesian_error[:, 3:6], axis=1)
-
-# # 2. Generate the plot
-# fig_mag, axs_mag = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-# fig_mag.suptitle('Magnitude of Cartesian Integration Error', fontsize=16)
-
-# # Position Error Magnitude
-# axs_mag[0].plot(time_days, pos_error_mag, color='tab:orange', linewidth=2)
-# axs_mag[0].set_title('Position Error Magnitude (RSS)', fontsize=14)
-# axs_mag[0].set_ylabel('$\|\Delta \mathbf{r}\|$ [m]', fontsize=12)
-# axs_mag[0].grid(True)
-# axs_mag[0].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
-
-# # Velocity Error Magnitude
-# axs_mag[1].plot(time_days, vel_error_mag, color='tab:purple', linewidth=2)
-# axs_mag[1].set_title('Velocity Error Magnitude (RSS)', fontsize=14)
-# axs_mag[1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
-# axs_mag[1].set_ylabel('$\|\Delta \mathbf{v}\|$ [m/s]', fontsize=12)
-# axs_mag[1].grid(True)
-# axs_mag[1].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
-
-# # Improve layout spacing
-# plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-# # 3. Save the figure
-# mag_output_path = os.path.join(output_dir, "magnitude_integration_error_q1.pdf")
-# plt.savefig(mag_output_path)
-# print(f"Error magnitude plot saved to: {mag_output_path}")
-
-# plt.close()
-
-
-# ###########################################################################
-# # WRITE TO RESULTS FILE ###################################################
-# ###########################################################################
-# os.makedirs('documents_deliverable', exist_ok=True)
-# results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_6541356.txt")
-
-# final_time = time_array[-1]
-# final_cartesian_state = numerical_cartesian[-1, :]
-
-# try:
-#     with open(results_path, 'r') as file:
-#         lines = file.readlines()
-# except FileNotFoundError:
-#     lines = []
-
-# line_to_replace = 1  # (change between questions)
-# while len(lines) <= line_to_replace:
-#     lines.append('\n')
-
-# output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
-# lines[line_to_replace] = output_line
-
-# with open(results_path, 'w') as file:
-#     file.writelines(lines)
+with open(results_path, 'w') as file:
+    file.writelines(lines)
 
