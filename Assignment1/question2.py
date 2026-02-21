@@ -330,6 +330,28 @@ freq_max_accel_sun_ampl = freq[pos_max_accel_sun_ampl]
 period_max_accel_sun_ampl = 1/freq_max_accel_sun_ampl
 print("The period of the variation of the sun's acceleration is ", period_max_accel_sun_ampl, " seconds")
 
+# ANALYSIS AS FUNCTION OF RELEVANT PERIODS
+
+# JUICE period
+sma = system_initial_state_keplerian[0]
+T_JUICE = 2 * np.pi * (sma**3 / ganymede_grav_param)**0.5
+print("T_JUICE = ", T_JUICE, " s") # debugging
+ 
+T_ganymede = 7.15455296 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Ganymede_(moon)
+T_io = 1.769137786 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Io_(moon) 
+T_jupiter = 11.862 * constants.JULIAN_YEAR # https://en.wikipedia.org/wiki/Jupiter
+
+print("\nRatios of period of maximum variation of acceletation by IO to relevant periods: ")
+print(f"T_max_io / T_JUICE: {period_max_accel_io_ampl/T_JUICE:.2f} (Inverse: {T_JUICE/period_max_accel_io_ampl:.2f})")
+print(f"T_max_io / T_io: {period_max_accel_io_ampl/T_io:.2f} (Inverse: {T_io/period_max_accel_io_ampl:.2f})")
+print(f"T_max_io / T_ganymede: {period_max_accel_io_ampl/T_ganymede:.2f} (Inverse: {T_ganymede/period_max_accel_io_ampl:.2f})")
+print(f"T_max_io / T_jupiter: {period_max_accel_io_ampl/T_jupiter:.2f} (Inverse: {T_jupiter/period_max_accel_io_ampl:.2f})")
+
+print("\nRatios of period of maximum variation of acceletation by Sun to relevant periods: ")
+print(f"T_max_sun / T_JUICE: {period_max_accel_sun_ampl/T_JUICE:.2f} (Inverse: {T_JUICE/period_max_accel_sun_ampl:.2f})")
+print(f"T_max_sun / T_io: {period_max_accel_sun_ampl/T_io:.2f} (Inverse: {T_io/period_max_accel_sun_ampl:.2f})")
+print(f"T_max_sun / T_ganymede: {period_max_accel_sun_ampl/T_ganymede:.2f} (Inverse: {T_ganymede/period_max_accel_sun_ampl:.2f})")
+print(f"T_max_sun / T_jupiter: {period_max_accel_sun_ampl/T_jupiter:.2f} (Inverse: {T_jupiter/period_max_accel_sun_ampl:.2f})")
 
 ###########################################################################
 # WRITE TO RESULTS FILE ###################################################
