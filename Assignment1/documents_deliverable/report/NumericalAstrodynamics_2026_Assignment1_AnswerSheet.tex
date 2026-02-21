@@ -31,8 +31,8 @@ Github link: \textit{\href{https://github.com/ismaelgallolopez/numerical-astrody
 
 Time spent per exercise:
 \begin{enumerate}
-    \item 7h
-    \item \ldots
+    \item 7 h
+    \item 6 h
     \item \ldots
     \item \ldots
 \end{enumerate} 
@@ -41,6 +41,7 @@ People you worked with (if none, state this):
 \begin{itemize}
     \item Gemini 3
     \item Rodrigo Soares
+    \item Andreu Craus Vidal
 \end{itemize}
 
 \clearpage
@@ -83,20 +84,19 @@ Positions from numerical propagation: every other position $\mathbf{r}_{Gs}(t>0)
 \section*{Question 2}
 
 \subsection*{a}
-\begin{equation*}
-    \left(\mathbf{a}_{G,s}\right)_{G}= \nabla U_G (\mathbf{r}_{Gs}) 
-    \quad\mathrm{and}\quad 
-    \left(\mathbf{a}_{J,s}\right)_{G}= \nabla U_J (\mathbf{r}_{Js}) 
-    \quad\mathrm{and}\quad 
-    \left(\mathbf{a}_{I,s}\right)_{G}= -\frac{\mu_I}{\|\mathbf{r}_{Is}\|^3} \mathbf{r}_{Is}
-\end{equation*}
+\begin{gather*}
+    \left(\mathbf{a}_{G,s}\right)_{G} = \nabla U_G (\mathbf{r}_{Gs}) \\ 
+    \left(\mathbf{a}_{J,s}\right)_{G} = \nabla U_J (\mathbf{r}_{Js}) - \nabla U_J (\mathbf{r}_{JG}) = \nabla U_J (\mathbf{r}_{JG} + \mathbf{r}_{Gs}) - \nabla U_J (\mathbf{r}_{JG}) \\
+    \left(\mathbf{a}_{I,s}\right)_{G} = -\frac{\mu_I}{\|\mathbf{r}_{Is}\|^3} \mathbf{r}_{Is} - \left( - \mu_I \frac{\mathbf{r}_{IG}}{\|\mathbf{r}_{IG}\|^3} \right) 
+                                      = -\mu_I \left( \frac{\mathbf{r}_{IG} + \mathbf{r}_{Gs}}{\|\mathbf{r}_{IG} + \mathbf{r}_{Gs}\|^3} - \frac{\mathbf{r}_{IG}}{\|\mathbf{r}_{IG}\|^3} \right) \\
+\end{gather*}
 
 \subsection*{b}
 Positions from environment: 
 % initial position of JUICE
 $\mathbf{r}_{Gs}(t=0)$; 
 % position of every other celestial body at every instant:
-$\mathbf{r}_{G}$, $\mathbf{r}_{J}$, $\mathbf{r}_{S}$, $\mathbf{r}_{Sat}$, $\mathbf{r}_{E}$, $\mathbf{r}_{I}$, $\mathbf{r}_{C}$ \\
+$\mathbf{r}_{IG}$, $\mathbf{r}_{JG}$ \\
 Positions from numerical propagation: 
 % every other position of JUICE
  $\mathbf{r}_{Gs}(t>0)$
@@ -181,8 +181,11 @@ The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum tw
 
 \section*{Question 3}
 \subsection*{a}
-$\mathbf{a}_{\text{Aero}}=...$ \\
-$\mathbf{a}_{\text{SRP}}=...$ \\
+
+\begin{align}
+    \mathbf{a}_{\text{Aero}}= -\frac{1}{m} \left( \frac{1}{2} \rho v_{air}^2 C_D S_{ref} \right) \mathbf{\hat{v}_{air}} = -\frac{1}{m} \left( q_{air} C_D S_{ref} \right) \mathbf{\hat{v}_{air}} \\
+    \mathbf{a}_{\text{SRP}}= \left( \frac{P}{4 \pi c} \right) \left( \frac{C_r S_{ref}}{m} \right) \frac{\mathbf{r}_{Ss}}{\|\mathbf{r}_{Ss}\|^3}
+\end{align}
 \textit{Insert figures validating acceleration implementation}.
 \textit{\textbf{Explain (briefly!) why the figures validate the implementation}}.
 
