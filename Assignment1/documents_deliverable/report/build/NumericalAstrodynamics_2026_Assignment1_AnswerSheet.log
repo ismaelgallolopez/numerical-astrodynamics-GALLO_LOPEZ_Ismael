@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  20 FEB 2026 18:08
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  21 FEB 2026 17:07
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex
@@ -383,33 +383,23 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [2
 
 <../../figures/change_in_kepler_elements_q1.pdf>] [3<../../figures/keplerian_integration_error_q1.pdf>] [4<../../figures/cartesian_integration_error_q1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 122--145
-
+Overfull \hbox (3.70436pt too wide) detected at line 92
+[][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 r\OML/cmm/m/it/10 U[]\OT1/cmr/m/n/10 (\OT1/cmr/bx/n/10 r[]\OT1/cmr/m/n/10 ) []  [][] = \OMS/cmsy/m/n/10 r\OML/cmm/m/it/10 U[]\OT1/cmr/m/n/10 (\OT1/cmr/bx/n/10 r[]\OT1/cmr/m/n/10 ) []  [][] = \OMS/cmsy/m/n/10 ^^@[]\OT1/cmr/bx/n/10 r[]
  []
 
+<../../figures/third_body_accelerations_q2.pdf, id=232, 722.7pt x 433.62pt>
+File: ../../figures/third_body_accelerations_q2.pdf Graphic file (type pdf)
+<use ../../figures/third_body_accelerations_q2.pdf>
+Package luatex.def Info: ../../figures/third_body_accelerations_q2.pdf  used on input line 108.
+(luatex.def)             Requested size: 345.0pt x 206.9972pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 122--145
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 122--145
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 122--145
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 122--145
-
+Underfull \hbox (badness 10000) in paragraph at lines 137--137
+[][][][][]$\TU/lmtt/m/n/8 https://upload.wikimedia.org/wikipedia/commons/8/83/Galilean_moon_Laplace_
  []
 
 [5
 
-] [6] [7
+<../../figures/third_body_accelerations_q2.pdf>] [6] [7
 
 ] [8
 
@@ -423,19 +413,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment1_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 11003 strings out of 476553
+ 11044 strings out of 476553
  125027,1977958 words of node,token memory allocated
- 512 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 7 attribute, 55 glue_spec, 7 attribute_list, 1 write nodes
-   avail lists: 2:494,3:222,4:59,5:215,6:40,7:3204,8:24,9:331,10:6,11:158
- 32767 multiletter control sequences out of 65536+600000
- 39 fonts using 2840503 bytes
- 72i,11n,75p,488b,340s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (8 pages, 404667 bytes).
+ 568 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 4 glue, 4 kern, 1 glyph, 16 attribute, 55 glue_spec, 16 attribute_list, 1 write, 1 pdf_action nodes
+   avail lists: 2:558,3:210,4:60,5:260,6:39,7:3545,8:97,9:580,10:6,11:172
+ 32791 multiletter control sequences out of 65536+600000
+ 51 fonts using 3719575 bytes
+ 72i,11n,75p,639b,340s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (8 pages, 490708 bytes).
 
-PDF statistics: 338 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 131072)
+PDF statistics: 431 PDF objects out of 1000 (max. 8388607)
+ 202 compressed objects within 3 object streams
+ 54 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

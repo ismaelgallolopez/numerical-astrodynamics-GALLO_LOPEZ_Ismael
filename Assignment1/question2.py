@@ -274,7 +274,7 @@ ax_accel.legend(fontsize=12)
 plt.tight_layout()
 
 # Save the figure
-accel_output_path = os.path.join(output_dir, "third_body_accelerations.pdf")
+accel_output_path = os.path.join(output_dir, "third_body_accelerations_q2.pdf")
 plt.savefig(accel_output_path)
 print(f"Acceleration norms plot saved to: {accel_output_path}")
 
@@ -324,18 +324,18 @@ freq = fftfreq(number_of_points, d=fixed_step_size)
 
 freq_max_accel_io_ampl = freq[pos_max_accel_io_ampl]
 period_max_accel_io_ampl = 1/freq_max_accel_io_ampl
-print("The period of the variation of the acceleration is ", period_max_accel_io_ampl, " seconds")
+print(f"The period of the variation of Io's acceleration is {period_max_accel_io_ampl/3600:.2f} hours")
 
 freq_max_accel_sun_ampl = freq[pos_max_accel_sun_ampl]
 period_max_accel_sun_ampl = 1/freq_max_accel_sun_ampl
-print("The period of the variation of the sun's acceleration is ", period_max_accel_sun_ampl, " seconds")
+print(f"The period of the variation of Sun's acceleration is {period_max_accel_sun_ampl/3600:.2f} hours")
 
 # ANALYSIS AS FUNCTION OF RELEVANT PERIODS
 
 # JUICE period
 sma = system_initial_state_keplerian[0]
 T_JUICE = 2 * np.pi * (sma**3 / ganymede_grav_param)**0.5
-print("T_JUICE = ", T_JUICE, " s") # debugging
+# print("T_JUICE = ", T_JUICE, " s") # debugging
  
 T_ganymede = 7.15455296 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Ganymede_(moon)
 T_io = 1.769137786 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Io_(moon) 
@@ -352,6 +352,66 @@ print(f"T_max_sun / T_JUICE: {period_max_accel_sun_ampl/T_JUICE:.2f} (Inverse: {
 print(f"T_max_sun / T_io: {period_max_accel_sun_ampl/T_io:.2f} (Inverse: {T_io/period_max_accel_sun_ampl:.2f})")
 print(f"T_max_sun / T_ganymede: {period_max_accel_sun_ampl/T_ganymede:.2f} (Inverse: {T_ganymede/period_max_accel_sun_ampl:.2f})")
 print(f"T_max_sun / T_jupiter: {period_max_accel_sun_ampl/T_jupiter:.2f} (Inverse: {T_jupiter/period_max_accel_sun_ampl:.2f})")
+
+###########################################################################
+# PLOT ZOOMED ACCELERATIONS WITH SUPERIMPOSED PERIODS #####################
+###########################################################################
+
+# Convert the calculated periods from seconds to days for the x-axis
+T_io_days = period_max_accel_io_ampl / (24 * 3600)
+T_sun_days = period_max_accel_sun_ampl / (24 * 3600)
+
+# Convert time_days list to a numpy array for easy boolean masking
+time_days_arr = np.array(time_days)
+
+# Create a 2-panel figure
+fig_zoom, axs_zoom = plt.subplots(2, 1, figsize=(12, 10))
+
+# --- PANEL 1: IO ---
+# Define a subset window (e.g., 5 times the dominant period)
+num_periods_to_plot_io = 5
+window_io = num_periods_to_plot_io * T_io_days
+mask_io = time_days_arr <= window_io
+
+axs_zoom[0].plot(time_days_arr[mask_io], norm_accel_io[mask_io], color='tab:purple', linewidth=2)
+axs_zoom[0].set_title(f"Io Third-Body Acceleration (First {window_io:.2f} Days)\nSuperimposed Period: {T_io_days:.2f} Days", fontsize=14, fontweight='bold')
+axs_zoom[0].set_ylabel('Acceleration [$\mathrm{m/s}^2$]', fontsize=12)
+axs_zoom[0].grid(True, alpha=0.6)
+
+# Superimpose the period with vertical lines
+for i in range(1, num_periods_to_plot_io + 1):
+    axs_zoom[0].axvline(x=i * T_io_days, color='red', linestyle='--', linewidth=1.5, alpha=0.8, 
+                        label='FFT Period' if i == 1 else "")
+axs_zoom[0].legend(loc="upper right")
+
+
+# --- PANEL 2: SUN ---
+# Define a subset window (e.g., 5 times the dominant period)
+num_periods_to_plot_sun = 5
+window_sun = num_periods_to_plot_sun * T_sun_days
+mask_sun = time_days_arr <= window_sun
+
+axs_zoom[1].plot(time_days_arr[mask_sun], norm_accel_sun[mask_sun], color='tab:orange', linewidth=2)
+axs_zoom[1].set_title(f"Sun Third-Body Acceleration (First {window_sun:.2f} Days)\nSuperimposed Period: {T_sun_days:.2f} Days", fontsize=14, fontweight='bold')
+axs_zoom[1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+axs_zoom[1].set_ylabel('Acceleration [$\mathrm{m/s}^2$]', fontsize=12)
+axs_zoom[1].grid(True, alpha=0.6)
+
+# Superimpose the period with vertical lines
+for i in range(1, num_periods_to_plot_sun + 1):
+    axs_zoom[1].axvline(x=i * T_sun_days, color='red', linestyle='--', linewidth=1.5, alpha=0.8,
+                        label='FFT Period' if i == 1 else "")
+axs_zoom[1].legend(loc="upper right")
+
+# Improve layout
+plt.tight_layout()
+
+# Save the figure
+zoom_output_path = os.path.join(output_dir, "zoomed_accelerations_periods_q2.pdf")
+plt.savefig(zoom_output_path)
+print(f"Zoomed acceleration period plot saved to: {zoom_output_path}")
+
+plt.close()
 
 ###########################################################################
 # WRITE TO RESULTS FILE ###################################################

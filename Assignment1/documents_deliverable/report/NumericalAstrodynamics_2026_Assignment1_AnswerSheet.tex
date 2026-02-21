@@ -83,66 +83,100 @@ Positions from numerical propagation: every other position $\mathbf{r}_{Gs}(t>0)
 \section*{Question 2}
 
 \subsection*{a}
-\begin{center}
-    $\left(\mathbf{a}_{G,s}\right)_{G}= \nabla U_G (\mathbf{r}_{Gs})$ \\
-    $\left(\mathbf{a}_{J,s}\right)_{G}= \nabla U_J (\mathbf{r}_{Js})$ \\
-    $\left(\mathbf{a}_{I,s}\right)_{G}= -\frac{\mu_I}{\|\mathbf{r}_{Is}\|^3} \mathbf{r}_{Is}$
-\end{center}
+\begin{equation*}
+    \left(\mathbf{a}_{G,s}\right)_{G}= \nabla U_G (\mathbf{r}_{Gs}) 
+    \quad\mathrm{and}\quad 
+    \left(\mathbf{a}_{J,s}\right)_{G}= \nabla U_J (\mathbf{r}_{Js}) 
+    \quad\mathrm{and}\quad 
+    \left(\mathbf{a}_{I,s}\right)_{G}= -\frac{\mu_I}{\|\mathbf{r}_{Is}\|^3} \mathbf{r}_{Is}
+\end{equation*}
 
 \subsection*{b}
 Positions from environment: 
 % initial position of JUICE
 $\mathbf{r}_{Gs}(t=0)$; 
 % position of every other celestial body at every instant:
-$\mathbf{r}_{G}(t)$, $\mathbf{r}_{J}(t)$, $\mathbf{r}_{S}(t)$, $\mathbf{r}_{Sat}(t)$, $\mathbf{r}_{E}(t)$, $\mathbf{r}_{I}(t)$, $\mathbf{r}_{C}(t)$ \\
+$\mathbf{r}_{G}$, $\mathbf{r}_{J}$, $\mathbf{r}_{S}$, $\mathbf{r}_{Sat}$, $\mathbf{r}_{E}$, $\mathbf{r}_{I}$, $\mathbf{r}_{C}$ \\
 Positions from numerical propagation: 
 % every other position of JUICE
  $\mathbf{r}_{Gs}(t>0)$
 
 \subsection*{c.i}
 
-\textit{Insert figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/third_body_accelerations_q2.pdf}
+    \caption{Ganymede-centered gravitational accelerations acting on JUICE due to Io (purple) and the Sun (orange).}
+\end{figure}
 
 \subsection*{c.ii}
 
-$T_{\text{max,Io}}\approx\ldots$ hr \\
-$T_{\text{max,Sun}}\approx\ldots$ hr\\
-\textit{Insert figure(s) to support your explanation, and \textbf{explain briefly why this figure leads to the answer you fill in above}}
+\begin{equation}
+    T_{\text{max,Io}}\approx 57.33 \text{hr}
+    \quad\mathrm{and}\quad 
+    T_{\text{max,Sun}}\approx 1.53 \text{hr} 
+\end{equation}
 
+\footnote{No figures used, the answer is extracted from the FFT of the accelerations done with SciPy library.}
+% \textit{Insert figure(s) to support your explanation, and \textbf{explain briefly why this figure leads to the answer you fill in above}}
 
 \subsection*{c.iii}
 
-$T_{\text{max,Io}}=K_{1} T_{\text{JUICE}} + K_{2} T_{I} + K_{3} T_{J}+\ldots.$ (\textit{replace right-hand side with relevant terms/coefficients}) \\
-$T_{\text{max,Sun}}=K_{1} T_{\text{JUICE}} + K_{2} T_{I} + K_{3} T_{J}+\ldots.$ (\textit{replace right-hand side with relevant terms/coefficients})
+\begin{equation}
+    T_{\text{max,Io}}=\frac{1}{3} T_{G} = \frac{4}{3} T_{I} 
+    \quad\mathrm{and}\quad 
+    T_{\text{max,Sun}}= \frac{1}{2} T_{\text{JUICE}} 
+\end{equation}
 
 \subsection*{c.iv}
-\textit{\textbf{Answer on physical reason for Io-induced period.} (be brief)}  \\
-\textit{\textbf{Answer on physical reason for Sun-induced period.}}  
-\subsection*{c.v}
-\textit{Provide derivation:}\\
-\\
-$\left(\mathbf{a}_{S,s}\right)_{G}=...$ (where $S$ is the Sun and $s$ is the spacecraft; write out the full acceleration, as you did for Io, Jupiter and Ganymede in 2a)\\
-\\
-{Assumption 1 (math only):}\\
-{Assumption 1 (explanation of validity, max. 1 line):}\\
-...
-\\
-{Assumption N (math only):}\\
-{Assumption N (explanation of validity, max. 1 line):}\\
-\\
-Provide your derivation below. When going from step $i$ to step $i+1$, explicitly state which (if any) of the assumptions above are used:\\
-\\
-{Derivation step 1 (new assumptions introduced, give number):}\\
-{Derivation step 1 (math only):}\\
-{Derivation step 1 (explanation, max. 1 line):}\\
-...
-\\
-{Derivation step M (new assumptions introduced, give number):}\\
-{Derivation step M (math only):}\\
-{Derivation step M (explanation, max. 1 line):}\\
-\\
-\textbf{\textit{Write 2 lines explaining {why} your final equation confirms this predicted behaviour}}
 
+% \textit{\textbf{Answer on physical reason for Io-induced period.} (be brief)}  \\
+% \textit{\textbf{Answer on physical reason for Sun-induced period.}}  
+
+The gravitational perturbation from Io is primarily driven by the Io-Ganymede synodic period. In the Ganymede-centered frame, this acceleration reaches its maximum during conjunction and its minimum when Io is in quadrature ($90^\circ$ offset).
+\footnote{\url{https://upload.wikimedia.org/wikipedia/commons/8/83/Galilean_moon_Laplace_resonance_animation.gif}} 
+
+Conversely, the solar perturbation can be analyzed by treating the Sun-Ganymede vector as quasi-static, ($T_{Ganymede} \gg T_{JUICE}$). The resulting acceleration on JUICE depends on its alignment relative to the Sun-Ganymede axis.  This effect peaks when the spacecraft is collinear with the Sun and minimizes when the position vector is orthogonal to the Sun-Ganymede line. Consequently, this geometry results in two maxima per revolution.
+
+\subsection*{c.v}
+
+\begin{equation*}
+    \left(\mathbf{a}_{S,s}\right)_{G} = -\mu_{S} \left( \frac{\mathbf{r}_{Ss}}{||\mathbf{r}_{Ss}||^3} - \frac{\mathbf{r}_{SG}}{||\mathbf{r}_{SG}||^3} \right)
+\end{equation*}
+
+Assupmtions:
+\begin{enumerate}
+    \item $||\mathbf{r}_{SG}|| \gg ||\mathbf{r}_{Gs}||$ 
+    % {The distance from the Sun to Ganymede is much larger than the spacecraft's orbital radius around the moon.}\\
+    \item $||\mathbf{r}_{SG}|| \approx \text{constant}$ 
+    % {Ganymede’s heliocentric distance remains nearly invariant over JUICE’s much shorter orbital period.}\\
+    \item $(1+x)^{-3/2} \approx 1 - \frac{3}{2}x$ (first order Taylor expansion)
+    % {A first-order Taylor expansion is valid for the small ratio of the spacecraft's orbital radius to the solar distance.}\\
+\end{enumerate}
+
+Derivation steps:
+\begin{enumerate}
+    % \textbf{Derivation step   1 (Assumption 1):}\\
+    \item $\mathbf{r}_{Ss} = \mathbf{r}_{SG} + \mathbf{r}_{Gs}$
+    % {Express the Sun-spacecraft vector as the sum of the Sun-Ganymede and Ganymede-spacecraft vectors.}\\
+    % \textbf{Derivation step 2 (Assumption 1):}\\
+    \item $\left(\mathbf{a}_{S,s}\right)_{G} = -\mu_{S} \left( \frac{\mathbf{r}_{SG} + \mathbf{r}_{Gs}}{||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^3} - \frac{\mathbf{r}_{SG}}{||\mathbf{r}_{SG}||^3} \right)$
+    % {Substitute the vector sum into the relative acceleration formula.}\\
+    % \textbf{Derivation step 3 (Assumption 1):}\\
+    \item $||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^{-3} = \left( ||\mathbf{r}_{SG}||^2 + 2\mathbf{r}_{SG} \cdot \mathbf{r}_{Gs} + ||\mathbf{r}_{Gs}||^2 \right)^{-3/2}$ 
+    % {Expand the magnitude of the Sun-spacecraft vector using the law of cosines ($ \mathbf{r}_{SG} \cdot \mathbf{r}_{Gs} = ||\mathbf{r}_{SG}|| ||\mathbf{r}_{Gs}|| \cos\theta $).}\\
+    % \textbf{Derivation step 4 (Assumption 1, 3):}\\
+    \item $||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^{-3} \approx ||\mathbf{r}_{SG}||^{-3} \left( 1 - 3 \frac{||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||} \cos\theta \right)$ 
+    % {Factor out $||\mathbf{r}_{SG}||$ and apply the binomial expansion while neglecting higher-order terms of $||\mathbf{r}_{Gs}||/||\mathbf{r}_{SG}||$.}\\
+    % \textbf{Derivation step 5 (Assumption 1):}\\
+    \item $\left(\mathbf{a}_{S,s}\right)_{G} \approx -\frac{\mu_{S}}{||\mathbf{r}_{SG}||^3} \left[ (\mathbf{r}_{SG} + \mathbf{r}_{Gs}) \left( 1 - 3 \frac{||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||} \cos\theta \right) - \mathbf{r}_{SG} \right]$ 
+    % {Substitute the linearized magnitude back into the acceleration equation.}\\
+    % \textbf{Derivation step 6 (Assumption 1, 2):}\\
+    \item $||\left(\mathbf{a}_{S,s}\right)_{G}|| \approx \frac{\mu_{S} ||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||^3} \sqrt{1 + 3\cos^2\theta}$ 
+    % {Simplify to find the magnitude, showing it depends on the spacecraft's position relative to the Sun-Ganymede line.}\\
+\end{enumerate}
+
+The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum twice per orbit (at $\theta = 0^\circ$ and $180^\circ$). 
 \clearpage
 
 \section*{Question 3}
