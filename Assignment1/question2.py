@@ -23,6 +23,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy.optimize import fsolve
+from scipy.fftpack import fft, fftfreq
 from matplotlib import pyplot as plt
 from tudatpy import constants
 from tudatpy.data import save2txt
@@ -278,6 +279,57 @@ plt.savefig(accel_output_path)
 print(f"Acceleration norms plot saved to: {accel_output_path}")
 
 plt.close()
+
+###########################################################################
+# FFT ANALYSIS FOR PERIOD OF MAXIMUM VARIATION ############################
+###########################################################################
+
+norm_accel_io_fft = norm_accel_io - np.mean(norm_accel_io)
+norm_accel_sun_fft = norm_accel_sun - np.mean(norm_accel_sun)
+
+number_of_points = len(time_array)
+# timestep = fixed_step_size  # seconds
+
+# print(norm_accel_io_fft.mean())  # debugging
+# print(norm_accel_io_fft.shape)  # debugging
+
+# Source - https://stackoverflow.com/a/49545394
+# Posted by francis, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-02-21, License - CC BY-SA 4.0
+
+fft_accel_io = fft(norm_accel_io_fft)
+fft_accel_sun = fft(norm_accel_sun_fft)
+# print(fft_accel_io) # debugging
+
+def abs2(x):
+    return x.real**2 + x.imag**2
+
+fft_accel_io_ampl = abs2(fft_accel_io)
+fft_accel_sun_ampl = abs2(fft_accel_sun)
+
+pos_max_accel_io_ampl = np.argmax(fft_accel_io_ampl)
+pos_max_accel_sun_ampl = np.argmax(fft_accel_sun_ampl)
+
+# print(pos_max_accel_io_ampl) # debugging
+# print(len(norm_accel_io_fft)) # debugging
+
+
+# print(fft_accel_io_ampl[pos_max_accel_io_ampl]) # debugging
+# print(np.max(fft_accel_io_ampl)) # debugging
+
+
+freq = fftfreq(number_of_points, d=fixed_step_size)
+# print(freq.shape) # debugging
+# print(freq[pos_max_accel_io_ampl]) # debugging
+
+freq_max_accel_io_ampl = freq[pos_max_accel_io_ampl]
+period_max_accel_io_ampl = 1/freq_max_accel_io_ampl
+print("The period of the variation of the acceleration is ", period_max_accel_io_ampl, " seconds")
+
+freq_max_accel_sun_ampl = freq[pos_max_accel_sun_ampl]
+period_max_accel_sun_ampl = 1/freq_max_accel_sun_ampl
+print("The period of the variation of the sun's acceleration is ", period_max_accel_sun_ampl, " seconds")
+
 
 ###########################################################################
 # WRITE TO RESULTS FILE ###################################################
