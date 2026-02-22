@@ -70,7 +70,7 @@ spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 
 # Create settings for celestial bodies
 bodies_to_create = ["Ganymede", "Jupiter", "Sun", "Saturn", "Europa", "Io", "Callisto"]
-global_frame_origin = "SSB"
+global_frame_origin = "Ganymede"
 global_frame_orientation = "ECLIPJ2000"
 body_settings = environment_setup.get_default_body_settings(
     bodies_to_create, global_frame_origin, global_frame_orientation
