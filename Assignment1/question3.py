@@ -29,7 +29,10 @@ from tudatpy import constants
 from tudatpy.data import save2txt
 from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, propagation_setup, simulator
+from tudatpy.dynamics.propagation import create_dependent_variable_dictionary
 from tudatpy.astro import element_conversion, frame_conversion
+from tudatpy.util import result2array
+from tudatpy import constants
 
 # Retrieve current directory
 current_directory = os.getcwd()
@@ -45,8 +48,8 @@ simulation_start_epoch = (
     + B * constants.JULIAN_DAY
     + C * constants.JULIAN_DAY / 24.0
 )
-simulation_end_epoch = simulation_start_epoch + 1e-3 * constants.JULIAN_DAY / 24.0 # debugging 
-# simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
+simulation_end_epoch = simulation_start_epoch + 1e-1 * constants.JULIAN_DAY / 24.0 # debugging 
+simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
 
 # INPUT DATA FROM THE QUESTION IN THE ASSIGNMENT
 
@@ -77,26 +80,37 @@ body_settings = environment_setup.get_default_body_settings(
     bodies_to_create, global_frame_origin, global_frame_orientation
 )
 
-body_settings.get("Ganymede").atmosphere_settings = environment_setup.atmosphere.exponential(density_scale_height, density_at_zero_altitude)
-
-occulting_bodies_dict = dict()
-occulting_bodies_dict["Sun"] = ["Ganymede"]
-vehicle_target_settings = environment_setup.radiation_pressure.cannonball_radiation_target(ref_area_juice,rad_pres_coeff_juice,occulting_bodies_dict)
-
 ###########################################################################
 # CREATE VEHICLE ##########################################################
 ###########################################################################
 
 body_settings.add_empty_settings("JUICE")
-body_settings.get( "JUICE" ).radiation_pressure_target_settings = vehicle_target_settings
+
+# drag settings 
+body_settings.get("Ganymede").atmosphere_settings = environment_setup.atmosphere.exponential(density_scale_height, density_at_zero_altitude)
+aero_coefficient_settings = environment_setup.aerodynamic_coefficients.constant(
+    ref_area_juice, [drag_coeff_juice, 0, 0])
+
+# environment_setup.add_aerodynamic_coefficient_interface(bodies, "JUICE", aero_coefficient_settings)
+body_settings.get("JUICE").aerodynamic_coefficient_settings = aero_coefficient_settings
+
+# radiation pressure settings
+occulting_bodies_dict = dict()
+occulting_bodies_dict["Sun"] = ["Ganymede"]
+# body_settings.get( "JUICE" ).radiation_pressure_target_settings = vehicle_target_settings
+# vehicle_target_settings = environment_setup.radiation_pressure.cannonball_radiation_target(ref_area_juice,rad_pres_coeff_juice,occulting_bodies_dict)
+
+occulting_bodies_dict = dict()
+occulting_bodies_dict["Sun"] = ["Ganymede"]
+vehicle_target_settings = environment_setup.radiation_pressure.cannonball_radiation_target(
+    ref_area_juice, rad_pres_coeff_juice, occulting_bodies_dict )
+
+# Add the radiation pressure interface to the body settings
+body_settings.get("JUICE").radiation_pressure_target_settings = vehicle_target_settings
 
 # Create environment
 bodies = environment_setup.create_system_of_bodies(body_settings)
 bodies.get_body("JUICE").mass = mass_juice
-
-# drag settings 
-aero_coefficient_settings = environment_setup.aerodynamic_coefficients.constant(ref_area_juice, [drag_coeff_juice, 0, 0])
-environment_setup.add_aerodynamic_coefficient_interface(bodies, "JUICE", aero_coefficient_settings)
 
 ###########################################################################
 # CREATE ACCELERATIONS ####################################################
@@ -107,22 +121,40 @@ bodies_to_propagate = ["JUICE"]
 central_bodies = ["Ganymede"]
 
 # Define accelerations acting on vehicle.
-acceleration_settings_on_vehicle = dict(Ganymede=[propagation_setup.acceleration.spherical_harmonic_gravity(2,2),
-                                                  propagation_setup.acceleration.aerodynamic()],
-                                        Jupiter=[propagation_setup.acceleration.spherical_harmonic_gravity(4,0)],
-                                        Sun=[propagation_setup.acceleration.point_mass_gravity(),
-                                             propagation_setup.acceleration.radiation_pressure()], # CHECK 
-                                        Saturn=[propagation_setup.acceleration.point_mass_gravity()],
-                                        Europa=[propagation_setup.acceleration.point_mass_gravity()],
-                                        Io=[propagation_setup.acceleration.point_mass_gravity()],
-                                        Callisto=[propagation_setup.acceleration.point_mass_gravity()],)
+acceleration_settings_on_vehicle = dict(
+    Ganymede=[
+        propagation_setup.acceleration.spherical_harmonic_gravity(2,2),
+        propagation_setup.acceleration.aerodynamic()
+    ],
+    Jupiter=[
+        propagation_setup.acceleration.spherical_harmonic_gravity(4,0)
+    ],
+    Sun=[propagation_setup.acceleration.point_mass_gravity(),
+        propagation_setup.acceleration.radiation_pressure()  # CHECK
+    ], 
+    Saturn=[
+        propagation_setup.acceleration.point_mass_gravity()
+    ],
+    Europa=[
+        propagation_setup.acceleration.point_mass_gravity()
+    ],
+    Io=[
+        propagation_setup.acceleration.point_mass_gravity()
+    ],
+    Callisto=[
+        propagation_setup.acceleration.point_mass_gravity()
+    ]
+)
 
 # Create global accelerations dictionary.
 acceleration_settings = {"JUICE": acceleration_settings_on_vehicle}
 
 # Create acceleration models.
 acceleration_models = propagation_setup.create_acceleration_models(
-    bodies, acceleration_settings, bodies_to_propagate, central_bodies
+    bodies, 
+    acceleration_settings, 
+    bodies_to_propagate, 
+    central_bodies
 )
 
 ###########################################################################
@@ -174,6 +206,7 @@ integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step(
 termination_settings = propagation_setup.propagator.time_termination(
     simulation_end_epoch
 )
+
 propagator_settings = propagation_setup.propagator.translational(
     central_bodies,
     acceleration_models,
@@ -200,8 +233,9 @@ dynamics_simulator = simulator.create_dynamics_simulator(
 # Retrieve all data produced by simulation
 propagation_results = dynamics_simulator.propagation_results
 
-# Extract numerical solution for states and dependent variables
+# Extract numerical solution for states and dependent 
 state_history = propagation_results.state_history
+state_array = result2array(state_history)
 dependent_variables = propagation_results.dependent_variable_history
 
 
@@ -250,222 +284,69 @@ time_days = [
 # Extract the numerical Cartesian states
 numerical_cartesian = np.vstack(list(state_history.values()))[sorted_indices]
 
-# ###########################################################################
-# # PLOT THIRD-BODY ACCELERATION NORMS ######################################
-# ###########################################################################
-
-# # Ensure we have the full dependent variables matrix sorted by time
-# dep_vars_matrix = np.vstack(list(dependent_variables.values()))[sorted_indices]
-
-# # Extract the 3D acceleration vectors based on the dependent_variables_to_save order
-# accel_io_vector = dep_vars_matrix[:, 9:12]
-# accel_sun_vector = dep_vars_matrix[:, 12:15]
-
-# # Calculate the magnitudes (Euclidean norm) at each time step
-# norm_accel_io = np.linalg.norm(accel_io_vector, axis=1)
-# norm_accel_sun = np.linalg.norm(accel_sun_vector, axis=1)
-
-# # Generate the plot
-# fig_accel, ax_accel = plt.subplots(figsize=(10, 6))
-
-# # Plotting on a logarithmic y-axis
-# ax_accel.semilogy(time_days, norm_accel_sun, label='Sun Third-Body Gravity', color='tab:orange', linewidth=2)
-# ax_accel.semilogy(time_days, norm_accel_io, label='Io Third-Body Gravity', color='tab:purple', linewidth=2)
-
-# ax_accel.set_title('Magnitudes of Third-Body Gravitational Accelerations on JUICE', fontsize=14, fontweight='bold')
-# ax_accel.set_xlabel('Time since $t_0$ [days]', fontsize=12)
-# ax_accel.set_ylabel('Acceleration Norm [$\mathrm{m/s}^2$]', fontsize=12)
-
-# # Grid formatting for log scale
-# ax_accel.grid(True, which="major", linestyle="-", alpha=0.6)
-# ax_accel.grid(True, which="minor", linestyle="--", alpha=0.3)
-# ax_accel.legend(fontsize=12)
-
-# # Improve layout spacing
-# plt.tight_layout()
-
-# # Save the figure
-# accel_output_path = os.path.join(output_dir, "third_body_accelerations_q2.pdf")
-# plt.savefig(accel_output_path)
-# print(f"Acceleration norms plot saved to: {accel_output_path}")
-
-# plt.close()
-
-# ###########################################################################
-# # FFT ANALYSIS FOR PERIOD OF MAXIMUM VARIATION ############################
-# ###########################################################################
-
-# norm_accel_io_fft = norm_accel_io - np.mean(norm_accel_io)
-# norm_accel_sun_fft = norm_accel_sun - np.mean(norm_accel_sun)
-
-# number_of_points = len(time_array)
-# # timestep = fixed_step_size  # seconds
-
-# # print(norm_accel_io_fft.mean())  # debugging
-# # print(norm_accel_io_fft.shape)  # debugging
-
-# # Source - https://stackoverflow.com/a/49545394
-# # Posted by francis, modified by community. See post 'Timeline' for change history
-# # Retrieved 2026-02-21, License - CC BY-SA 4.0
-
-# fft_accel_io = fft(norm_accel_io_fft)
-# fft_accel_sun = fft(norm_accel_sun_fft)
-# # print(fft_accel_io) # debugging
-
-# def abs2(x):
-#     return x.real**2 + x.imag**2
-
-# fft_accel_io_ampl = abs2(fft_accel_io)
-# fft_accel_sun_ampl = abs2(fft_accel_sun)
-
-# pos_max_accel_io_ampl = np.argmax(fft_accel_io_ampl)
-# pos_max_accel_sun_ampl = np.argmax(fft_accel_sun_ampl)
-
-# # print(pos_max_accel_io_ampl) # debugging
-# # print(len(norm_accel_io_fft)) # debugging
-
-
-# # print(fft_accel_io_ampl[pos_max_accel_io_ampl]) # debugging
-# # print(np.max(fft_accel_io_ampl)) # debugging
-
-
-# freq = fftfreq(number_of_points, d=fixed_step_size)
-# # print(freq.shape) # debugging
-# # print(freq[pos_max_accel_io_ampl]) # debugging
-
-# freq_max_accel_io_ampl = freq[pos_max_accel_io_ampl]
-# period_max_accel_io_ampl = 1/freq_max_accel_io_ampl
-# print(f"The period of the variation of Io's acceleration is {period_max_accel_io_ampl/3600:.2f} hours")
-
-# freq_max_accel_sun_ampl = freq[pos_max_accel_sun_ampl]
-# period_max_accel_sun_ampl = 1/freq_max_accel_sun_ampl
-# print(f"The period of the variation of Sun's acceleration is {period_max_accel_sun_ampl/3600:.2f} hours")
-
-# # ANALYSIS AS FUNCTION OF RELEVANT PERIODS
-
-# # JUICE period
-# sma = system_initial_state_keplerian[0]
-# T_JUICE = 2 * np.pi * (sma**3 / ganymede_grav_param)**0.5
-# # print("T_JUICE = ", T_JUICE, " s") # debugging
- 
-# T_ganymede = 7.15455296 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Ganymede_(moon)
-# T_io = 1.769137786 * constants.JULIAN_DAY # https://en.wikipedia.org/wiki/Io_(moon) 
-# T_jupiter = 11.862 * constants.JULIAN_YEAR # https://en.wikipedia.org/wiki/Jupiter
-
-# print("\nRatios of period of maximum variation of acceletation by IO to relevant periods: ")
-# print(f"T_max_io / T_JUICE: {period_max_accel_io_ampl/T_JUICE:.2f} (Inverse: {T_JUICE/period_max_accel_io_ampl:.2f})")
-# print(f"T_max_io / T_io: {period_max_accel_io_ampl/T_io:.2f} (Inverse: {T_io/period_max_accel_io_ampl:.2f})")
-# print(f"T_max_io / T_ganymede: {period_max_accel_io_ampl/T_ganymede:.2f} (Inverse: {T_ganymede/period_max_accel_io_ampl:.2f})")
-# print(f"T_max_io / T_jupiter: {period_max_accel_io_ampl/T_jupiter:.2f} (Inverse: {T_jupiter/period_max_accel_io_ampl:.2f})")
-
-# print("\nRatios of period of maximum variation of acceletation by Sun to relevant periods: ")
-# print(f"T_max_sun / T_JUICE: {period_max_accel_sun_ampl/T_JUICE:.2f} (Inverse: {T_JUICE/period_max_accel_sun_ampl:.2f})")
-# print(f"T_max_sun / T_io: {period_max_accel_sun_ampl/T_io:.2f} (Inverse: {T_io/period_max_accel_sun_ampl:.2f})")
-# print(f"T_max_sun / T_ganymede: {period_max_accel_sun_ampl/T_ganymede:.2f} (Inverse: {T_ganymede/period_max_accel_sun_ampl:.2f})")
-# print(f"T_max_sun / T_jupiter: {period_max_accel_sun_ampl/T_jupiter:.2f} (Inverse: {T_jupiter/period_max_accel_sun_ampl:.2f})")
-
-# ###########################################################################
-# # PLOT ZOOMED ACCELERATIONS WITH SUPERIMPOSED PERIODS #####################
-# ###########################################################################
-
-# # Convert the calculated periods from seconds to days for the x-axis
-# T_io_days = period_max_accel_io_ampl / (24 * 3600)
-# T_sun_days = period_max_accel_sun_ampl / (24 * 3600)
-
-# # Convert time_days list to a numpy array for easy boolean masking
-# time_days_arr = np.array(time_days)
-
-# # Create a 2-panel figure
-# fig_zoom, axs_zoom = plt.subplots(2, 1, figsize=(12, 10))
-
-# # --- PANEL 1: IO ---
-# # Define a subset window (e.g., 5 times the dominant period)
-# num_periods_to_plot_io = 5
-# window_io = num_periods_to_plot_io * T_io_days
-# mask_io = time_days_arr <= window_io
-
-# axs_zoom[0].plot(time_days_arr[mask_io], norm_accel_io[mask_io], color='tab:purple', linewidth=2)
-# axs_zoom[0].set_title(f"Io Third-Body Acceleration (First {window_io:.2f} Days)\nSuperimposed Period: {T_io_days:.2f} Days", fontsize=14, fontweight='bold')
-# axs_zoom[0].set_ylabel('Acceleration [$\mathrm{m/s}^2$]', fontsize=12)
-# axs_zoom[0].grid(True, alpha=0.6)
-
-# # Superimpose the period with vertical lines
-# for i in range(1, num_periods_to_plot_io + 1):
-#     axs_zoom[0].axvline(x=i * T_io_days, color='red', linestyle='--', linewidth=1.5, alpha=0.8, 
-#                         label='FFT Period' if i == 1 else "")
-# axs_zoom[0].legend(loc="upper right")
-
-
-# # --- PANEL 2: SUN ---
-# # Define a subset window (e.g., 5 times the dominant period)
-# num_periods_to_plot_sun = 5
-# window_sun = num_periods_to_plot_sun * T_sun_days
-# mask_sun = time_days_arr <= window_sun
-
-# axs_zoom[1].plot(time_days_arr[mask_sun], norm_accel_sun[mask_sun], color='tab:orange', linewidth=2)
-# axs_zoom[1].set_title(f"Sun Third-Body Acceleration (First {window_sun:.2f} Days)\nSuperimposed Period: {T_sun_days:.2f} Days", fontsize=14, fontweight='bold')
-# axs_zoom[1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
-# axs_zoom[1].set_ylabel('Acceleration [$\mathrm{m/s}^2$]', fontsize=12)
-# axs_zoom[1].grid(True, alpha=0.6)
-
-# # Superimpose the period with vertical lines
-# for i in range(1, num_periods_to_plot_sun + 1):
-#     axs_zoom[1].axvline(x=i * T_sun_days, color='red', linestyle='--', linewidth=1.5, alpha=0.8,
-#                         label='FFT Period' if i == 1 else "")
-# axs_zoom[1].legend(loc="upper right")
-
-# # Improve layout
-# plt.tight_layout()
-
-# # Save the figure
-# zoom_output_path = os.path.join(output_dir, "zoomed_accelerations_periods_q2.pdf")
-# plt.savefig(zoom_output_path)
-# print(f"Zoomed acceleration period plot saved to: {zoom_output_path}")
-
-# plt.close()
-
 ###########################################################################
 # VALIDATING ACCELERATIONS ################################################
 ###########################################################################
 
-c = 299792458 # m/s https://en.wikipedia.org/wiki/Speed_of_light
+c = constants.SPEED_OF_LIGHT # m/s
 P = 3.828e26 # W https://en.wikipedia.org/wiki/Solar_luminosity
 
 # extraction of dependent variables 
 dep_vars = propagation_results.dependent_variable_history
+dep_vars_array = result2array(dep_vars)
+# print(dep_vars_array[0]) # debugging
+dep_var_dict = create_dependent_variable_dictionary(dynamics_simulator)
+
 dep_vars_matrix = np.vstack(list(dependent_variables.values()))[sorted_indices]
 dep_vars_ids = propagation_results.dependent_variable_ids
 
 print("Dependent variable IDs: ", dep_vars_ids) # debugging
 
-if not len(dep_vars[simulation_start_epoch]) == 44: # debugging in case that more dependent variables are added
-    raise ValueError(f"Expected 44 dependent variables, but got {len(dep_vars[simulation_start_epoch])}") # debugging in case that more dependent variables are added
+if not len(dep_vars_array[0]) == 45: # debugging in case that more dependent variables are added
+    raise ValueError(f"Expected 44 dependent variables, but got {len(dep_vars_array[0])-1}") # debugging in case that more dependent variables are added
 
 # print(dep_vars_matrix) # debugging
 
-mass_sanity_check = dep_vars_matrix[:,28]
+# Remember to add 1 to the IDs because of result2array implementation
+mass_sanity_check = dep_vars_array[:,29]
 print(f"Mass sanity check: {mass_sanity_check[0]} kg") # debugging
 # aerodynamic_coeffs = dep_vars_matrix[:, 22:25] # only for sanity check of drag
 # print(aerodynamic_coeffs[0]) # print first aerodynamic coefficient
 
-dynamic_pressure = dep_vars_matrix[:, 21]
-density = dep_vars_matrix[:, 26]
-sun_juice_position = dep_vars_matrix[:, 29:32]
-airspeed = dep_vars_matrix[:, 25]
-airspeed_vector = dep_vars_matrix[:, 41:44]
+# dynamic_pressure_old = dep_vars_array[:, 22]
+dynamic_pressure = dep_var_dict.asarray(propagation_setup.dependent_variable.dynamic_pressure("JUICE", "Ganymede"))
+# print(dynamic_pressure - dynamic_pressure_old) # debugging
+density = dep_var_dict.asarray(propagation_setup.dependent_variable.density("JUICE", "Ganymede"))
+sun_juice_position = dep_var_dict.asarray(propagation_setup.dependent_variable.relative_position("JUICE", "Sun"))
+airspeed = dep_var_dict.asarray(propagation_setup.dependent_variable.airspeed("JUICE", "Ganymede"))
+airspeed_vector = dep_var_dict.asarray(propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede"))
+radiation_pressure_coeff_sanity = dep_var_dict.asarray(propagation_setup.dependent_variable.radiation_pressure_coefficient("JUICE", "Sun"))
+
 
 # sanity checks
 if not np.allclose(dynamic_pressure, 0.5 * density * airspeed**2):
-    raise ValueError("Dynamic pressure does not match ") # sanity check
-radiation_pressure_coeff_sanity = dep_vars_matrix[:, 27]
+    raise ValueError(f"Dynamic pressure does not match. Residual =  {dynamic_pressure - 0.5 * density * airspeed**2}") # sanity check
 if not np.allclose(radiation_pressure_coeff_sanity, rad_pres_coeff_juice):
-    raise ValueError("Radiation pressure coefficient does not match the expected value") # sanity check
+    raise ValueError(f"Radiation pressure coefficient does not match. Expected: {rad_pres_coeff_juice}, Got: {radiation_pressure_coeff_sanity[0]}") # sanity check
 
 # calculation of accelerations for validation
+
+#aerodynamic acceleration
+airspeed_vector_inertial = np.zeros_like(airspeed_vector)
+for i, epoch in enumerate(time_array):
+    rot_matrix = spice.compute_rotation_matrix_between_frames(
+        "IAU_GANYMEDE", "ECLIPJ2000", epoch
+    )
+    airspeed_vector_inertial[i, :] = rot_matrix @ airspeed_vector[i, :]
+
+airspeed_norm = np.linalg.norm(airspeed_vector_inertial, axis=1)[:, np.newaxis]
+airspeed_unitary_vector_inertial = airspeed_vector_inertial / airspeed_norm
+
+
 accel_aerodynamic_manual_mag = dynamic_pressure * ref_area_juice * drag_coeff_juice / mass_juice
-airspeed_norm = np.linalg.norm(airspeed_vector, axis=1)[:, np.newaxis]
-airspeed_unitary_vector = airspeed_vector / airspeed_norm
-accel_aerodynamic_manual = -accel_aerodynamic_manual_mag[:, np.newaxis] * airspeed_unitary_vector
+# airspeed_norm = np.linalg.norm(airspeed_vector, axis=1)[:, np.newaxis]
+# airspeed_unitary_vector = airspeed_vector / airspeed_norm
+accel_aerodynamic_manual = -accel_aerodynamic_manual_mag[:, np.newaxis] * airspeed_unitary_vector_inertial
 
 sun_juice_position_mag = np.linalg.norm(sun_juice_position, axis=1)
 # print(sun_juice_position_mag.shape) # debugging
@@ -475,111 +356,107 @@ accel_radiation_pressure_manual_mag = np.linalg.norm(accel_radiation_pressure_ma
 # print(accel_radiation_pressure_manual_mag) # debugging
 
 # retrieving of accelerations from simulations
-accel_aerodynamic_simulation = dep_vars_matrix[:, 15:18]
+accel_aerodynamic_simulation = dep_vars_array[:, 19:22]
 accel_aerodynamic_simulation_mag = np.linalg.norm(accel_aerodynamic_simulation, axis=1)
 # print(accel_aerodynamic_simulation_mag) # debugging
 
-accel_radiation_pressure_simulation = dep_vars_matrix[:, 18:21]
+accel_radiation_pressure_simulation = dep_vars_array[:, 16:19]
 accel_radiation_pressure_simulation_mag = np.linalg.norm(accel_radiation_pressure_simulation, axis=1)
 # print(accel_radiation_pressure_simulation_mag) # debugging
 
 ###########################################################################
-# PLOT ACCELERATION VALIDATION ############################################
+# PLOT ACCELERATION VALIDATION (DIFFERENCES) ##############################
 ###########################################################################
 
 # Correct the manual aerodynamic magnitude to be strictly positive for comparison
 accel_aero_manual_mag_abs = np.abs(accel_aerodynamic_manual_mag)
 
+# Calculate differences (Simulation - Analytical)
+diff_aero_mag = accel_aerodynamic_simulation_mag - accel_aero_manual_mag_abs
+diff_srp_mag = accel_radiation_pressure_simulation_mag - accel_radiation_pressure_manual_mag
+diff_srp_vec = accel_radiation_pressure_simulation - accel_radiation_pressure_manual
+diff_aero_vec = accel_aerodynamic_simulation - accel_aerodynamic_manual
+
 # -------------------------------------------------------------------------
-# 1. Aerodynamic Magnitude Comparison
+# 1. Aerodynamic Magnitude Difference
 # -------------------------------------------------------------------------
 fig_aero, ax_aero = plt.subplots(figsize=(10, 6))
-ax_aero.plot(time_days, accel_aerodynamic_simulation_mag, label='Tudat Simulation', color='tab:blue', linewidth=2)
-ax_aero.plot(time_days, accel_aero_manual_mag_abs, label='Manual Analytical', color='red', linestyle='--', linewidth=2)
+ax_aero.plot(time_days, diff_aero_mag, color='tab:blue', linewidth=2)
 
-ax_aero.set_title('Aerodynamic Acceleration Magnitude Validation', fontsize=14, fontweight='bold')
+ax_aero.set_title('Aerodynamic Acceleration Magnitude Difference\n(Simulation - Analytical)', fontsize=14, fontweight='bold')
 ax_aero.set_xlabel('Time since $t_0$ [days]', fontsize=12)
-ax_aero.set_ylabel(r'Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
+ax_aero.set_ylabel(r'$\Delta$ Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
 ax_aero.grid(True, alpha=0.6)
-ax_aero.legend(fontsize=12)
+ax_aero.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 plt.tight_layout()
-aero_val_path = os.path.join(output_dir, "validation_aero_mag_q3.pdf")
+aero_val_path = os.path.join(output_dir, "validation_aero_mag_diff_q3.pdf")
 plt.savefig(aero_val_path)
-print(f"Aerodynamic validation plot saved to: {aero_val_path}")
+print(f"Aerodynamic magnitude difference plot saved to: {aero_val_path}")
 plt.close()
 
 # -------------------------------------------------------------------------
-# 2. Radiation Pressure Magnitude Comparison
+# 2. Radiation Pressure Magnitude Difference
 # -------------------------------------------------------------------------
 fig_srp_mag, ax_srp_mag = plt.subplots(figsize=(10, 6))
-ax_srp_mag.plot(time_days, accel_radiation_pressure_simulation_mag, label='Tudat Simulation', color='tab:orange', linewidth=2)
-ax_srp_mag.plot(time_days, accel_radiation_pressure_manual_mag, label='Manual Analytical', color='black', linestyle='--', linewidth=2)
+ax_srp_mag.plot(time_days, diff_srp_mag, color='tab:orange', linewidth=2)
 
-ax_srp_mag.set_title('Solar Radiation Pressure Magnitude Validation', fontsize=14, fontweight='bold')
+ax_srp_mag.set_title('Solar Radiation Pressure Magnitude Difference\n(Simulation - Analytical)', fontsize=14, fontweight='bold')
 ax_srp_mag.set_xlabel('Time since $t_0$ [days]', fontsize=12)
-ax_srp_mag.set_ylabel(r'Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
+ax_srp_mag.set_ylabel(r'$\Delta$ Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
 ax_srp_mag.grid(True, alpha=0.6)
-ax_srp_mag.legend(fontsize=12)
+ax_srp_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 plt.tight_layout()
-srp_mag_val_path = os.path.join(output_dir, "validation_srp_mag_q3.pdf")
+srp_mag_val_path = os.path.join(output_dir, "validation_srp_mag_diff_q3.pdf")
 plt.savefig(srp_mag_val_path)
-print(f"SRP magnitude validation plot saved to: {srp_mag_val_path}")
+print(f"SRP magnitude difference plot saved to: {srp_mag_val_path}")
 plt.close()
 
 # -------------------------------------------------------------------------
-# 3. Radiation Pressure Vector Comparison
+# 3. Radiation Pressure Vector Difference
 # -------------------------------------------------------------------------
 fig_srp_vec, axs_srp_vec = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
-fig_srp_vec.suptitle('Solar Radiation Pressure Vector Validation', fontsize=16, fontweight='bold', y=0.96)
+fig_srp_vec.suptitle('Solar Radiation Pressure Vector Difference\n(Simulation - Analytical)', fontsize=16, fontweight='bold', y=0.96)
 
 components = ['X', 'Y', 'Z']
 colors = ['tab:red', 'tab:green', 'tab:purple']
 
 for i in range(3):
-    # Plot numerical simulation as solid thick lines
-    axs_srp_vec[i].plot(time_days, accel_radiation_pressure_simulation[:, i], label='Tudat Simulation', color=colors[i], linewidth=2)
-    # Plot manual calculation as dashed black lines over the top
-    axs_srp_vec[i].plot(time_days, accel_radiation_pressure_manual[:, i], label='Manual Analytical', color='black', linestyle='--', linewidth=1.5)
-    
-    axs_srp_vec[i].set_ylabel(components[i] + ' Component [m s^-2]', fontsize=12)
+    axs_srp_vec[i].plot(time_days, diff_srp_vec[:, i], color=colors[i], linewidth=2)
+    axs_srp_vec[i].set_ylabel(f'$\Delta$ {components[i]} Component [m s^-2]', fontsize=12)
     axs_srp_vec[i].grid(True, alpha=0.6)
-    axs_srp_vec[i].legend(loc='upper right', fontsize=10)
+    axs_srp_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 axs_srp_vec[-1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-srp_vec_val_path = os.path.join(output_dir, "validation_srp_vector_q3.pdf")
+srp_vec_val_path = os.path.join(output_dir, "validation_srp_vector_diff_q3.pdf")
 plt.savefig(srp_vec_val_path)
-print(f"SRP vector validation plot saved to: {srp_vec_val_path}")
+print(f"SRP vector difference plot saved to: {srp_vec_val_path}")
 plt.close()
 
 # -------------------------------------------------------------------------
-# 4. Aerodynamic acceleration Vector Comparison
+# 4. Aerodynamic Acceleration Vector Difference
 # -------------------------------------------------------------------------
 fig_aero_vec, axs_aero_vec = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
-fig_aero_vec.suptitle('Aerodynamic Acceleration Vector Validation', fontsize=16, fontweight='bold', y=0.96)
+fig_aero_vec.suptitle('Aerodynamic Acceleration Vector Difference\n(Simulation - Analytical)', fontsize=16, fontweight='bold', y=0.96)
 
 components = ['X', 'Y', 'Z']
 colors = ['tab:red', 'tab:green', 'tab:purple']
 
 for i in range(3):
-    # Plot numerical simulation as solid thick lines
-    axs_aero_vec[i].plot(time_days, accel_aerodynamic_simulation[:, i], label='Tudat Simulation', color=colors[i], linewidth=2)
-    # Plot manual calculation as dashed black lines over the top
-    axs_aero_vec[i].plot(time_days, accel_aerodynamic_manual[:, i], label='Manual Analytical', color='black', linestyle='--', linewidth=1.5)
-    
-    axs_aero_vec[i].set_ylabel(components[i] + ' Component [m s^-2]', fontsize=12)
+    axs_aero_vec[i].plot(time_days, diff_aero_vec[:, i], color=colors[i], linewidth=2)
+    axs_aero_vec[i].set_ylabel(f'$\Delta$ {components[i]} Component [m s^-2]', fontsize=12)
     axs_aero_vec[i].grid(True, alpha=0.6)
-    axs_aero_vec[i].legend(loc='upper right', fontsize=10)
+    axs_aero_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 axs_aero_vec[-1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-aero_vec_val_path = os.path.join(output_dir, "validation_aero_vector_q3.pdf")
+aero_vec_val_path = os.path.join(output_dir, "validation_aero_vector_diff_q3.pdf")
 plt.savefig(aero_vec_val_path)
-print(f"Aerodynamic vector validation plot saved to: {aero_vec_val_path}")
+print(f"Aerodynamic vector difference plot saved to: {aero_vec_val_path}")
 plt.close()
 
 ###########################################################################
