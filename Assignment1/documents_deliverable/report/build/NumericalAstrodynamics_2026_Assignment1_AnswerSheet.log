@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  21 FEB 2026 20:58
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  22 FEB 2026 11:02
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex
@@ -395,9 +395,88 @@ Underfull \hbox (badness 10000) in paragraph at lines 137--137
 [][][][][]$\TU/lmtt/m/n/8 https://upload.wikimedia.org/wikipedia/commons/8/83/Galilean_moon_Laplace_
  []
 
-[6] [7
+[6]
+<../../figures/validation_aero_mag_q3.pdf, id=363, 722.7pt x 433.62pt>
+File: ../../figures/validation_aero_mag_q3.pdf Graphic file (type pdf)
+<use ../../figures/validation_aero_mag_q3.pdf>
+Package luatex.def Info: ../../figures/validation_aero_mag_q3.pdf  used on input line 192.
+(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+<../../figures/validation_aero_vector_q3.pdf, id=364, 722.7pt x 867.24pt>
+File: ../../figures/validation_aero_vector_q3.pdf Graphic file (type pdf)
+<use ../../figures/validation_aero_vector_q3.pdf>
+Package luatex.def Info: ../../figures/validation_aero_vector_q3.pdf  used on input line 198.
+(luatex.def)             Requested size: 345.0pt x 413.9944pt.
 
-] [8
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/validation_srp_mag_q3.pdf, id=365, 722.7pt x 433.62pt>
+File: ../../figures/validation_srp_mag_q3.pdf Graphic file (type pdf)
+<use ../../figures/validation_srp_mag_q3.pdf>
+Package luatex.def Info: ../../figures/validation_srp_mag_q3.pdf  used on input line 204.
+(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/validation_srp_vector_q3.pdf, id=366, 722.7pt x 867.24pt>
+File: ../../figures/validation_srp_vector_q3.pdf Graphic file (type pdf)
+<use ../../figures/validation_srp_vector_q3.pdf>
+Package luatex.def Info: ../../figures/validation_srp_vector_q3.pdf  used on input line 210.
+(luatex.def)             Requested size: 345.0pt x 413.9944pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/rsw_aero_acceleration_magnitude_q3.pdf, id=367, 722.7pt x 361.35pt>
+File: ../../figures/rsw_aero_acceleration_magnitude_q3.pdf Graphic file (type pdf)
+<use ../../figures/rsw_aero_acceleration_magnitude_q3.pdf>
+Package luatex.def Info: ../../figures/rsw_aero_acceleration_magnitude_q3.pdf  used on input line 221.
+(luatex.def)             Requested size: 345.0pt x 172.49767pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/rsw_aero_acceleration_vector_local_q3.pdf, id=368, 722.7pt x 650.43pt>
+File: ../../figures/rsw_aero_acceleration_vector_local_q3.pdf Graphic file (type pdf)
+<use ../../figures/rsw_aero_acceleration_vector_local_q3.pdf>
+Package luatex.def Info: ../../figures/rsw_aero_acceleration_vector_local_q3.pdf  used on input line 227.
+(luatex.def)             Requested size: 345.0pt x 310.49579pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/rsw_srp_acceleration_magnitude_q3.pdf, id=369, 722.7pt x 361.35pt>
+File: ../../figures/rsw_srp_acceleration_magnitude_q3.pdf Graphic file (type pdf)
+<use ../../figures/rsw_srp_acceleration_magnitude_q3.pdf>
+Package luatex.def Info: ../../figures/rsw_srp_acceleration_magnitude_q3.pdf  used on input line 233.
+(luatex.def)             Requested size: 345.0pt x 172.49767pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/rsw_srp_acceleration_vector_local_q3.pdf, id=370, 722.7pt x 650.43pt>
+File: ../../figures/rsw_srp_acceleration_vector_local_q3.pdf Graphic file (type pdf)
+<use ../../figures/rsw_srp_acceleration_vector_local_q3.pdf>
+Package luatex.def Info: ../../figures/rsw_srp_acceleration_vector_local_q3.pdf  used on input line 239.
+(luatex.def)             Requested size: 345.0pt x 310.49579pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/position_difference_magnitude_aero_effect_q3.pdf, id=371, 722.7pt x 433.62pt>
+File: ../../figures/position_difference_magnitude_aero_effect_q3.pdf Graphic file (type pdf)
+<use ../../figures/position_difference_magnitude_aero_effect_q3.pdf>
+Package luatex.def Info: ../../figures/position_difference_magnitude_aero_effect_q3.pdf  used on input line 249.
+(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../../figures/position_difference_magnitude_srp_effect_q3.pdf, id=372, 722.7pt x 433.62pt>
+File: ../../figures/position_difference_magnitude_srp_effect_q3.pdf Graphic file (type pdf)
+<use ../../figures/position_difference_magnitude_srp_effect_q3.pdf>
+Package luatex.def Info: ../../figures/position_difference_magnitude_srp_effect_q3.pdf  used on input line 255.
+(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[7
+
+<../../figures/validation_aero_mag_q3.pdf>] [8<../../figures/validation_aero_vector_q3.pdf>] [9<../../figures/validation_srp_mag_q3.pdf>] [10<../../figures/validation_srp_vector_q3.pdf>] [11<../../figures/rsw_aero_acceleration_magnitude_q3.pdf><../../figures/rsw_aero_acceleration_vector_local_q3.pdf>] [12<../../figures/rsw_srp_acceleration_magnitude_q3.pdf><../../figures/rsw_srp_acceleration_vector_local_q3.pdf>] [13<../../figures/position_difference_magnitude_aero_effect_q3.pdf><../../figures/position_difference_magnitude_srp_effect_q3.pdf>] [14
 
 ] (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux)
  ***********
@@ -409,19 +488,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment1_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 11048 strings out of 476553
+ 11164 strings out of 476553
  125027,1977958 words of node,token memory allocated
  592 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 4 glue, 4 kern, 4 sub_mlist, 1 glyph, 19 attribute, 55 glue_spec, 19 attribute_list, 1 write, 1 pdf_action nodes
-   avail lists: 2:618,3:224,4:65,5:280,6:42,7:3691,8:97,9:670,10:6,11:172
- 32793 multiletter control sequences out of 65536+600000
+   avail lists: 2:674,3:224,4:65,5:280,6:42,7:3691,8:97,9:670,10:9,11:223
+ 32863 multiletter control sequences out of 65536+600000
  51 fonts using 3719575 bytes
  72i,11n,75p,639b,350s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (8 pages, 503967 bytes).
+Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (14 pages, 674346 bytes).
 
-PDF statistics: 471 PDF objects out of 1000 (max. 8388607)
- 208 compressed objects within 3 object streams
- 56 named destinations out of 1000 (max. 131072)
+PDF statistics: 1216 PDF objects out of 1440 (max. 8388607)
+ 393 compressed objects within 4 object streams
+ 72 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

@@ -201,12 +201,12 @@ dependent_variables = propagation_results.dependent_variable_history
 results_directory = "./results"
 
 save2txt(
-    solution=state_history, filename="JUICEPropagationHistory_Q1.dat", directory=results_directory
+    solution=state_history, filename="JUICEPropagationHistory_Q2.dat", directory=results_directory
 )
 
 save2txt(
     solution=dependent_variables,
-    filename="JUICEPropagationHistory_DependentVariables_Q1.dat",
+    filename="JUICEPropagationHistory_DependentVariables_Q2.dat",
     directory=results_directory,
 )
 

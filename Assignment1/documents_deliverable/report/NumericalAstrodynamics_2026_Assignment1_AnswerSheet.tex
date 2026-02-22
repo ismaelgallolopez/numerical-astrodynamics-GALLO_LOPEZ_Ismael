@@ -186,14 +186,76 @@ The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum tw
     \mathbf{a}_{\text{Aero}}= -\frac{1}{m} \left( \frac{1}{2} \rho v_{air}^2 C_D S_{ref} \right) \mathbf{\hat{v}_{air}} = -\frac{1}{m} \left( q_{air} C_D S_{ref} \right) \mathbf{\hat{v}_{air}} \\
     \mathbf{a}_{\text{SRP}}= \left( \frac{P}{4 \pi c} \right) \left( \frac{C_r S_{ref}}{m} \right) \frac{\mathbf{r}_{Ss}}{\|\mathbf{r}_{Ss}\|^3}
 \end{align}
-\textit{Insert figures validating acceleration implementation}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/validation_aero_mag_q3.pdf}
+    \caption{Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, calculated and extracted from propagation}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/validation_aero_vector_q3.pdf}
+    \caption{Ganymede-centered aerodynamic acceleration vector acting on JUICE, calculated and extracted from propagation.}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/validation_srp_mag_q3.pdf}
+    \caption{Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, calculated and extracted from propagation}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/validation_srp_vector_q3.pdf}
+    \caption{Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, calculated and extracted from propagation.}
+\end{figure}
+% \textit{Insert figures validating acceleration implementation}.
 \textit{\textbf{Explain (briefly!) why the figures validate the implementation}}.
 
 \subsection*{b}
-\textit{Insert figures with accelerations in RSW frame.}
+% \textit{Insert figures with accelerations in RSW frame.}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_magnitude_q3.pdf}
+    \caption{Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, in RSW frame.}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_vector_local_q3.pdf}
+    \caption{Ganymede-centered aerodynamic acceleration vector acting on JUICE, RSW frame.}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_magnitude_q3.pdf}
+    \caption{Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, in RSW frame}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_vector_local_q3.pdf}
+    \caption{Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, RSW frame.}
+\end{figure}
 
 \subsection*{c.i}
-\textit{Insert figure}
+
+% \textit{Insert figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_aero_effect_q3.pdf}
+    \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without aerodynamic acceleration.}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_srp_effect_q3.pdf}
+    \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without SRP acceleration.}
+\end{figure}
+
 \subsection*{c.ii}
 \textit{\textbf{Explanation for stronger relative influence of aerodynamic acceleration on $||\Delta \mathbf{r}_{G,s}(t)||$}}.
 \clearpage

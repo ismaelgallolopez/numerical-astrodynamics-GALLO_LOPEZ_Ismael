@@ -45,8 +45,8 @@ simulation_start_epoch = (
     + B * constants.JULIAN_DAY
     + C * constants.JULIAN_DAY / 24.0
 )
-# simulation_end_epoch = simulation_start_epoch + 1e-3 * constants.JULIAN_DAY / 24.0 # debugging 
-simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
+simulation_end_epoch = simulation_start_epoch + 1e-3 * constants.JULIAN_DAY / 24.0 # debugging 
+# simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
 
 # INPUT DATA FROM THE QUESTION IN THE ASSIGNMENT
 
@@ -160,8 +160,8 @@ dependent_variables_to_save = [
     propagation_setup.dependent_variable.radiation_pressure_coefficient("JUICE", "Sun"), # sanity check
     propagation_setup.dependent_variable.body_mass("JUICE"), # sanity check
     propagation_setup.dependent_variable.relative_position("JUICE", "Sun"),
-    # propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede"),
-    propagation_setup.dependent_variable.tnw_to_inertial_rotation_matrix("JUICE", "Ganymede")
+    propagation_setup.dependent_variable.tnw_to_inertial_rotation_matrix("JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede")
 ]
 
 # Create numerical integrator settings.
@@ -211,12 +211,12 @@ dependent_variables = propagation_results.dependent_variable_history
 results_directory = "./results"
 
 save2txt(
-    solution=state_history, filename="JUICEPropagationHistory_Q1.dat", directory=results_directory
+    solution=state_history, filename="JUICEPropagationHistory_Q3.dat", directory=results_directory
 )
 
 save2txt(
     solution=dependent_variables,
-    filename="JUICEPropagationHistory_DependentVariables_Q1.dat",
+    filename="JUICEPropagationHistory_DependentVariables_Q3.dat",
     directory=results_directory,
 )
 
@@ -438,8 +438,8 @@ dep_vars_ids = propagation_results.dependent_variable_ids
 
 print("Dependent variable IDs: ", dep_vars_ids) # debugging
 
-if not len(dep_vars[simulation_start_epoch]) == 41: # debugging in case that more dependent variables are added
-    raise ValueError(f"Expected 41 dependent variables, but got {len(dep_vars[simulation_start_epoch])}") # debugging in case that more dependent variables are added
+if not len(dep_vars[simulation_start_epoch]) == 44: # debugging in case that more dependent variables are added
+    raise ValueError(f"Expected 44 dependent variables, but got {len(dep_vars[simulation_start_epoch])}") # debugging in case that more dependent variables are added
 
 # print(dep_vars_matrix) # debugging
 
@@ -449,9 +449,10 @@ print(f"Mass sanity check: {mass_sanity_check[0]} kg") # debugging
 # print(aerodynamic_coeffs[0]) # print first aerodynamic coefficient
 
 dynamic_pressure = dep_vars_matrix[:, 21]
-airspeed = dep_vars_matrix[:, 25]
 density = dep_vars_matrix[:, 26]
 sun_juice_position = dep_vars_matrix[:, 29:32]
+airspeed = dep_vars_matrix[:, 25]
+airspeed_vector = dep_vars_matrix[:, 41:44]
 
 # sanity checks
 if not np.allclose(dynamic_pressure, 0.5 * density * airspeed**2):
@@ -461,7 +462,10 @@ if not np.allclose(radiation_pressure_coeff_sanity, rad_pres_coeff_juice):
     raise ValueError("Radiation pressure coefficient does not match the expected value") # sanity check
 
 # calculation of accelerations for validation
-accel_aerodynamic_manual_mag = -dynamic_pressure * ref_area_juice * drag_coeff_juice / mass_juice 
+accel_aerodynamic_manual_mag = dynamic_pressure * ref_area_juice * drag_coeff_juice / mass_juice
+airspeed_norm = np.linalg.norm(airspeed_vector, axis=1)[:, np.newaxis]
+airspeed_unitary_vector = airspeed_vector / airspeed_norm
+accel_aerodynamic_manual = -accel_aerodynamic_manual_mag[:, np.newaxis] * airspeed_unitary_vector
 
 sun_juice_position_mag = np.linalg.norm(sun_juice_position, axis=1)
 # print(sun_juice_position_mag.shape) # debugging
@@ -551,6 +555,33 @@ plt.savefig(srp_vec_val_path)
 print(f"SRP vector validation plot saved to: {srp_vec_val_path}")
 plt.close()
 
+# -------------------------------------------------------------------------
+# 4. Aerodynamic acceleration Vector Comparison
+# -------------------------------------------------------------------------
+fig_aero_vec, axs_aero_vec = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+fig_aero_vec.suptitle('Aerodynamic Acceleration Vector Validation', fontsize=16, fontweight='bold', y=0.96)
+
+components = ['X', 'Y', 'Z']
+colors = ['tab:red', 'tab:green', 'tab:purple']
+
+for i in range(3):
+    # Plot numerical simulation as solid thick lines
+    axs_aero_vec[i].plot(time_days, accel_aerodynamic_simulation[:, i], label='Tudat Simulation', color=colors[i], linewidth=2)
+    # Plot manual calculation as dashed black lines over the top
+    axs_aero_vec[i].plot(time_days, accel_aerodynamic_manual[:, i], label='Manual Analytical', color='black', linestyle='--', linewidth=1.5)
+    
+    axs_aero_vec[i].set_ylabel(components[i] + ' Component [m s^-2]', fontsize=12)
+    axs_aero_vec[i].grid(True, alpha=0.6)
+    axs_aero_vec[i].legend(loc='upper right', fontsize=10)
+
+axs_aero_vec[-1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+aero_vec_val_path = os.path.join(output_dir, "validation_aero_vector_q3.pdf")
+plt.savefig(aero_vec_val_path)
+print(f"Aerodynamic vector validation plot saved to: {aero_vec_val_path}")
+plt.close()
+
 ###########################################################################
 # RSW FRAME CONVERSION ####################################################
 ###########################################################################
@@ -599,7 +630,7 @@ for i in range(3):
 axs_aero_vec[-1].set_xlabel('Time since t0 [days]', fontsize=12)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-aero_vec_path = os.path.join(output_dir, "aero_acceleration_vector_local_q3.pdf")
+aero_vec_path = os.path.join(output_dir, "rsw_aero_acceleration_vector_local_q3.pdf")
 plt.savefig(aero_vec_path)
 print(f"Aerodynamic vector plot saved to: {aero_vec_path}")
 plt.close()
@@ -617,7 +648,7 @@ ax_aero_mag.grid(True, alpha=0.6)
 ax_aero_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 plt.tight_layout()
-aero_mag_path = os.path.join(output_dir, "aero_acceleration_magnitude_q3.pdf")
+aero_mag_path = os.path.join(output_dir, "rsw_aero_acceleration_magnitude_q3.pdf")
 plt.savefig(aero_mag_path)
 print(f"Aerodynamic magnitude plot saved to: {aero_mag_path}")
 plt.close()
@@ -637,7 +668,7 @@ for i in range(3):
 axs_srp_vec[-1].set_xlabel('Time since t0 [days]', fontsize=12)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-srp_vec_path = os.path.join(output_dir, "srp_acceleration_vector_local_q3.pdf")
+srp_vec_path = os.path.join(output_dir, "rsw_srp_acceleration_vector_local_q3.pdf")
 plt.savefig(srp_vec_path)
 print(f"SRP vector plot saved to: {srp_vec_path}")
 plt.close()
@@ -655,10 +686,112 @@ ax_srp_mag.grid(True, alpha=0.6)
 ax_srp_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
 
 plt.tight_layout()
-srp_mag_path = os.path.join(output_dir, "srp_acceleration_magnitude_q3.pdf")
+srp_mag_path = os.path.join(output_dir, "rsw_srp_acceleration_magnitude_q3.pdf")
 plt.savefig(srp_mag_path)
 print(f"SRP magnitude plot saved to: {srp_mag_path}")
 plt.close()
+
+###########################################################################
+# PPROPAGATION WITHOUT AERODYNAMIC ACCEL. #################################
+###########################################################################
+
+# Define accelerations acting on vehicle.
+acceleration_settings_on_vehicle_noaero = dict(Ganymede=[propagation_setup.acceleration.spherical_harmonic_gravity(2,2)],
+                                                #   propagation_setup.acceleration.aerodynamic()],
+                                        Jupiter=[propagation_setup.acceleration.spherical_harmonic_gravity(4,0)],
+                                        Sun=[propagation_setup.acceleration.point_mass_gravity(),
+                                             propagation_setup.acceleration.radiation_pressure()], # CHECK 
+                                        Saturn=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Europa=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Io=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Callisto=[propagation_setup.acceleration.point_mass_gravity()],)
+
+# Create global accelerations dictionary.
+acceleration_settings_noaero = {"JUICE": acceleration_settings_on_vehicle_noaero}
+
+# Create acceleration models.
+acceleration_models_noaero = propagation_setup.create_acceleration_models(
+    bodies, acceleration_settings_noaero, bodies_to_propagate, central_bodies
+)
+
+###########################################################################
+# CREATE PROPAGATION SETTINGS #############################################
+###########################################################################
+
+# # Define initial state.
+# system_initial_state = spice.get_body_cartesian_state_at_epoch(
+#     target_body_name="JUICE",
+#     observer_body_name="Ganymede",
+#     reference_frame_name="ECLIPJ2000",
+#     aberration_corrections="NONE",
+#     ephemeris_time=simulation_start_epoch,
+# )
+# Get Ganymede gravitational parameter
+# ganymede_grav_param = bodies.get("Ganymede").gravitational_parameter
+# print(ganymede_grav_param) # debugging
+# Transform initial state to keplerian
+# system_initial_state_keplerian = element_conversion.cartesian_to_keplerian(system_initial_state, ganymede_grav_param)
+
+# print(system_initial_state) # debugging
+
+# Define required outputs
+dependent_variables_to_save = [
+    propagation_setup.dependent_variable.keplerian_state( "JUICE", "Ganymede" ),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.spherical_harmonic_gravity_type , "JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Io"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Sun"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.radiation_pressure_type , "JUICE", "Sun"),
+    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.aerodynamic_type , "JUICE", "Ganymede" ),
+    propagation_setup.dependent_variable.dynamic_pressure("JUICE", "Ganymede"),
+    # propagation_setup.dependent_variable.aerodynamic_force_coefficients("JUICE", "Ganymede"), # for doing sanity check on C_D
+    # propagation_setup.dependent_variable.airspeed("JUICE", "Ganymede"),
+    # propagation_setup.dependent_variable.density("JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.radiation_pressure_coefficient("JUICE", "Sun"), # sanity check
+    propagation_setup.dependent_variable.body_mass("JUICE"), # sanity check
+    propagation_setup.dependent_variable.relative_position("JUICE", "Sun"),
+    propagation_setup.dependent_variable.tnw_to_inertial_rotation_matrix("JUICE", "Ganymede"),
+    # propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede")
+]
+
+# # Create numerical integrator settings.
+# fixed_step_size = 10.0
+# integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step(
+#     fixed_step_size, coefficient_set=propagation_setup.integrator.CoefficientSets.rk_4
+# )
+
+# # Create propagation settings.
+# termination_settings = propagation_setup.propagator.time_termination(
+#     simulation_end_epoch
+# )
+propagator_settings_noaero = propagation_setup.propagator.translational(
+    central_bodies,
+    acceleration_models_noaero,
+    bodies_to_propagate,
+    system_initial_state,
+    simulation_start_epoch,
+    integrator_settings,
+    termination_settings,
+    output_variables=dependent_variables_to_save,
+)
+
+propagator_settings_noaero.print_settings.print_initial_and_final_conditions = True
+
+
+###########################################################################
+# PROPAGATE ORBIT #########################################################
+###########################################################################
+
+# Create simulation object and propagate dynamics.
+dynamics_simulator_noaero = simulator.create_dynamics_simulator(
+    bodies, propagator_settings_noaero
+)
+
+# Retrieve all data produced by simulation
+propagation_results_noaero = dynamics_simulator_noaero.propagation_results
+
+# Extract numerical solution for states and dependent variables
+state_history_noaero = propagation_results_noaero.state_history
+dependent_variables_noaero = propagation_results_noaero.dependent_variable_history
 
 ###########################################################################
 # WRITE TO RESULTS FILE ###################################################
@@ -666,8 +799,9 @@ plt.close()
 os.makedirs('documents_deliverable', exist_ok=True)
 results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_6541356.txt")
 
+cartesian_noaero = np.vstack(list(state_history_noaero.values()))[sorted_indices]
 final_time = time_array[-1]
-final_cartesian_state = numerical_cartesian[-1, :]
+final_cartesian_state_noaero = cartesian_noaero[-1, :]
 
 try:
     with open(results_path, 'r') as file:
@@ -679,9 +813,203 @@ line_to_replace = 2  # (change between questions)
 while len(lines) <= line_to_replace:
     lines.append('\n')
 
-output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
+output_line = f"{final_time:.16e} {final_cartesian_state_noaero[0]:.16e} {final_cartesian_state_noaero[1]:.16e} {final_cartesian_state_noaero[2]:.16e} {final_cartesian_state_noaero[3]:.16e} {final_cartesian_state_noaero[4]:.16e} {final_cartesian_state_noaero[5]:.16e}\n"
 lines[line_to_replace] = output_line
 
 with open(results_path, 'w') as file:
     file.writelines(lines)
+
+###########################################################################
+# PLOT POSITION DIFFERENCE MAGNITUDE: NOMINAL VS NO-AERODYNAMICS ##########
+###########################################################################
+
+# Extract the position components (first 3 columns) and calculate the difference
+# Difference = Nominal (with drag) - Perturbed (without drag)
+position_difference = numerical_cartesian[:, 0:3] - cartesian_noaero[:, 0:3]
+
+# Calculate the magnitude of the position difference vector (Euclidean distance)
+position_difference_mag = np.linalg.norm(position_difference, axis=1)
+
+# Generate the plot
+fig_diff_mag, ax_diff_mag = plt.subplots(figsize=(10, 6))
+ax_diff_mag.plot(time_days, position_difference_mag, color='black', linewidth=2)
+
+ax_diff_mag.set_title('Magnitude of Position Difference\n(Nominal vs. No Aerodynamic Acceleration)', fontsize=14, fontweight='bold')
+ax_diff_mag.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_diff_mag.set_ylabel('$\|\Delta \mathbf{r}\|$ [m]', fontsize=12)
+ax_diff_mag.grid(True, alpha=0.6)
+
+# Use scientific notation for the y-axis
+ax_diff_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout
+plt.tight_layout()
+
+# Save the figure
+diff_mag_output_path = os.path.join(output_dir, "position_difference_magnitude_aero_effect_q3.pdf")
+plt.savefig(diff_mag_output_path)
+print(f"Position difference magnitude plot saved to: {diff_mag_output_path}")
+
+plt.close()
+
+###########################################################################
+# PPROPAGATION WITHOUT SRP ACCEL. #########################################
+###########################################################################
+
+# Define accelerations acting on vehicle.
+acceleration_settings_on_vehicle_nosrp = dict(Ganymede=[propagation_setup.acceleration.spherical_harmonic_gravity(2,2),
+                                                  propagation_setup.acceleration.aerodynamic()],
+                                        Jupiter=[propagation_setup.acceleration.spherical_harmonic_gravity(4,0)],
+                                        Sun=[propagation_setup.acceleration.point_mass_gravity()],
+                                            #  propagation_setup.acceleration.radiation_pressure()], # CHECK 
+                                        Saturn=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Europa=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Io=[propagation_setup.acceleration.point_mass_gravity()],
+                                        Callisto=[propagation_setup.acceleration.point_mass_gravity()],)
+
+# Create global accelerations dictionary.
+acceleration_settings_nosrp = {"JUICE": acceleration_settings_on_vehicle_nosrp}
+
+# Create acceleration models.
+acceleration_models_nosrp = propagation_setup.create_acceleration_models(
+    bodies, acceleration_settings_nosrp, bodies_to_propagate, central_bodies
+)
+
+###########################################################################
+# CREATE PROPAGATION SETTINGS #############################################
+###########################################################################
+
+# # Define initial state.
+# system_initial_state = spice.get_body_cartesian_state_at_epoch(
+#     target_body_name="JUICE",
+#     observer_body_name="Ganymede",
+#     reference_frame_name="ECLIPJ2000",
+#     aberration_corrections="NONE",
+#     ephemeris_time=simulation_start_epoch,
+# )
+# Get Ganymede gravitational parameter
+# ganymede_grav_param = bodies.get("Ganymede").gravitational_parameter
+# print(ganymede_grav_param) # debugging
+# Transform initial state to keplerian
+# system_initial_state_keplerian = element_conversion.cartesian_to_keplerian(system_initial_state, ganymede_grav_param)
+
+# print(system_initial_state) # debugging
+
+# Define required outputs
+dependent_variables_to_save = [
+    propagation_setup.dependent_variable.keplerian_state( "JUICE", "Ganymede" ),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.spherical_harmonic_gravity_type , "JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Io"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Sun"),
+    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.radiation_pressure_type , "JUICE", "Sun"),
+    propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.aerodynamic_type , "JUICE", "Ganymede" ),
+    propagation_setup.dependent_variable.dynamic_pressure("JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.aerodynamic_force_coefficients("JUICE", "Ganymede"), # for doing sanity check on C_D
+    propagation_setup.dependent_variable.airspeed("JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.density("JUICE", "Ganymede"),
+    # propagation_setup.dependent_variable.radiation_pressure_coefficient("JUICE", "Sun"), # sanity check
+    propagation_setup.dependent_variable.body_mass("JUICE"), # sanity check
+    propagation_setup.dependent_variable.relative_position("JUICE", "Sun"),
+    propagation_setup.dependent_variable.tnw_to_inertial_rotation_matrix("JUICE", "Ganymede"),
+    propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede")
+]
+
+# # Create numerical integrator settings.
+# fixed_step_size = 10.0
+# integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step(
+#     fixed_step_size, coefficient_set=propagation_setup.integrator.CoefficientSets.rk_4
+# )
+
+# # Create propagation settings.
+# termination_settings = propagation_setup.propagator.time_termination(
+#     simulation_end_epoch
+# )
+propagator_settings_nosrp = propagation_setup.propagator.translational(
+    central_bodies,
+    acceleration_models_nosrp,
+    bodies_to_propagate,
+    system_initial_state,
+    simulation_start_epoch,
+    integrator_settings,
+    termination_settings,
+    output_variables=dependent_variables_to_save,
+)
+
+propagator_settings_nosrp.print_settings.print_initial_and_final_conditions = True
+
+
+###########################################################################
+# PROPAGATE ORBIT #########################################################
+###########################################################################
+
+# Create simulation object and propagate dynamics.
+dynamics_simulator_nosrp = simulator.create_dynamics_simulator(
+    bodies, propagator_settings_nosrp
+)
+
+# Retrieve all data produced by simulation
+propagation_results_nosrp = dynamics_simulator_nosrp.propagation_results
+
+# Extract numerical solution for states and dependent variables
+state_history_nosrp = propagation_results_nosrp.state_history
+dependent_variables_nosrp = propagation_results_nosrp.dependent_variable_history
+
+###########################################################################
+# WRITE TO RESULTS FILE ###################################################
+###########################################################################
+os.makedirs('documents_deliverable', exist_ok=True)
+results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_6541356.txt")
+
+cartesian_nosrp = np.vstack(list(state_history_nosrp.values()))[sorted_indices]
+final_time = time_array[-1]
+final_cartesian_state_nosrp = cartesian_nosrp[-1, :]
+
+try:
+    with open(results_path, 'r') as file:
+        lines = file.readlines()
+except FileNotFoundError:
+    lines = []
+
+line_to_replace = 3  # (change between questions)
+while len(lines) <= line_to_replace:
+    lines.append('\n')
+
+output_line = f"{final_time:.16e} {final_cartesian_state_nosrp[0]:.16e} {final_cartesian_state_nosrp[1]:.16e} {final_cartesian_state_nosrp[2]:.16e} {final_cartesian_state_nosrp[3]:.16e} {final_cartesian_state_nosrp[4]:.16e} {final_cartesian_state_nosrp[5]:.16e}\n"
+lines[line_to_replace] = output_line
+
+with open(results_path, 'w') as file:
+    file.writelines(lines)
+
+###########################################################################
+# PLOT POSITION DIFFERENCE MAGNITUDE: NOMINAL VS NO-AERODYNAMICS ##########
+###########################################################################
+
+# Extract the position components (first 3 columns) and calculate the difference
+# Difference = Nominal (with drag) - Perturbed (without drag)
+position_difference = numerical_cartesian[:, 0:3] - cartesian_nosrp[:, 0:3]
+
+# Calculate the magnitude of the position difference vector (Euclidean distance)
+position_difference_mag = np.linalg.norm(position_difference, axis=1)
+
+# Generate the plot
+fig_diff_mag, ax_diff_mag = plt.subplots(figsize=(10, 6))
+ax_diff_mag.plot(time_days, position_difference_mag, color='black', linewidth=2)
+
+ax_diff_mag.set_title('Magnitude of Position Difference\n(Nominal vs. No SRP Acceleration)', fontsize=14, fontweight='bold')
+ax_diff_mag.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_diff_mag.set_ylabel('$\|\Delta \mathbf{r}\|$ [m]', fontsize=12)
+ax_diff_mag.grid(True, alpha=0.6)
+
+# Use scientific notation for the y-axis
+ax_diff_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout
+plt.tight_layout()
+
+# Save the figure
+diff_mag_output_path = os.path.join(output_dir, "position_difference_magnitude_srp_effect_q3.pdf")
+plt.savefig(diff_mag_output_path)
+print(f"Position difference magnitude plot saved to: {diff_mag_output_path}")
+
+plt.close()
 
