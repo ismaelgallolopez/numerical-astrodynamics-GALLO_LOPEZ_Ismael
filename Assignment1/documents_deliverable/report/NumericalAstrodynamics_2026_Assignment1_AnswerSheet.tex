@@ -147,33 +147,42 @@ Conversely, the solar perturbation can be analyzed by treating the Sun-Ganymede 
 Assupmtions:
 \begin{enumerate}
     \item $||\mathbf{r}_{SG}|| \gg ||\mathbf{r}_{Gs}||$ 
-    % {The distance from the Sun to Ganymede is much larger than the spacecraft's orbital radius around the moon.}\\
+    
+    {Sun-Ganymede distance is much larger than the spacecraft's orbital radius.}\\
     \item $||\mathbf{r}_{SG}|| \approx \text{constant}$ 
-    % {Ganymede’s heliocentric distance remains nearly invariant over JUICE’s much shorter orbital period.}\\
+    
+    {Ganymede’s heliocentric distance is constant over JUICE’s orbital period.}\\
     \item $(1+x)^{-3/2} \approx 1 - \frac{3}{2}x$ (first order Taylor expansion)
-    % {A first-order Taylor expansion is valid for the small ratio of the spacecraft's orbital radius to the solar distance.}\\
+    
+    {First-order Taylor expansion applies to the small ratio of orbital distances.}\\
 \end{enumerate}
 
 Derivation steps:
 \begin{enumerate}
     % \textbf{Derivation step   1 (Assumption 1):}\\
     \item $\mathbf{r}_{Ss} = \mathbf{r}_{SG} + \mathbf{r}_{Gs}$
-    % {Express the Sun-spacecraft vector as the sum of the Sun-Ganymede and Ganymede-spacecraft vectors.}\\
+    
+    {Express the Sun-spacecraft vector as the sum of relative position vectors.}\\
     % \textbf{Derivation step 2 (Assumption 1):}\\
     \item $\left(\mathbf{a}_{S,s}\right)_{G} = -\mu_{S} \left( \frac{\mathbf{r}_{SG} + \mathbf{r}_{Gs}}{||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^3} - \frac{\mathbf{r}_{SG}}{||\mathbf{r}_{SG}||^3} \right)$
-    % {Substitute the vector sum into the relative acceleration formula.}\\
+    
+    {Substitute the vector sum into the relative acceleration formula.}\\
     % \textbf{Derivation step 3 (Assumption 1):}\\
     \item $||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^{-3} = \left( ||\mathbf{r}_{SG}||^2 + 2\mathbf{r}_{SG} \cdot \mathbf{r}_{Gs} + ||\mathbf{r}_{Gs}||^2 \right)^{-3/2}$ 
-    % {Expand the magnitude of the Sun-spacecraft vector using the law of cosines ($ \mathbf{r}_{SG} \cdot \mathbf{r}_{Gs} = ||\mathbf{r}_{SG}|| ||\mathbf{r}_{Gs}|| \cos\theta $).}\\
+    
+    {Expand the magnitude of the Sun-spacecraft vector using the law of cosines ($ \mathbf{r}_{SG} \cdot \mathbf{r}_{Gs} = ||\mathbf{r}_{SG}|| ||\mathbf{r}_{Gs}|| \cos\theta $).}\\
     % \textbf{Derivation step 4 (Assumption 1, 3):}\\
     \item $||\mathbf{r}_{SG} + \mathbf{r}_{Gs}||^{-3} \approx ||\mathbf{r}_{SG}||^{-3} \left( 1 - 3 \frac{||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||} \cos\theta \right)$ 
-    % {Factor out $||\mathbf{r}_{SG}||$ and apply the binomial expansion while neglecting higher-order terms of $||\mathbf{r}_{Gs}||/||\mathbf{r}_{SG}||$.}\\
+    
+    {Factor $||\mathbf{r}_{SG}||$, apply binomial expansion and neglect higher-order terms.}\\
     % \textbf{Derivation step 5 (Assumption 1):}\\
     \item $\left(\mathbf{a}_{S,s}\right)_{G} \approx -\frac{\mu_{S}}{||\mathbf{r}_{SG}||^3} \left[ (\mathbf{r}_{SG} + \mathbf{r}_{Gs}) \left( 1 - 3 \frac{||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||} \cos\theta \right) - \mathbf{r}_{SG} \right]$ 
-    % {Substitute the linearized magnitude back into the acceleration equation.}\\
+    
+    {Substitute the linearized magnitude back into the acceleration equation.}\\
     % \textbf{Derivation step 6 (Assumption 1, 2):}\\
     \item $||\left(\mathbf{a}_{S,s}\right)_{G}|| \approx \frac{\mu_{S} ||\mathbf{r}_{Gs}||}{||\mathbf{r}_{SG}||^3} \sqrt{1 + 3\cos^2\theta}$ 
-    % {Simplify to find the magnitude, showing it depends on the spacecraft's position relative to the Sun-Ganymede line.}\\
+    
+    {Simplify the magnitude as a function of the Sun-Ganymede relative angle.}\\
 \end{enumerate}
 
 The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum twice per orbit (at $\theta = 0^\circ$ and $180^\circ$). 
@@ -189,75 +198,86 @@ The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum tw
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_aero_mag_q3.pdf}
-    \caption{Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, calculated and extracted from propagation}
+    \includegraphics[width=\textwidth]{../../figures/validation_aero_mag_diff_q3.pdf}
+    \caption{Difference in Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, between manually calculated and extracted from propagation.}
+    \label{fig:aero_mag_diff_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_aero_vector_q3.pdf}
-    \caption{Ganymede-centered aerodynamic acceleration vector acting on JUICE, calculated and extracted from propagation.}
+    \includegraphics[width=\textwidth]{../../figures/validation_aero_vector_diff_q3.pdf}
+    \caption{Difference in Ganymede-centered aerodynamic acceleration vector acting on JUICE, between manually calculated and extracted from propagation.}
+    \label{fig:aero_vector_diff_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_srp_mag_q3.pdf}
-    \caption{Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, calculated and extracted from propagation}
+    \includegraphics[width=\textwidth]{../../figures/validation_srp_mag_diff_q3.pdf}
+    \caption{Difference in Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, between manually calculated and extracted from propagation}
+    \label{fig:validation_srp_mag_diff_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_srp_vector_q3.pdf}
-    \caption{Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, calculated and extracted from propagation.}
+    \includegraphics[width=\textwidth]{../../figures/validation_srp_vector_diff_q3.pdf}
+    \caption{Difference in Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, between manually calculated and extracted from propagation.}
+    \label{fig:validation_srp_vector_diff_q3}
 \end{figure}
-% \textit{Insert figures validating acceleration implementation}.
-\textit{\textbf{Explain (briefly!) why the figures validate the implementation}}.
+
+\autoref{fig:aero_mag_diff_q3}, \ref{fig:aero_vector_diff_q3}, \ref{fig:validation_srp_mag_diff_q3}, and \ref{fig:validation_srp_vector_diff_q3} show that the manually calculated accelerations match the extracted propagation values within numerical precision. 
 
 \subsection*{b}
-% \textit{Insert figures with accelerations in RSW frame.}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_magnitude_q3.pdf}
     \caption{Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, in RSW frame.}
+    \label{fig:rsw_aero_acceleration_magnitude_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_vector_local_q3.pdf}
     \caption{Ganymede-centered aerodynamic acceleration vector acting on JUICE, RSW frame.}
+    \label{fig:rsw_aero_acceleration_vector_local_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_magnitude_q3.pdf}
     \caption{Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, in RSW frame}
+    \label{fig:rsw_srp_acceleration_magnitude_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_vector_local_q3.pdf}
     \caption{Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, RSW frame.}
+    \label{fig:rsw_srp_acceleration_vector_local_q3}
 \end{figure}
 
 \subsection*{c.i}
-
-% \textit{Insert figure}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_aero_effect_q3.pdf}
     \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without aerodynamic acceleration.}
+    \label{fig:position_difference_magnitude_aero_effect_q3}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_srp_effect_q3.pdf}
     \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without SRP acceleration.}
+    \label{fig:position_difference_magnitude_srp_effect_q3}
 \end{figure}
 
 \subsection*{c.ii}
-\textit{\textbf{Explanation for stronger relative influence of aerodynamic acceleration on $||\Delta \mathbf{r}_{G,s}(t)||$}}.
+% \textit{\textbf{Explanation for stronger relative influence of aerodynamic acceleration on $||\Delta \mathbf{r}_{G,s}(t)||$}}.
+As per \autoref{fig:position_difference_magnitude_aero_effect_q3} and \ref{fig:position_difference_magnitude_srp_effect_q3}, the aerodynamic acceleration has a stronger influence on the position difference than the SRP acceleration. 
+From \autoref{fig:rsw_aero_acceleration_vector_local_q3}, in opposition to \autoref{fig:rsw_srp_acceleration_vector_local_q3}, it can be perceived that the aerodynamic acceleration has a bigger continuous effect in the along track direction, hence affecting the SMA during all the propagation.
+Even though the SRP acceleration magnitude its greater, its long-term effects are less important because the in-plane components are periodic and quasi-symmetric, hence compensating the effect in long-term propagation (as this case).
+
 \clearpage
 
 
