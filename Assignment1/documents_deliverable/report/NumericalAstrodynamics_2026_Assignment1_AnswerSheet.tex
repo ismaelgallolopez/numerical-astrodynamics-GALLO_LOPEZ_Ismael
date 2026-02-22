@@ -33,7 +33,7 @@ Time spent per exercise:
 \begin{enumerate}
     \item 7 h
     \item 6 h
-    \item \ldots
+    \item 6 h
     \item \ldots
 \end{enumerate} 
 
@@ -284,12 +284,20 @@ Even though the SRP acceleration magnitude its greater, its long-term effects ar
 
 \section*{Question 4}
 \subsection*{a}
-${\left(\mathbf{a}_{s}\right)_{J}}=\ldots$
+Assuming point-mass acceleration from Jupiter:
+\begin{align*}
+    {\left(\mathbf{a}_{s}\right)_{J}} 
+    & = - \frac{\mu_J}{\|\mathbf{r}_{Js}\|^3} \mathbf{r}_{Js} - \frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs} + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ} \\
+    & = - \frac{\mu_J}{\|\mathbf{r}_{Js}\|^3} \mathbf{r}_{Js} - \frac{\mu_G}{\|\mathbf{r}_{GJ} + \mathbf{r}_{Js}\|^3} (\mathbf{r}_{GJ} + \mathbf{r}_{Js}) + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ} 
+    % = - \frac{\mu_J}{\|\mathbf{r}_{JG} + \mathbf{r}_{Gs}\|^3} (\mathbf{r}_{JG} + \mathbf{r}_{Gs}) - \frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs}  + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ}
+\end{align*}
 
 \subsection*{b}
-$\left(\mathbf{a}_{G,s}\right)_{J}=$ \ldots \\
-$\left(\mathbf{a}_{J,s}\right)_{J}=$ \ldots \\
-$\left(\mathbf{a}_{I,s}\right)_{J}=$ \ldots
+\begin{align*}
+    & \left(\mathbf{a}_{G,s}\right)_{J} = \nabla U_G(\mathbf{r}_{Gs}) - \nabla U_G(\mathbf{r}_{GJ}) = \nabla U_G(\mathbf{r}_{GJ} + \mathbf{r}_{Js}) - \nabla U_G(\mathbf{r}_{GJ}) \\
+    & \left(\mathbf{a}_{J,s}\right)_{J} = \nabla U_J(\mathbf{r}_{Js}) \\% = \nabla U_J(\mathbf{r}_{JG} + \mathbf{r}_{Gs}) \\
+    & \left(\mathbf{a}_{I,s}\right)_{J} = - \mu_I \frac{\mathbf{r}_{Is}}{\|\mathbf{r}_{Is}\|^3} + \mu_I \frac{\mathbf{r}_{IJ}}{\|\mathbf{r}_{IJ}\|^3} = -\mu_I \left( \frac{\mathbf{r}_{IG} + \mathbf{r}_{Gs}}{\|\mathbf{r}_{IG} + \mathbf{r}_{Gs}\|^3} - \frac{\mathbf{r}_{IJ}}{\|\mathbf{r}_{IJ}\|^3} \right)
+\end{align*}
 
 \subsection*{c}
 \textit{\textbf{Provide physical and mathematical explanation for the observed behavior}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
