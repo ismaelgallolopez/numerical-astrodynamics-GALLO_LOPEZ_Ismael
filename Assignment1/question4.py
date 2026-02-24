@@ -49,7 +49,7 @@ simulation_start_epoch = (
     + C * constants.JULIAN_DAY / 24.0
 )
 simulation_end_epoch = simulation_start_epoch + 1e-3 * constants.JULIAN_DAY / 24.0 # debugging 
-# simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
+simulation_end_epoch = simulation_start_epoch + 344.0 * constants.JULIAN_DAY / 24.0
 
 # INPUT DATA FROM THE QUESTION IN THE ASSIGNMENT
 
@@ -164,7 +164,7 @@ acceleration_models_perturbed = propagation_setup.create_acceleration_models(
 # Define initial state.
 system_initial_state = spice.get_body_cartesian_state_at_epoch(
     target_body_name="JUICE",
-    observer_body_name="Ganymede",
+    observer_body_name="Jupiter",
     reference_frame_name="ECLIPJ2000",
     aberration_corrections="NONE",
     ephemeris_time=simulation_start_epoch,
@@ -179,21 +179,8 @@ system_initial_state_keplerian = element_conversion.cartesian_to_keplerian(syste
 
 # Define required outputs
 dependent_variables_to_save = [
-    propagation_setup.dependent_variable.keplerian_state( "JUICE", "Ganymede" ),
-    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.spherical_harmonic_gravity_type , "JUICE", "Ganymede"),
-    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Io"),
-    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.point_mass_gravity_type , "JUICE", "Sun"),
-    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.radiation_pressure_type , "JUICE", "Sun"),
-    # propagation_setup.dependent_variable.single_acceleration( propagation_setup.acceleration.aerodynamic_type , "JUICE", "Ganymede" ),
-    # propagation_setup.dependent_variable.dynamic_pressure("JUICE", "Ganymede"),
-    # propagation_setup.dependent_variable.aerodynamic_force_coefficients("JUICE", "Ganymede"), # for doing sanity check on C_D
-    # propagation_setup.dependent_variable.airspeed("JUICE", "Ganymede"),
-    # propagation_setup.dependent_variable.density("JUICE", "Ganymede"),
-    # propagation_setup.dependent_variable.radiation_pressure_coefficient("JUICE", "Sun"), # sanity check
-    # propagation_setup.dependent_variable.body_mass("JUICE"), # sanity check
-    # propagation_setup.dependent_variable.relative_position("JUICE", "Sun"),
-    # propagation_setup.dependent_variable.tnw_to_inertial_rotation_matrix("JUICE", "Ganymede"),
-    # propagation_setup.dependent_variable.body_fixed_airspeed_velocity("JUICE", "Ganymede")
+    propagation_setup.dependent_variable.relative_position( "Ganymede", "Jupiter" ),
+    propagation_setup.dependent_variable.relative_position( "JUICE", "Ganymede" )
 ]
 
 # Create numerical integrator settings.
@@ -346,19 +333,27 @@ save2txt(
 #     file.writelines(lines)
 
 ###########################################################################
-# COMPARISON BETWEEN UNPERTURBED CASES ####################################
+# IMPORT ALL DATA FOR COMPARISON ##########################################
 ###########################################################################
 
-# time = dependent_variables_unperturbed.keys()
-# time_array = np.array(list(time))
-# len_time = len(time_array)
-# print(len(time_array)) # debugging
+
+# Ensure the 'figures' directory exists
+output_dir = os.path.join(current_directory, "figures")
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # load all the state history as per the nomenclature in question 4
-# state_history_1 = read_vector_history_from_file(6, results_directory + "/.dat")
+state_history_1 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q1.dat")
 state_history_2 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q4_unperturbed.dat")
-# state_history_3 = read_vector_history_from_file(6, results_directory + "/.dat")
+state_history_3 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q2.dat")
 state_history_4 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q4_perturbed.dat")
+
+# convert them to arrays for easier slicing
+state_array_1 = result2array(state_history_1)
+print(state_array_1.shape) # debugging
+state_array_2 = result2array(state_history_2)
+state_array_3 = result2array(state_history_3)
+state_array_4 = result2array(state_history_4)
 
 # load all the dependent variables as per the nomenclature in question 4 
 
@@ -382,13 +377,101 @@ dependent_variables_2 = read_dep_vars_from_file(results_directory + "/JUICEPropa
 dependent_variables_3 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q2.dat")
 dependent_variables_4 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q4_perturbed.dat")
 
+ganymede_jupiter_position_history_2 = dependent_variables_2[:, 1:4]
+ganymede_jupiter_position_history_4 = dependent_variables_4[:, 1:4]
+
+ganymede_juice_position_unperturbed = dependent_variables_2[:, 4:7]
+ganymede_juice_position_perturbed = dependent_variables_4[:, 4:7]
+
+# print(type(state_history_2)) # debugging
 # print(state_history_2) # debugging
+# print(state_array_2) # debugging
 # print(dependent_variables_1.shape) # debugging
 # print(dependent_variables_2.shape) # debugging
+# print("first row:", dependent_variables_2[0]) # debugging
 # print(dependent_variables_3.shape) # debugging
 # print(dependent_variables_4.shape) # debugging
 
+position_unperturbed_gan_centered = state_array_1[:, 1:4]
+position_unperturbed_jup_centered = state_array_2[:, 1:4]
+position_perturbed_gan_centered = state_array_3[:, 1:4]
+position_perturbed_jup_centered = state_array_4[:, 1:4]
+
+# Extract time arrays
+# time = dependent_variables_perturbed.keys()
+# print(time) # debugging
+time_array = state_array_1[:, 0]
+time_days = [
+    t / constants.JULIAN_DAY - simulation_start_epoch / constants.JULIAN_DAY
+    for t in time_array
+]
+###########################################################################
+# COMPARISON BETWEEN UNPERTURBED CASES ####################################
+###########################################################################
+
+position_difference_unperturbed = position_unperturbed_gan_centered - (position_unperturbed_jup_centered - ganymede_jupiter_position_history_2)
+# position_difference_unperturbed = position_unperturbed_gan_centered - juice_ganymede_position_unperturbed
+position_difference_mag_unperturbed = np.linalg.norm(position_difference_unperturbed, axis=1)
+print(np.mean(position_difference_mag_unperturbed))
+
+# print(position_difference_unperturbed.shape) # debugging
+# print(position_difference_mag_unperturbed.shape) # debugging
+
+###########################################################################
+# PLOT UNPERTURBED COMPARISON #############################################
+###########################################################################
+
+fig_unpert, ax_unpert = plt.subplots(figsize=(10, 6))
+
+# ax_unpert.semilogy(time_days, position_difference_mag_unperturbed, label=r'$||\Delta \mathbf{r}(t)||_{i,ii}$ (Unperturbed)', color='tab:blue', linewidth=2)
+ax_unpert.plot(time_days, position_difference_mag_unperturbed, label=r'$||\Delta \mathbf{r}(t)||_{i,ii}$ (Unperturbed)', color='tab:blue', linewidth=2)
+
+ax_unpert.set_title('Position Difference: Unperturbed Case\n(Ganymede-Centered vs. Jupiter-Centered)', fontsize=14, fontweight='bold')
+ax_unpert.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_unpert.set_ylabel(r'Position Difference $||\Delta \mathbf{r}||$ [m]', fontsize=12)
+
+ax_unpert.grid(True, which="major", linestyle="-", alpha=0.6)
+ax_unpert.grid(True, which="minor", linestyle="--", alpha=0.3)
+ax_unpert.legend(fontsize=12)
+
+plt.tight_layout()
+unpert_output_path = os.path.join(output_dir, "propagation_origin_unperturbed_q4.pdf")
+plt.savefig(unpert_output_path)
+print(f"Unperturbed plot saved to: {unpert_output_path}")
+
+plt.close()
+
+###########################################################################
+# COMPARISON BETWEEN PERTURBED CASES ######################################
+###########################################################################
+
+position_difference_perturbed = position_perturbed_gan_centered - (position_perturbed_jup_centered - ganymede_jupiter_position_history_4)
+# position_difference_perturbed = position_perturbed_gan_centered - juice_ganymede_position_perturbed
+position_difference_mag_perturbed = np.linalg.norm(position_difference_perturbed, axis=1)
 
 
+fig_comp, ax_comp = plt.subplots(figsize=(10, 6))
 
+###########################################################################
+# PLOT PERTURBED COMPARISON ###############################################
+###########################################################################
 
+fig_pert, ax_pert = plt.subplots(figsize=(10, 6))
+
+# ax_pert.semilogy(time_days, position_difference_mag_perturbed, label=r'$||\Delta \mathbf{r}(t)||_{iii,iv}$ (Perturbed)', color='tab:orange', linewidth=2)
+ax_pert.plot(time_days, position_difference_mag_perturbed, label=r'$||\Delta \mathbf{r}(t)||_{iii,iv}$ (Perturbed)', color='tab:orange', linewidth=2)
+
+ax_pert.set_title('Position Difference: Perturbed Case\n(Ganymede-Centered vs. Jupiter-Centered)', fontsize=14, fontweight='bold')
+ax_pert.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_pert.set_ylabel(r'Position Difference $||\Delta \mathbf{r}||$ [m]', fontsize=12)
+
+ax_pert.grid(True, which="major", linestyle="-", alpha=0.6)
+ax_pert.grid(True, which="minor", linestyle="--", alpha=0.3)
+ax_pert.legend(fontsize=12)
+
+plt.tight_layout()
+pert_output_path = os.path.join(output_dir, "propagation_origin_perturbed_q4.pdf")
+plt.savefig(pert_output_path)
+print(f"Perturbed plot saved to: {pert_output_path}")
+
+plt.close()
