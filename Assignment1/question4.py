@@ -26,7 +26,7 @@ from scipy.optimize import fsolve
 from scipy.fftpack import fft, fftfreq
 from matplotlib import pyplot as plt
 from tudatpy import constants
-from tudatpy.data import save2txt
+from tudatpy.data import save2txt, read_vector_history_from_file
 from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, propagation_setup, simulator
 from tudatpy.dynamics.propagation import create_dependent_variable_dictionary
@@ -316,6 +316,9 @@ save2txt(
     directory=results_directory,
 )
 
+# print(len(state_history_perturbed)) # debugging
+# print(len(state_history_unperturbed)) # debugging
+
 # ###########################################################################
 # # WRITE TO RESULTS FILE ###################################################
 # ###########################################################################
@@ -341,3 +344,51 @@ save2txt(
 
 # with open(results_path, 'w') as file:
 #     file.writelines(lines)
+
+###########################################################################
+# COMPARISON BETWEEN UNPERTURBED CASES ####################################
+###########################################################################
+
+# time = dependent_variables_unperturbed.keys()
+# time_array = np.array(list(time))
+# len_time = len(time_array)
+# print(len(time_array)) # debugging
+
+# load all the state history as per the nomenclature in question 4
+# state_history_1 = read_vector_history_from_file(6, results_directory + "/.dat")
+state_history_2 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q4_unperturbed.dat")
+# state_history_3 = read_vector_history_from_file(6, results_directory + "/.dat")
+state_history_4 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q4_perturbed.dat")
+
+# load all the dependent variables as per the nomenclature in question 4 
+
+def read_dep_vars_from_file(filename):
+   
+    # Source - https://stackoverflow.com/a/16448992
+    # Posted by Alfe, modified by community. See post 'Timeline' for change history
+    # Retrieved 2026-02-24, License - CC BY-SA 4.0
+
+    with open(filename) as f:
+        line = f.readline()
+        num_cols = len(line.split())
+        # print(num_cols) # debugging
+
+        dep_vars = read_vector_history_from_file(num_cols-1, filename) # first column is time so it does not count
+        dep_vars_array = result2array(dep_vars)
+        return dep_vars_array
+    
+dependent_variables_1 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q1.dat")
+dependent_variables_2 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q4_unperturbed.dat")
+dependent_variables_3 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q2.dat")
+dependent_variables_4 = read_dep_vars_from_file(results_directory + "/JUICEPropagationHistory_DependentVariables_Q4_perturbed.dat")
+
+# print(state_history_2) # debugging
+# print(dependent_variables_1.shape) # debugging
+# print(dependent_variables_2.shape) # debugging
+# print(dependent_variables_3.shape) # debugging
+# print(dependent_variables_4.shape) # debugging
+
+
+
+
+
