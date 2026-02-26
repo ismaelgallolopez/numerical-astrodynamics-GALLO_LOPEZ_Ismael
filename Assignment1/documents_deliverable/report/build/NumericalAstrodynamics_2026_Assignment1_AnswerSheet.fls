@@ -109,6 +109,9 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx
 INPUT /usr/share/texlive/texmf-dist/tex/latex/xkcdcolors/xkcdcolors.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-luatex.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-luatex.lua
 INPUT ./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux
@@ -152,6 +155,8 @@ INPUT ../../figures/third_body_accelerations_q2.pdf
 INPUT ../../figures/third_body_accelerations_q2.pdf
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-regular.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman5-regular.luc
+INPUT ../../figures/zoomed_accelerations_periods_q2.pdf
+INPUT ../../figures/zoomed_accelerations_periods_q2.pdf
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman8-regular.luc
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
@@ -185,6 +190,15 @@ INPUT ../../figures/position_difference_magnitude_aero_effect_q3.pdf
 INPUT ../../figures/position_difference_magnitude_aero_effect_q3.pdf
 INPUT ../../figures/position_difference_magnitude_srp_effect_q3.pdf
 INPUT ../../figures/position_difference_magnitude_srp_effect_q3.pdf
+INPUT ../../figures/propagation_origin_unperturbed_q4.pdf
+INPUT ../../figures/propagation_origin_unperturbed_q4.pdf
+INPUT ../../figures/propagation_origin_perturbed_q4.pdf
+INPUT ../../figures/propagation_origin_perturbed_q4.pdf
+INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc
+INPUT ../../figures/propagation_origin_unperturbed_d_q4.pdf
+INPUT ../../figures/propagation_origin_unperturbed_d_q4.pdf
+INPUT ../../figures/propagation_origin_perturbed_d_q4.pdf
+INPUT ../../figures/propagation_origin_perturbed_d_q4.pdf
 INPUT ./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux
 INPUT ./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb

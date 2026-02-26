@@ -1,0 +1,40 @@
+###########################################################################
+# PLOT THIRD-BODY ACCELERATION NORMS ######################################
+###########################################################################
+
+# Ensure we have the full dependent variables matrix sorted by time
+dep_vars_matrix = np.vstack(list(dependent_variables.values()))[sorted_indices]
+
+# Extract the 3D acceleration vectors based on the dependent_variables_to_save order
+accel_io_vector = dep_vars_matrix[:, 9:12]
+accel_sun_vector = dep_vars_matrix[:, 12:15]
+
+# Calculate the magnitudes (Euclidean norm) at each time step
+norm_accel_io = np.linalg.norm(accel_io_vector, axis=1)
+norm_accel_sun = np.linalg.norm(accel_sun_vector, axis=1)
+
+# Generate the plot
+fig_accel, ax_accel = plt.subplots(figsize=(10, 6))
+
+# Plotting on a logarithmic y-axis
+ax_accel.semilogy(time_days, norm_accel_sun, label='Sun Third-Body Gravity', color='tab:orange', linewidth=2)
+ax_accel.semilogy(time_days, norm_accel_io, label='Io Third-Body Gravity', color='tab:purple', linewidth=2)
+
+ax_accel.set_title('Magnitudes of Third-Body Gravitational Accelerations on JUICE', fontsize=14, fontweight='bold')
+ax_accel.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_accel.set_ylabel('Acceleration Norm [$\mathrm{m/s}^2$]', fontsize=12)
+
+# Grid formatting for log scale
+ax_accel.grid(True, which="major", linestyle="-", alpha=0.6)
+ax_accel.grid(True, which="minor", linestyle="--", alpha=0.3)
+ax_accel.legend(fontsize=12)
+
+# Improve layout spacing
+plt.tight_layout()
+
+# Save the figure
+accel_output_path = os.path.join(output_dir, "third_body_accelerations.pdf")
+plt.savefig(accel_output_path)
+print(f"Acceleration norms plot saved to: {accel_output_path}")
+
+plt.close()

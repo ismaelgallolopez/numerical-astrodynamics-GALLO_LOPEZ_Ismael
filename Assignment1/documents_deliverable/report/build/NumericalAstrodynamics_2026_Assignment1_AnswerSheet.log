@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  22 FEB 2026 17:19
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  26 FEB 2026 16:21
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex
@@ -270,88 +270,147 @@ Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 ) (/usr/share/texlive/texmf-dist/tex/latex/xkcdcolors/xkcdcolors.sty
 Package: xkcdcolors 2023/08/11 v1.0.2 Provide names for xkcd colors
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count284
+\float@exts=\toks25
+\float@box=\box53
+\@float@everytoks=\toks26
+\@floatcapt=\box54
+) (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+ (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count285
+\Gm@cntv=\count286
+\c@Gm@tempcnt=\count287
+\Gm@bindingoffset=\dimen155
+\Gm@wd@mp=\dimen156
+\Gm@odd@mp=\dimen157
+\Gm@even@mp=\dimen158
+\Gm@layoutwidth=\dimen159
+\Gm@layoutheight=\dimen160
+\Gm@layouthoffset=\dimen161
+\Gm@layoutvoffset=\dimen162
+\Gm@dimlist=\toks27
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-luatex.def
 File: l3backend-luatex.def 2024-01-04 L3 backend support: PDF output (LuaTeX)
-\l__color_backend_stack_int=\count284
+\l__color_backend_stack_int=\count288
 Inserting `l3color' in `luaotfload.parse_color'.
-\l__pdf_internal_box=\box53
+\l__pdf_internal_box=\box55
 ) (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux)
 \openout1 = NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 20.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-Package hyperref Info: Link coloring ON on input line 17.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+Package hyperref Info: Link coloring ON on input line 20.
  (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out) (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out)
 \@outlinefile=\write3
 
 \openout3 = NumericalAstrodynamics_2026_Assignment1_AnswerSheet.out
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count285
-\scratchdimen=\dimen155
-\scratchbox=\box54
-\nofMPsegments=\count286
-\nofMParguments=\count287
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count288
-\MPscratchDim=\dimen156
-\MPnumerator=\count289
-\makeMPintoPDFobject=\count290
-\everyMPtoPDFconversion=\toks26
+\scratchcounter=\count289
+\scratchdimen=\dimen163
+\scratchbox=\box56
+\nofMPsegments=\count290
+\nofMParguments=\count291
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count292
+\MPscratchDim=\dimen164
+\MPnumerator=\count293
+\makeMPintoPDFobject=\count294
+\everyMPtoPDFconversion=\toks29
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Underfull \hbox (badness 10000) in paragraph at lines 21--23
+*geometry* driver: auto-detecting
+*geometry* detected driver: luatex
+*geometry* verbose mode - [ preamble ] result:
+* driver: luatex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(51.21504pt, 495.07779pt, 51.21504pt)
+* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=495.07779pt
+* \textheight=731.23584pt
+* \oddsidemargin=-21.05495pt
+* \evensidemargin=-21.05495pt
+* \topmargin=-52.36449pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--23
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--25
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--27
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 28--29
+Underfull \hbox (badness 10000) in paragraph at lines 31--32
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--31
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
@@ -361,174 +420,202 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--31
 <../../figures/change_in_kepler_elements_q1.pdf, id=19, 722.7pt x 578.16pt>
 File: ../../figures/change_in_kepler_elements_q1.pdf Graphic file (type pdf)
 <use ../../figures/change_in_kepler_elements_q1.pdf>
-Package luatex.def Info: ../../figures/change_in_kepler_elements_q1.pdf  used on input line 57.
-(luatex.def)             Requested size: 345.0pt x 275.99626pt.
+Package luatex.def Info: ../../figures/change_in_kepler_elements_q1.pdf  used on input line 61.
+(luatex.def)             Requested size: 420.81914pt x 336.65633pt.
 <../../figures/keplerian_integration_error_q1.pdf, id=20, 867.24pt x 722.7pt>
 File: ../../figures/keplerian_integration_error_q1.pdf Graphic file (type pdf)
 <use ../../figures/keplerian_integration_error_q1.pdf>
-Package luatex.def Info: ../../figures/keplerian_integration_error_q1.pdf  used on input line 73.
-(luatex.def)             Requested size: 345.0pt x 287.49794pt.
+Package luatex.def Info: ../../figures/keplerian_integration_error_q1.pdf  used on input line 78.
+(luatex.def)             Requested size: 420.81914pt x 350.68552pt.
+ [2
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/cartesian_integration_error_q1.pdf, id=21, 867.24pt x 722.7pt>
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1'
+<../../figures/change_in_kepler_elements_q1.pdf>]
+<../../figures/cartesian_integration_error_q1.pdf, id=102, 867.24pt x 722.7pt>
 File: ../../figures/cartesian_integration_error_q1.pdf Graphic file (type pdf)
 <use ../../figures/cartesian_integration_error_q1.pdf>
-Package luatex.def Info: ../../figures/cartesian_integration_error_q1.pdf  used on input line 79.
-(luatex.def)             Requested size: 345.0pt x 287.49794pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[2
-
-<../../figures/change_in_kepler_elements_q1.pdf>] [3<../../figures/keplerian_integration_error_q1.pdf>] [4<../../figures/cartesian_integration_error_q1.pdf>]
+Package luatex.def Info: ../../figures/cartesian_integration_error_q1.pdf  used on input line 84.
+(luatex.def)             Requested size: 420.81914pt x 350.68552pt.
+ [3
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.2'
+<../../figures/keplerian_integration_error_q1.pdf>] [4
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.3'
+<../../figures/cartesian_integration_error_q1.pdf>]
 <../../figures/third_body_accelerations_q2.pdf, id=232, 722.7pt x 433.62pt>
 File: ../../figures/third_body_accelerations_q2.pdf Graphic file (type pdf)
 <use ../../figures/third_body_accelerations_q2.pdf>
-Package luatex.def Info: ../../figures/third_body_accelerations_q2.pdf  used on input line 108.
-(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+Package luatex.def Info: ../../figures/third_body_accelerations_q2.pdf  used on input line 114.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+<../../figures/zoomed_accelerations_periods_q2.pdf, id=233, 867.24pt x 722.7pt>
+File: ../../figures/zoomed_accelerations_periods_q2.pdf Graphic file (type pdf)
+<use ../../figures/zoomed_accelerations_periods_q2.pdf>
+Package luatex.def Info: ../../figures/zoomed_accelerations_periods_q2.pdf  used on input line 129.
+(luatex.def)             Requested size: 420.81914pt x 350.68552pt.
  [5
 
+
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.4'
 <../../figures/third_body_accelerations_q2.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 137--137
-[][][][][]$\TU/lmtt/m/n/8 https://upload.wikimedia.org/wikipedia/commons/8/83/Galilean_moon_Laplace_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 151--152
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 154--155
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 157--158
+[6
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.5'
+<../../figures/zoomed_accelerations_periods_q2.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--171
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
 
  []
 
 
-Overfull \hbox (0.15pt too wide) in paragraph at lines 173--175
-[]\TU/lmr/m/n/10 Ex-pand the mag-ni-tude of the Sun-spacecraft vec-tor us-ing the law of cosines
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--175
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 177--179
+Underfull \hbox (badness 10000) in paragraph at lines 184--186
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 181--183
+Underfull \hbox (badness 10000) in paragraph at lines 188--190
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 185--186
+Underfull \hbox (badness 10000) in paragraph at lines 192--194
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--198
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 200--201
 
  []
 
 [7]
-<../../figures/validation_aero_mag_diff_q3.pdf, id=367, 722.7pt x 433.62pt>
+<../../figures/validation_aero_mag_diff_q3.pdf, id=452, 722.7pt x 433.62pt>
 File: ../../figures/validation_aero_mag_diff_q3.pdf Graphic file (type pdf)
 <use ../../figures/validation_aero_mag_diff_q3.pdf>
-Package luatex.def Info: ../../figures/validation_aero_mag_diff_q3.pdf  used on input line 201.
-(luatex.def)             Requested size: 345.0pt x 206.9972pt.
-<../../figures/validation_aero_vector_diff_q3.pdf, id=368, 722.7pt x 867.24pt>
+Package luatex.def Info: ../../figures/validation_aero_mag_diff_q3.pdf  used on input line 217.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+<../../figures/validation_aero_vector_diff_q3.pdf, id=453, 722.7pt x 867.24pt>
 File: ../../figures/validation_aero_vector_diff_q3.pdf Graphic file (type pdf)
 <use ../../figures/validation_aero_vector_diff_q3.pdf>
-Package luatex.def Info: ../../figures/validation_aero_vector_diff_q3.pdf  used on input line 208.
-(luatex.def)             Requested size: 345.0pt x 413.9944pt.
+Package luatex.def Info: ../../figures/validation_aero_vector_diff_q3.pdf  used on input line 224.
+(luatex.def)             Requested size: 420.81914pt x 504.98451pt.
+ [8
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/validation_srp_mag_diff_q3.pdf, id=369, 722.7pt x 433.62pt>
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.6'
+<../../figures/validation_aero_mag_diff_q3.pdf>]
+<../../figures/validation_srp_mag_diff_q3.pdf, id=531, 722.7pt x 433.62pt>
 File: ../../figures/validation_srp_mag_diff_q3.pdf Graphic file (type pdf)
 <use ../../figures/validation_srp_mag_diff_q3.pdf>
-Package luatex.def Info: ../../figures/validation_srp_mag_diff_q3.pdf  used on input line 215.
-(luatex.def)             Requested size: 345.0pt x 206.9972pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/validation_srp_vector_diff_q3.pdf, id=370, 722.7pt x 867.24pt>
+Package luatex.def Info: ../../figures/validation_srp_mag_diff_q3.pdf  used on input line 231.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [9
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.7'
+<../../figures/validation_aero_vector_diff_q3.pdf>]
+<../../figures/validation_srp_vector_diff_q3.pdf, id=610, 722.7pt x 867.24pt>
 File: ../../figures/validation_srp_vector_diff_q3.pdf Graphic file (type pdf)
 <use ../../figures/validation_srp_vector_diff_q3.pdf>
-Package luatex.def Info: ../../figures/validation_srp_vector_diff_q3.pdf  used on input line 222.
-(luatex.def)             Requested size: 345.0pt x 413.9944pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/rsw_aero_acceleration_magnitude_q3.pdf, id=375, 722.7pt x 361.35pt>
+Package luatex.def Info: ../../figures/validation_srp_vector_diff_q3.pdf  used on input line 238.
+(luatex.def)             Requested size: 420.81914pt x 504.98451pt.
+ [10
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.8'
+<../../figures/validation_srp_mag_diff_q3.pdf>]
+<../../figures/rsw_aero_acceleration_magnitude_q3.pdf, id=694, 722.7pt x 361.35pt>
 File: ../../figures/rsw_aero_acceleration_magnitude_q3.pdf Graphic file (type pdf)
 <use ../../figures/rsw_aero_acceleration_magnitude_q3.pdf>
-Package luatex.def Info: ../../figures/rsw_aero_acceleration_magnitude_q3.pdf  used on input line 233.
-(luatex.def)             Requested size: 345.0pt x 172.49767pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/rsw_aero_acceleration_vector_local_q3.pdf, id=376, 722.7pt x 650.43pt>
+Package luatex.def Info: ../../figures/rsw_aero_acceleration_magnitude_q3.pdf  used on input line 249.
+(luatex.def)             Requested size: 420.81914pt x 210.4102pt.
+ [11
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.9'
+<../../figures/validation_srp_vector_diff_q3.pdf>]
+<../../figures/rsw_aero_acceleration_vector_local_q3.pdf, id=777, 722.7pt x 650.43pt>
 File: ../../figures/rsw_aero_acceleration_vector_local_q3.pdf Graphic file (type pdf)
 <use ../../figures/rsw_aero_acceleration_vector_local_q3.pdf>
-Package luatex.def Info: ../../figures/rsw_aero_acceleration_vector_local_q3.pdf  used on input line 240.
-(luatex.def)             Requested size: 345.0pt x 310.49579pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/rsw_srp_acceleration_magnitude_q3.pdf, id=377, 722.7pt x 361.35pt>
+Package luatex.def Info: ../../figures/rsw_aero_acceleration_vector_local_q3.pdf  used on input line 256.
+(luatex.def)             Requested size: 420.81914pt x 378.73837pt.
+<../../figures/rsw_srp_acceleration_magnitude_q3.pdf, id=778, 722.7pt x 361.35pt>
 File: ../../figures/rsw_srp_acceleration_magnitude_q3.pdf Graphic file (type pdf)
 <use ../../figures/rsw_srp_acceleration_magnitude_q3.pdf>
-Package luatex.def Info: ../../figures/rsw_srp_acceleration_magnitude_q3.pdf  used on input line 247.
-(luatex.def)             Requested size: 345.0pt x 172.49767pt.
+Package luatex.def Info: ../../figures/rsw_srp_acceleration_magnitude_q3.pdf  used on input line 263.
+(luatex.def)             Requested size: 420.81914pt x 210.4102pt.
+ [12
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.10'
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/rsw_srp_acceleration_vector_local_q3.pdf, id=378, 722.7pt x 650.43pt>
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.11'
+<../../figures/rsw_aero_acceleration_magnitude_q3.pdf><../../figures/rsw_aero_acceleration_vector_local_q3.pdf>]
+<../../figures/rsw_srp_acceleration_vector_local_q3.pdf, id=923, 722.7pt x 650.43pt>
 File: ../../figures/rsw_srp_acceleration_vector_local_q3.pdf Graphic file (type pdf)
 <use ../../figures/rsw_srp_acceleration_vector_local_q3.pdf>
-Package luatex.def Info: ../../figures/rsw_srp_acceleration_vector_local_q3.pdf  used on input line 254.
-(luatex.def)             Requested size: 345.0pt x 310.49579pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/position_difference_magnitude_aero_effect_q3.pdf, id=379, 722.7pt x 433.62pt>
+Package luatex.def Info: ../../figures/rsw_srp_acceleration_vector_local_q3.pdf  used on input line 270.
+(luatex.def)             Requested size: 420.81914pt x 378.73837pt.
+<../../figures/position_difference_magnitude_aero_effect_q3.pdf, id=924, 722.7pt x 433.62pt>
 File: ../../figures/position_difference_magnitude_aero_effect_q3.pdf Graphic file (type pdf)
 <use ../../figures/position_difference_magnitude_aero_effect_q3.pdf>
-Package luatex.def Info: ../../figures/position_difference_magnitude_aero_effect_q3.pdf  used on input line 263.
-(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+Package luatex.def Info: ../../figures/position_difference_magnitude_aero_effect_q3.pdf  used on input line 279.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [13
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.12'
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<../../figures/position_difference_magnitude_srp_effect_q3.pdf, id=380, 722.7pt x 433.62pt>
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.13'
+<../../figures/rsw_srp_acceleration_magnitude_q3.pdf><../../figures/rsw_srp_acceleration_vector_local_q3.pdf>]
+<../../figures/position_difference_magnitude_srp_effect_q3.pdf, id=1070, 722.7pt x 433.62pt>
 File: ../../figures/position_difference_magnitude_srp_effect_q3.pdf Graphic file (type pdf)
 <use ../../figures/position_difference_magnitude_srp_effect_q3.pdf>
-Package luatex.def Info: ../../figures/position_difference_magnitude_srp_effect_q3.pdf  used on input line 270.
-(luatex.def)             Requested size: 345.0pt x 206.9972pt.
+Package luatex.def Info: ../../figures/position_difference_magnitude_srp_effect_q3.pdf  used on input line 286.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [14
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.14'
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.15'
+<../../figures/position_difference_magnitude_aero_effect_q3.pdf><../../figures/position_difference_magnitude_srp_effect_q3.pdf>]
+<../../figures/propagation_origin_unperturbed_q4.pdf, id=1222, 722.7pt x 433.62pt>
+File: ../../figures/propagation_origin_unperturbed_q4.pdf Graphic file (type pdf)
+<use ../../figures/propagation_origin_unperturbed_q4.pdf>
+Package luatex.def Info: ../../figures/propagation_origin_unperturbed_q4.pdf  used on input line 314.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+<../../figures/propagation_origin_perturbed_q4.pdf, id=1223, 722.7pt x 433.62pt>
+File: ../../figures/propagation_origin_perturbed_q4.pdf Graphic file (type pdf)
+<use ../../figures/propagation_origin_perturbed_q4.pdf>
+Package luatex.def Info: ../../figures/propagation_origin_perturbed_q4.pdf  used on input line 329.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [15
 
-[8
 
-<../../figures/validation_aero_mag_diff_q3.pdf>] [9<../../figures/validation_aero_vector_diff_q3.pdf>] [10<../../figures/validation_srp_mag_diff_q3.pdf>] [11<../../figures/validation_srp_vector_diff_q3.pdf>] [12<../../figures/rsw_aero_acceleration_magnitude_q3.pdf><../../figures/rsw_aero_acceleration_vector_local_q3.pdf>] [13<../../figures/rsw_srp_acceleration_magnitude_q3.pdf><../../figures/rsw_srp_acceleration_vector_local_q3.pdf>] [14<../../figures/position_difference_magnitude_aero_effect_q3.pdf><../../figures/position_difference_magnitude_srp_effect_q3.pdf>] [15
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.16'
+<../../figures/propagation_origin_unperturbed_q4.pdf>]
+<../../figures/propagation_origin_unperturbed_d_q4.pdf, id=1319, 722.7pt x 433.62pt>
+File: ../../figures/propagation_origin_unperturbed_d_q4.pdf Graphic file (type pdf)
+<use ../../figures/propagation_origin_unperturbed_d_q4.pdf>
+Package luatex.def Info: ../../figures/propagation_origin_unperturbed_d_q4.pdf  used on input line 358.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [16
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.17'
+<../../figures/propagation_origin_perturbed_q4.pdf>]
+<../../figures/propagation_origin_perturbed_d_q4.pdf, id=1409, 722.7pt x 433.62pt>
+File: ../../figures/propagation_origin_perturbed_d_q4.pdf Graphic file (type pdf)
+<use ../../figures/propagation_origin_perturbed_d_q4.pdf>
+Package luatex.def Info: ../../figures/propagation_origin_perturbed_d_q4.pdf  used on input line 364.
+(luatex.def)             Requested size: 420.81914pt x 252.49225pt.
+ [17
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.18'
 
-] (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux)
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.19'
+<../../figures/propagation_origin_unperturbed_d_q4.pdf><../../figures/propagation_origin_perturbed_d_q4.pdf>] [18] (./build/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -538,19 +625,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment1_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 11175 strings out of 476553
+ 11793 strings out of 476553
  125027,1977958 words of node,token memory allocated
- 592 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 4 glue, 4 kern, 4 sub_mlist, 1 glyph, 19 attribute, 55 glue_spec, 19 attribute_list, 1 write, 1 pdf_action nodes
-   avail lists: 2:740,3:269,4:70,5:280,6:44,7:4163,8:97,9:583,10:9,11:377
- 32873 multiletter control sequences out of 65536+600000
- 51 fonts using 3719575 bytes
- 72i,11n,75p,639b,431s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (15 pages, 1614713 bytes).
+ 578 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 3 glue, 4 kern, 5 sub_mlist, 1 glyph, 18 attribute, 55 glue_spec, 18 attribute_list, 1 write nodes
+   avail lists: 1:1,2:588,3:161,4:71,5:284,6:46,7:4335,8:97,9:656,10:5,11:346
+ 33454 multiletter control sequences out of 65536+600000
+ 52 fonts using 3851263 bytes
+ 72i,11n,75p,999b,431s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (18 pages, 1821198 bytes).
 
-PDF statistics: 1233 PDF objects out of 1440 (max. 8388607)
- 405 compressed objects within 5 object streams
- 73 named destinations out of 1000 (max. 131072)
+PDF statistics: 1684 PDF objects out of 1728 (max. 8388607)
+ 507 compressed objects within 6 object streams
+ 80 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

@@ -1,0 +1,84 @@
+###########################################################################
+# PLOT ACCELERATIONS IN LOCAL FRAME (4 SEPARATE PLOTS) ####################
+###########################################################################
+
+# Component labels for the local frame (typically R, S, W or T, N, W)
+local_components = ['Component 1 (Radial/Tangential)', 
+                    'Component 2 (Transverse/Normal)', 
+                    'Component 3 (Normal/Out-of-Plane)']
+
+# -------------------------------------------------------------------------
+# 1. Aerodynamic Acceleration Vector (Local Components)
+# -------------------------------------------------------------------------
+fig_aero_vec, axs_aero_vec = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
+fig_aero_vec.suptitle('Aerodynamic Acceleration Components (Local Frame)', fontsize=16, fontweight='bold', y=0.96)
+
+for i in range(3):
+    axs_aero_vec[i].plot(time_days, accel_aerodynamic_rsw[:, i], color='tab:blue', linewidth=1.5)
+    axs_aero_vec[i].set_ylabel(f'{local_components[i]}\n[m/s²]', fontsize=10)
+    axs_aero_vec[i].grid(True, alpha=0.6)
+    axs_aero_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_aero_vec[-1].set_xlabel('Time since t0 [days]', fontsize=12)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+aero_vec_path = os.path.join(output_dir, "aero_acceleration_vector_local.pdf")
+plt.savefig(aero_vec_path)
+print(f"Aerodynamic vector plot saved to: {aero_vec_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 2. Aerodynamic Acceleration Magnitude
+# -------------------------------------------------------------------------
+fig_aero_mag, ax_aero_mag = plt.subplots(figsize=(10, 5))
+ax_aero_mag.plot(time_days, accel_aerodynamic_simulation_mag, color='tab:blue', linewidth=2)
+
+ax_aero_mag.set_title('Aerodynamic Acceleration Magnitude', fontsize=16, fontweight='bold')
+ax_aero_mag.set_xlabel('Time since t0 [days]', fontsize=12)
+ax_aero_mag.set_ylabel('Magnitude [m/s²]', fontsize=12)
+ax_aero_mag.grid(True, alpha=0.6)
+ax_aero_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout()
+aero_mag_path = os.path.join(output_dir, "aero_acceleration_magnitude.pdf")
+plt.savefig(aero_mag_path)
+print(f"Aerodynamic magnitude plot saved to: {aero_mag_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 3. Solar Radiation Pressure Vector (Local Components)
+# -------------------------------------------------------------------------
+fig_srp_vec, axs_srp_vec = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
+fig_srp_vec.suptitle('Solar Radiation Pressure Components (Local Frame)', fontsize=16, fontweight='bold', y=0.96)
+
+for i in range(3):
+    axs_srp_vec[i].plot(time_days, accel_radiation_pressure_rsw[:, i], color='tab:orange', linewidth=1.5)
+    axs_srp_vec[i].set_ylabel(f'{local_components[i]}\n[m/s²]', fontsize=10)
+    axs_srp_vec[i].grid(True, alpha=0.6)
+    axs_srp_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_srp_vec[-1].set_xlabel('Time since t0 [days]', fontsize=12)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+srp_vec_path = os.path.join(output_dir, "srp_acceleration_vector_local.pdf")
+plt.savefig(srp_vec_path)
+print(f"SRP vector plot saved to: {srp_vec_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 4. Solar Radiation Pressure Magnitude
+# -------------------------------------------------------------------------
+fig_srp_mag, ax_srp_mag = plt.subplots(figsize=(10, 5))
+ax_srp_mag.plot(time_days, accel_radiation_pressure_simulation_mag, color='tab:orange', linewidth=2)
+
+ax_srp_mag.set_title('Solar Radiation Pressure Magnitude', fontsize=16, fontweight='bold')
+ax_srp_mag.set_xlabel('Time since t0 [days]', fontsize=12)
+ax_srp_mag.set_ylabel('Magnitude [m/s²]', fontsize=12)
+ax_srp_mag.grid(True, alpha=0.6)
+ax_srp_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout()
+srp_mag_path = os.path.join(output_dir, "srp_acceleration_magnitude.pdf")
+plt.savefig(srp_mag_path)
+print(f"SRP magnitude plot saved to: {srp_mag_path}")
+plt.close()

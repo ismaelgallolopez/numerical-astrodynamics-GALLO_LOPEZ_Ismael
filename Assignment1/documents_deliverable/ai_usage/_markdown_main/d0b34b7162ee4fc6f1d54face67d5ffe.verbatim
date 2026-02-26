@@ -1,0 +1,2 @@
+Sun=[propagation_setup.acceleration.point_mass_gravity(),
+     propagation_setup.acceleration.cannonball_radiation_pressure()], # CHECK 

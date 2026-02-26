@@ -5,6 +5,9 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{pdfpages}
 
 % 1. Setup the Markdown Package
 % This package renders external .md files
@@ -12,23 +15,59 @@
   hybrid,   % Allows standard LaTeX commands inside markdown
   fencedCode,
   smartEllipses,
-%   theme=bw  % Black and white theme (cleaner for reports)
+  pipeTables,
+  tableCaptions,
+  underscores=false,
+  definitionLists,
+  inlineFootnotes,
+  footnotes,
+  hashEnumerators,
+  strikeThrough
 ]{markdown}
 
+% Configure markdown rendering options
+\markdownSetup{
+  rendererPrototypes={
+    headingOne = {\section{#1}},
+    headingTwo = {\subsection*{#1}},
+    headingThree = {\subsubsection*{#1}},
+    horizontalRule = {\vspace{0.5em}\noindent\rule{\textwidth}{0.4pt}\vspace{0.5em}}
+  }
+}
+
+% Configure code block styling
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  xleftmargin=10pt,
+  xrightmargin=10pt,
+  framexleftmargin=5pt,
+  framexrightmargin=5pt,
+  numbers=none
+}
+
 % 2. Define Visual Styles for the Chat
-% Note: Cannot wrap \markdownInput in tcolorbox - commented out for now
-% If you want styling, use markdown's built-in features or CSS-style options
-% \newtcolorbox{chatbox}{
-%   colback=gray!5,      % Light gray background
-%   colframe=gray!50,    % Darker gray border
-%   title=\textbf{AI Chat Transcript (Rendered from Markdown)},
-%   fonttitle=\sffamily\small,
-%   coltitle=black,
-%   breakable,           % Allows the chat to split across pages
-%   enhanced,
-%   boxrule=0.5pt,
-%   left=10pt, right=10pt, top=10pt, bottom=10pt
-% }
+\newtcolorbox{chatbox}{
+  colback=white,      % White background
+  colframe=gray!30,    % Light gray border
+  fonttitle=\sffamily\bfseries,
+  coltitle=black,
+  breakable,           % Allows the chat to split across pages
+  enhanced,
+  boxrule=0.5pt,
+  left=15pt, right=15pt, top=10pt, bottom=10pt,
+  sharp corners
+}
+
+% Configure page geometry for better readability
+\geometry{
+  left=2.5cm,
+  right=2.5cm,
+  top=2.5cm,
+  bottom=2.5cm
+}
 
 \title{AI Appendix - AE4868}
 \author{Ismael Gallo López} % Replace with your name
@@ -38,58 +77,57 @@
 
 \maketitle
 
-% ---------------------------------------------------------
-% SECTION 1: AI USAGE SUMMARY
-% Requirement: Description of overall assignment usage [cite: 18, 19]
-% Requirement: Description of usage for understanding course material [cite: 20]
-% Requirement: Unredacted record of general (non-question specific) chats 
-% ---------------------------------------------------------
 \section*{AI Usage Summary}
 
 \subsection*{Description of Usage}
-% REPLACE THIS TEXT:
-I used Gemini to help visualize the orbital elements... (Write your general description here).
 
-\subsection*{General Chat Transcript}
-% TODO: Replace template_markdown.md with your actual general AI chat export (general_chat.md)
-% Note: markdownInput cannot be wrapped in tcolorbox - it must be used directly
-\markdownInput{markdown_files/template_markdown.md}
+For this assignment, AI tools were used exclusively for debugging assistance, conceptual clarification, and implementation guidance related to TudatPy simulations.
 
-\newpage
+Specifically, AI was consulted to:
 
-% ---------------------------------------------------------
-% SECTION 2: QUESTION 1 - AI USAGE
-% Requirement: Description of usage for this specific question [cite: 23]
-% Requirement: Unredacted record of chats for this question [cite: 24]
-% ---------------------------------------------------------
+\begin{itemize}
+  \item Interpret and resolve runtime errors related to radiation pressure interface configuration and order-of-operations issues in environment setup.
+  \item Understand how to correctly retrieve individual accelerations using the AvailableAcceleration enumeration and dependent variable system.
+  \item Clarify frame consistency issues (e.g., body-fixed vs inertial frames) when comparing analytical and numerical accelerations.
+  \item Debug indexing issues when extracting data from dependent variable dictionaries and converting them into NumPy arrays.
+  \item Conceptually reason about the physical and mathematical implications of changing the propagation origin (e.g., Ganymede-centered vs. Jupiter-centered propagation).
+  \item Verify whether the implemented numerical comparison strategy for Question 4 logically addressed the assignment requirements.
+  \item Write this very document, summarizing the AI interactions and their role in the assignment.
+\end{itemize}
+
+AI was not used to generate derivations, formulate analytical models, write propagation algorithms, produce executable assignment solutions, compute numerical results, or generate report-ready explanations for the assignment questions. All mathematical formulations, implementation decisions, simulations, and analysis were developed independently.
+
+The AI interactions served as debugging support and conceptual discussion, comparable to consulting peers regarding implementation issues.
+
+
 \section*{Question 1 - AI Usage}
 
 \subsection*{Description of Usage}
-% REPLACE THIS TEXT:
-For Question 1, I used AI to debug the plotting library...
+For Question 1, AI was used only to clarify implementation-related issues and to better understand error messages encountered during execution. The AI provided general guidance on how to interpret specific runtime errors and suggested possible logical checks to verify consistency in the propagation setup.
 
-% \subsection*{Chat Transcript}
-% Uncomment and create markdown_files/question1_chat.md when ready
-% \begin{chatbox}
-%     \markdownInput{markdown_files/question1_chat.md}
-% \end{chatbox}
+No derivations, algorithms, executable code, or numerical results were generated by AI. The full implementation, model configuration, simulation execution, and analysis were performed independently.
 
-\newpage
-
-% ---------------------------------------------------------
-% SECTION 3: QUESTION 2 - AI USAGE
-% Repeat for all questions [cite: 25, 26]
-% ---------------------------------------------------------
 \section*{Question 2 - AI Usage}
 
 \subsection*{Description of Usage}
-% REPLACE THIS TEXT:
-I did not use AI for this question.
+For Question 2, AI was used to diagnose runtime errors related to the radiation pressure acceleration model and to understand the correct order of defining body settings before creating the system of bodies. The AI provided conceptual explanations of why the simulation failed due to missing radiation pressure interfaces.
 
-% If no AI was used, state it explicitly[cite: 12].
-% You can comment out the chatbox below if empty.
-% \begin{chatbox}
-%    \markdownInput{markdown_files/question2_chat.md}
-% \end{chatbox}
+No analytical derivations, executable assignment solutions, or numerical results were generated by AI.
+
+\section*{Question 3 - AI Usage}
+
+For Question 3, AI was used to clarify how to retrieve individual accelerations using dependent variables and how to interpret indexing errors when extracting data from dictionaries versus NumPy arrays. AI also provided conceptual guidance on frame transformations when comparing analytical and simulated accelerations.
+
+All analytical acceleration formulations, numerical calculations, and comparison plots were implemented independently.
+
+\section*{Question 4 - AI Usage}
+
+For Question 4, AI was used to discuss the conceptual implications of changing the propagation origin and to identify inconsistencies in the implemented acceleration model when switching from Ganymede-centered to Jupiter-centered propagation. AI provided high-level reasoning regarding indirect accelerations and reconstruction of relative position vectors.
+
+The mathematical formulation, implementation of the dynamical model, propagation runs, and analysis of the results were carried out independently.
+
+\subsection*{General Chat Transcript}
+
+\includepdf[pages=-,pagecommand={},scale=0.95,frame=false]{markdown_files/NA_assignment1.pdf}
 
 \end{document}

@@ -1,0 +1,5 @@
+# CORRECTED UNPERTURBED SETTINGS
+acceleration_settings_on_vehicle_unperturbed = dict(
+    Ganymede=[propagation_setup.acceleration.point_mass_gravity()],
+    Jupiter=[propagation_setup.acceleration.point_mass_gravity()] # <--- YOU MUST ADD THIS
+)

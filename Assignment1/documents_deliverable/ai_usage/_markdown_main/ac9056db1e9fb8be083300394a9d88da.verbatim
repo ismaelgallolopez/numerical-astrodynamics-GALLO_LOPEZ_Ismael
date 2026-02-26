@@ -1,0 +1,2 @@
+# Change len_time to 6
+state_history_2 = read_vector_history_from_file(6, results_directory + "/JUICEPropagationHistory_Q4_unperturbed.dat")

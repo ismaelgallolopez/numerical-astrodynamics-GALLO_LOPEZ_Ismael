@@ -1,0 +1,5 @@
+# You must include Jupiter here for the Q4 unperturbed case
+acceleration_settings_on_vehicle_unperturbed = dict(
+    Ganymede=[propagation_setup.acceleration.point_mass_gravity()],
+    Jupiter=[propagation_setup.acceleration.point_mass_gravity()] # <--- ADD THIS
+)

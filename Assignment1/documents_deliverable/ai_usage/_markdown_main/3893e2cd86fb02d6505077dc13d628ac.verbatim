@@ -1,0 +1,60 @@
+###########################################################################
+# PLOT ACCELERATIONS IN LOCAL FRAME (SEPARATED WITH NORMS) ################
+###########################################################################
+
+# Component labels for the local frame (typically R, S, W or T, N, W)
+local_components = ['Component 1 (Radial/Tangential)', 
+                    'Component 2 (Transverse/Normal)', 
+                    'Component 3 (Normal/Out-of-Plane)']
+
+# -------------------------------------------------------------------------
+# 1. Aerodynamic Acceleration (Local Components + Magnitude)
+# -------------------------------------------------------------------------
+fig_aero_loc, axs_aero_loc = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
+fig_aero_loc.suptitle('Aerodynamic Acceleration in Local Frame', fontsize=16, fontweight='bold', y=0.96)
+
+# Plot the 3 local components
+for i in range(3):
+    axs_aero_loc[i].plot(time_days, accel_aerodynamic_rsw[:, i], color='tab:blue', linewidth=1.5)
+    axs_aero_loc[i].set_ylabel(f'{local_components[i]}\n[m/s²]', fontsize=10)
+    axs_aero_loc[i].grid(True, alpha=0.6)
+    axs_aero_loc[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Plot the Magnitude
+axs_aero_loc[3].plot(time_days, accel_aerodynamic_simulation_mag, color='black', linewidth=1.5, linestyle='-')
+axs_aero_loc[3].set_ylabel('Magnitude\n[m/s²]', fontsize=10, fontweight='bold')
+axs_aero_loc[3].set_xlabel('Time since t0 [days]', fontsize=12)
+axs_aero_loc[3].grid(True, alpha=0.6)
+axs_aero_loc[3].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+aero_local_path = os.path.join(output_dir, "aero_acceleration_local_frame.pdf")
+plt.savefig(aero_local_path)
+print(f"Aerodynamic local frame plot saved to: {aero_local_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 2. Solar Radiation Pressure (Local Components + Magnitude)
+# -------------------------------------------------------------------------
+fig_srp_loc, axs_srp_loc = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
+fig_srp_loc.suptitle('Solar Radiation Pressure in Local Frame', fontsize=16, fontweight='bold', y=0.96)
+
+# Plot the 3 local components
+for i in range(3):
+    axs_srp_loc[i].plot(time_days, accel_radiation_pressure_rsw[:, i], color='tab:orange', linewidth=1.5)
+    axs_srp_loc[i].set_ylabel(f'{local_components[i]}\n[m/s²]', fontsize=10)
+    axs_srp_loc[i].grid(True, alpha=0.6)
+    axs_srp_loc[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Plot the Magnitude
+axs_srp_loc[3].plot(time_days, accel_radiation_pressure_simulation_mag, color='black', linewidth=1.5, linestyle='-')
+axs_srp_loc[3].set_ylabel('Magnitude\n[m/s²]', fontsize=10, fontweight='bold')
+axs_srp_loc[3].set_xlabel('Time since t0 [days]', fontsize=12)
+axs_srp_loc[3].grid(True, alpha=0.6)
+axs_srp_loc[3].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+srp_local_path = os.path.join(output_dir, "srp_acceleration_local_frame.pdf")
+plt.savefig(srp_local_path)
+print(f"SRP local frame plot saved to: {srp_local_path}")
+plt.close()

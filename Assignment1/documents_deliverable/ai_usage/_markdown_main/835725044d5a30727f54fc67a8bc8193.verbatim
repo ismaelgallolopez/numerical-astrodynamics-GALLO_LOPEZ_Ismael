@@ -1,0 +1,11 @@
+def read_dep_vars_from_file(filename):
+    
+    with open(filename) as f:
+        line = f.readline()
+        # Subtract 1 because the first column is the Time Key, not part of the vector
+        num_cols = len(line.split()) - 1 
+        print(num_cols) # Should print 6
+
+        dep_vars = read_vector_history_from_file(num_cols, filename)
+        dep_vars_array = result2array(dep_vars)
+        return dep_vars_array

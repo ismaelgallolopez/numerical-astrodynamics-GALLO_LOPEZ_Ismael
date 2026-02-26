@@ -1,0 +1,28 @@
+###########################################################################
+# PLOT POSITION DIFFERENCE MAGNITUDE: NOMINAL VS NO-AERODYNAMICS ##########
+###########################################################################
+
+# Calculate the magnitude of the position difference vector (Euclidean distance)
+position_difference_mag = np.linalg.norm(position_difference, axis=1)
+
+# Generate the plot
+fig_diff_mag, ax_diff_mag = plt.subplots(figsize=(10, 6))
+ax_diff_mag.plot(time_days, position_difference_mag, color='black', linewidth=2)
+
+ax_diff_mag.set_title('Magnitude of Position Difference\n(Nominal vs. No Aerodynamic Acceleration)', fontsize=14, fontweight='bold')
+ax_diff_mag.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_diff_mag.set_ylabel('$\|\Delta \mathbf{r}\|$ [m]', fontsize=12)
+ax_diff_mag.grid(True, alpha=0.6)
+
+# Use scientific notation for the y-axis
+ax_diff_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+# Improve layout
+plt.tight_layout()
+
+# Save the figure
+diff_mag_output_path = os.path.join(output_dir, "position_difference_magnitude_aero_effect.pdf")
+plt.savefig(diff_mag_output_path)
+print(f"Position difference magnitude plot saved to: {diff_mag_output_path}")
+
+plt.close()

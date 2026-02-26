@@ -1,0 +1,2 @@
+# CORRECTED CALCULATION
+position_difference_unperturbed = position_unperturbed_gan_centered - (position_unperturbed_jup_centered - ganymede_jupiter_position_history_2)

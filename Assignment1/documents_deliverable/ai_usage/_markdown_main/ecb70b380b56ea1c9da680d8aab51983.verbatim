@@ -1,0 +1,94 @@
+###########################################################################
+# PLOT ACCELERATION VALIDATION (DIFFERENCES) ##############################
+###########################################################################
+
+# Correct the manual aerodynamic magnitude to be strictly positive for comparison
+accel_aero_manual_mag_abs = np.abs(accel_aerodynamic_manual_mag)
+
+# Calculate differences (Simulation - Analytical)
+diff_aero_mag = accel_aerodynamic_simulation_mag - accel_aero_manual_mag_abs
+diff_srp_mag = accel_radiation_pressure_simulation_mag - accel_radiation_pressure_manual_mag
+diff_srp_vec = accel_radiation_pressure_simulation - accel_radiation_pressure_manual
+diff_aero_vec = accel_aerodynamic_simulation - accel_aerodynamic_manual
+
+# -------------------------------------------------------------------------
+# 1. Aerodynamic Magnitude Difference
+# -------------------------------------------------------------------------
+fig_aero, ax_aero = plt.subplots(figsize=(10, 6))
+ax_aero.plot(time_days, diff_aero_mag, color='tab:blue', linewidth=2)
+
+ax_aero.set_title('Aerodynamic Acceleration Magnitude Difference\n(Simulation - Analytical)', fontsize=14, fontweight='bold')
+ax_aero.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_aero.set_ylabel(r'$\Delta$ Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
+ax_aero.grid(True, alpha=0.6)
+ax_aero.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout()
+aero_val_path = os.path.join(output_dir, "validation_aero_mag_diff_q3.pdf")
+plt.savefig(aero_val_path)
+print(f"Aerodynamic magnitude difference plot saved to: {aero_val_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 2. Radiation Pressure Magnitude Difference
+# -------------------------------------------------------------------------
+fig_srp_mag, ax_srp_mag = plt.subplots(figsize=(10, 6))
+ax_srp_mag.plot(time_days, diff_srp_mag, color='tab:orange', linewidth=2)
+
+ax_srp_mag.set_title('Solar Radiation Pressure Magnitude Difference\n(Simulation - Analytical)', fontsize=14, fontweight='bold')
+ax_srp_mag.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_srp_mag.set_ylabel(r'$\Delta$ Magnitude [$\mathrm{m/s}^2$]', fontsize=12)
+ax_srp_mag.grid(True, alpha=0.6)
+ax_srp_mag.ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+plt.tight_layout()
+srp_mag_val_path = os.path.join(output_dir, "validation_srp_mag_diff_q3.pdf")
+plt.savefig(srp_mag_val_path)
+print(f"SRP magnitude difference plot saved to: {srp_mag_val_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 3. Radiation Pressure Vector Difference
+# -------------------------------------------------------------------------
+fig_srp_vec, axs_srp_vec = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+fig_srp_vec.suptitle('Solar Radiation Pressure Vector Difference\n(Simulation - Analytical)', fontsize=16, fontweight='bold', y=0.96)
+
+components = ['X', 'Y', 'Z']
+colors = ['tab:red', 'tab:green', 'tab:purple']
+
+for i in range(3):
+    axs_srp_vec[i].plot(time_days, diff_srp_vec[:, i], color=colors[i], linewidth=2)
+    axs_srp_vec[i].set_ylabel(f'$\Delta$ {components[i]} Component [$\mathrm{m/s}^2$]', fontsize=12)
+    axs_srp_vec[i].grid(True, alpha=0.6)
+    axs_srp_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_srp_vec[-1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+srp_vec_val_path = os.path.join(output_dir, "validation_srp_vector_diff_q3.pdf")
+plt.savefig(srp_vec_val_path)
+print(f"SRP vector difference plot saved to: {srp_vec_val_path}")
+plt.close()
+
+# -------------------------------------------------------------------------
+# 4. Aerodynamic Acceleration Vector Difference
+# -------------------------------------------------------------------------
+fig_aero_vec, axs_aero_vec = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+fig_aero_vec.suptitle('Aerodynamic Acceleration Vector Difference\n(Simulation - Analytical)', fontsize=16, fontweight='bold', y=0.96)
+
+components = ['X', 'Y', 'Z']
+colors = ['tab:red', 'tab:green', 'tab:purple']
+
+for i in range(3):
+    axs_aero_vec[i].plot(time_days, diff_aero_vec[:, i], color=colors[i], linewidth=2)
+    axs_aero_vec[i].set_ylabel(f'$\Delta$ {components[i]} Component [$\mathrm{m/s}^2$]', fontsize=12)
+    axs_aero_vec[i].grid(True, alpha=0.6)
+    axs_aero_vec[i].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_aero_vec[-1].set_xlabel('Time since $t_0$ [days]', fontsize=12)
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+aero_vec_val_path = os.path.join(output_dir, "validation_aero_vector_diff_q3.pdf")
+plt.savefig(aero_vec_val_path)
+print(f"Aerodynamic vector difference plot saved to: {aero_vec_val_path}")
+plt.close()

@@ -1,0 +1,59 @@
+###########################################################################
+# RECONSTRUCT GANYMEDE-CENTERED STATE FOR CASES II AND IV #################
+###########################################################################
+
+# NOTE: You must identify which columns in your dependent variables correspond 
+# to the relative position of Ganymede w.r.t Jupiter.
+# Replace [start_idx:end_idx] below with the actual indices from your Q4 setup.
+# Example: If it was the first dependent variable saved, it might be [1:4].
+
+# Assuming saved variable is relative_position("Ganymede", "Jupiter") -> r_GJ
+# If you saved ("Jupiter", "Ganymede"), change the sign in the reconstruction below.
+
+# Extract r_GJ for unperturbed case (ii)
+r_GJ_unperturbed = dependent_variables_2[:, 1:4] # <--- CHECK THESE INDICES
+
+# Extract r_GJ for perturbed case (iv)
+r_GJ_perturbed = dependent_variables_4[:, 1:4]   # <--- CHECK THESE INDICES
+
+# Reconstruct r_Gs = r_Js - r_GJ
+# (Vector math: Position of Sat w.r.t Ganymede = Position of Sat w.r.t Jupiter - Position of Ganymede w.r.t Jupiter)
+pos_reconstructed_ii = position_unperturbed_jup_centered - r_GJ_unperturbed
+pos_reconstructed_iv = position_perturbed_jup_centered - r_GJ_perturbed
+
+###########################################################################
+# CALCULATE ERRORS ########################################################
+###########################################################################
+
+# Difference between Case i (Direct Ganymede) and Case ii (Reconstructed from Jupiter)
+diff_vec_i_ii = position_unperturbed_gan_centered - pos_reconstructed_ii
+delta_r_i_ii = np.linalg.norm(diff_vec_i_ii, axis=1)
+
+# Difference between Case iii (Direct Ganymede) and Case iv (Reconstructed from Jupiter)
+diff_vec_iii_iv = position_perturbed_gan_centered - pos_reconstructed_iv
+delta_r_iii_iv = np.linalg.norm(diff_vec_iii_iv, axis=1)
+
+###########################################################################
+# PLOT POSITION DIFFERENCE (FRAME ORIGIN COMPARISON) ######################
+###########################################################################
+
+fig_comp, ax_comp = plt.subplots(figsize=(10, 6))
+
+# Use log scale because errors can vary by orders of magnitude
+ax_comp.semilogy(time_days, delta_r_i_ii, label=r'$||\Delta \mathbf{r}(t)||_{i,ii}$ (Unperturbed)', color='tab:blue', linewidth=2)
+ax_comp.semilogy(time_days, delta_r_iii_iv, label=r'$||\Delta \mathbf{r}(t)||_{iii,iv}$ (Perturbed)', color='tab:orange', linestyle='--', linewidth=2)
+
+ax_comp.set_title('Impact of Propagation Origin on Position Accuracy\n(Ganymede-Centered vs. Jupiter-Centered)', fontsize=14, fontweight='bold')
+ax_comp.set_xlabel('Time since $t_0$ [days]', fontsize=12)
+ax_comp.set_ylabel(r'Position Difference $||\Delta \mathbf{r}||$ [m]', fontsize=12)
+
+ax_comp.grid(True, which="major", linestyle="-", alpha=0.6)
+ax_comp.grid(True, which="minor", linestyle="--", alpha=0.3)
+ax_comp.legend(fontsize=12)
+
+plt.tight_layout()
+comp_output_path = os.path.join(output_dir, "propagation_origin_comparison.pdf")
+plt.savefig(comp_output_path)
+print(f"Comparison plot saved to: {comp_output_path}")
+
+plt.close()

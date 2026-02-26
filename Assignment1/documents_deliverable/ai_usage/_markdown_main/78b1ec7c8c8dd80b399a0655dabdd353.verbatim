@@ -1,0 +1,39 @@
+###########################################################################
+# PLOT ACCELERATIONS IN LOCAL FRAME #######################################
+###########################################################################
+
+# Create a 3x2 figure
+fig_local, axs_local = plt.subplots(3, 2, figsize=(14, 10), sharex=True)
+fig_local.suptitle('Accelerations Decomposed in Local Frame', fontsize=16, fontweight='bold', y=0.95)
+
+# Axis labels for the 3 components
+components = ['Component 1 (R/T)', 'Component 2 (S/N)', 'Component 3 (W)']
+
+# --- COLUMN 1: AERODYNAMIC ACCELERATION ---
+for i in range(3):
+    axs_local[i, 0].plot(time_days, accel_aerodynamic_rsw[:, i], color='tab:blue', linewidth=1.5)
+    axs_local[i, 0].set_ylabel(f'{components[i]} [m/s^2]', fontsize=12)
+    axs_local[i, 0].grid(True, alpha=0.6)
+    axs_local[i, 0].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_local[0, 0].set_title('Aerodynamic Acceleration', fontsize=14, fontweight='bold')
+axs_local[-1, 0].set_xlabel('Time since t0 [days]', fontsize=12)
+
+# --- COLUMN 2: SOLAR RADIATION PRESSURE ---
+for i in range(3):
+    axs_local[i, 1].plot(time_days, accel_radiation_pressure_rsw[:, i], color='tab:orange', linewidth=1.5)
+    axs_local[i, 1].grid(True, alpha=0.6)
+    axs_local[i, 1].ticklabel_format(style='sci', scilimits=(0,0), axis='y')
+
+axs_local[0, 1].set_title('Solar Radiation Pressure', fontsize=14, fontweight='bold')
+axs_local[-1, 1].set_xlabel('Time since t0 [days]', fontsize=12)
+
+# Improve layout
+plt.tight_layout(rect=[0, 0.03, 1, 0.93])
+
+# Save the figure
+local_output_path = os.path.join(output_dir, "accelerations_local_frame.pdf")
+plt.savefig(local_output_path)
+print(f"Local frame accelerations plot saved to: {local_output_path}")
+
+plt.close()

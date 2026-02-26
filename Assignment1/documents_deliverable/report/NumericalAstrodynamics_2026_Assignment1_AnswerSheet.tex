@@ -8,10 +8,13 @@
 \usepackage{enumerate}
 \usepackage{xcolor}
 \usepackage{xkcdcolors}
+\usepackage{float}
 
 
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{.6in}
+% \addtolength{\topmargin}{-.7in}
+% \addtolength{\textheight}{.6in}
+\usepackage[a4paper, left=1.80cm, right=1.80cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry} 
+
 
 
 \begin{document}
@@ -34,7 +37,7 @@ Time spent per exercise:
     \item 7 h
     \item 6 h
     \item 6 h
-    \item \ldots
+    \item 13 h
 \end{enumerate} 
 
 People you worked with (if none, state this): 
@@ -42,6 +45,7 @@ People you worked with (if none, state this):
     \item Gemini 3
     \item Rodrigo Soares
     \item Andreu Craus Vidal
+    \item Daniel Pérez Trías
 \end{itemize}
 
 \clearpage
@@ -52,9 +56,9 @@ People you worked with (if none, state this):
 
 \subsection*{a}
 % \textit{Insert figure}
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/change_in_kepler_elements_q1.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/change_in_kepler_elements_q1.pdf}
     \caption{Change in Kepler elements of JUICE w.r.t $t_0$ (Frame: J2000)}
 \end{figure}
 
@@ -62,21 +66,22 @@ People you worked with (if none, state this):
 \begin{align}
     {\left(\mathbf{a}_{s}\right)_{G}}= -\frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs}
 \end{align}
+where $\left(\mathbf{a}_{s}\right)_{G}$ is the Ganymede-centered acceleration of JUICE, $\mu_G$ is the gravitational parameter of Ganymede, and $\mathbf{r}_{Gs}$ is the position vector from Ganymede to JUICE.
 
 \subsection*{c}
 Positions from environment: initial position $\mathbf{r}_{Gs}(t=0)$ \\
 Positions from numerical propagation: every other position $\mathbf{r}_{Gs}(t>0)$
 
 \subsection*{d}
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/keplerian_integration_error_q1.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/keplerian_integration_error_q1.pdf}
     \caption{Numerical Integration Error vs Analytical Solution (Keplerian)}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/cartesian_integration_error_q1.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/cartesian_integration_error_q1.pdf}
     \caption{Numerical Integration Error vs Analytical Solution (Cartesian)}
 \end{figure}
 
@@ -90,6 +95,7 @@ Positions from numerical propagation: every other position $\mathbf{r}_{Gs}(t>0)
     \left(\mathbf{a}_{I,s}\right)_{G} = -\frac{\mu_I}{\|\mathbf{r}_{Is}\|^3} \mathbf{r}_{Is} - \left( - \mu_I \frac{\mathbf{r}_{IG}}{\|\mathbf{r}_{IG}\|^3} \right) 
                                       = -\mu_I \left( \frac{\mathbf{r}_{IG} + \mathbf{r}_{Gs}}{\|\mathbf{r}_{IG} + \mathbf{r}_{Gs}\|^3} - \frac{\mathbf{r}_{IG}}{\|\mathbf{r}_{IG}\|^3} \right) \\
 \end{gather*}
+where $\left(\mathbf{a}_{G,s}\right)_{G}$ is the Ganymede-centered acceleration of JUICE due to Ganymede, $U_G$ is the gravitational potential of Ganymede, $\mathbf{r}_{Gs}$ is the position vector from Ganymede to JUICE, $\left(\mathbf{a}_{J,s}\right)_{G}$ is the Ganymede-centered acceleration of JUICE due to Jupiter, $U_J$ is the gravitational potential of Jupiter, $\mathbf{r}_{Js}$ is the position vector from Jupiter to JUICE, $\mathbf{r}_{JG}$ is the position vector from Jupiter to Ganymede, $\left(\mathbf{a}_{I,s}\right)_{G}$ is the Ganymede-centered acceleration of JUICE due to Io, $\mu_I$ is the gravitational parameter of Io, $\mathbf{r}_{Is}$ is the position vector from Io to JUICE, and $\mathbf{r}_{IG}$ is the position vector from Io to Ganymede.
 
 \subsection*{b}
 Positions from environment: 
@@ -103,9 +109,9 @@ Positions from numerical propagation:
 
 \subsection*{c.i}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/third_body_accelerations_q2.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/third_body_accelerations_q2.pdf}
     \caption{Ganymede-centered gravitational accelerations acting on JUICE due to Io (purple) and the Sun (orange).}
 \end{figure}
 
@@ -116,8 +122,15 @@ Positions from numerical propagation:
     \quad\mathrm{and}\quad 
     T_{\text{max,Sun}}\approx 1.53 \text{hr} 
 \end{equation}
+where $T_{\text{max,Io}}$ is the period of maximum amplitude for Io-induced acceleration and $T_{\text{max,Sun}}$ is the period of maximum amplitude for Sun-induced acceleration.
 
-\footnote{No figures used, the answer is extracted from the FFT of the accelerations done with SciPy library.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../figures/zoomed_accelerations_periods_q2.pdf}
+    \caption{Ganymede-centered gravitational accelerations (zoomed for detail) acting on JUICE due to Io (purple) and the Sun (orange), with the period of the acceleration with the largest amplitude superposed.}
+\end{figure}
+
+% \footnote{No figures used, the answer is extracted from the FFT of the accelerations done with SciPy library.}
 % \textit{Insert figure(s) to support your explanation, and \textbf{explain briefly why this figure leads to the answer you fill in above}}
 
 \subsection*{c.iii}
@@ -127,6 +140,7 @@ Positions from numerical propagation:
     \quad\mathrm{and}\quad 
     T_{\text{max,Sun}}= \frac{1}{2} T_{\text{JUICE}} 
 \end{equation}
+where $T_{G}$ is the orbital period of Ganymede, $T_{I}$ is the orbital period of Io, and $T_{\text{JUICE}}$ is the orbital period of JUICE around Ganymede.
 
 \subsection*{c.iv}
 
@@ -143,6 +157,7 @@ Conversely, the solar perturbation can be analyzed by treating the Sun-Ganymede 
 \begin{equation*}
     \left(\mathbf{a}_{S,s}\right)_{G} = -\mu_{S} \left( \frac{\mathbf{r}_{Ss}}{||\mathbf{r}_{Ss}||^3} - \frac{\mathbf{r}_{SG}}{||\mathbf{r}_{SG}||^3} \right)
 \end{equation*}
+where $\left(\mathbf{a}_{S,s}\right)_{G}$ is the Ganymede-centered acceleration of JUICE due to the Sun, $\mu_{S}$ is the gravitational parameter of the Sun, $\mathbf{r}_{Ss}$ is the position vector from the Sun to JUICE, and $\mathbf{r}_{SG}$ is the position vector from the Sun to Ganymede.
 
 Assupmtions:
 \begin{enumerate}
@@ -195,31 +210,32 @@ The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum tw
     \mathbf{a}_{\text{Aero}}= -\frac{1}{m} \left( \frac{1}{2} \rho v_{air}^2 C_D S_{ref} \right) \mathbf{\hat{v}_{air}} = -\frac{1}{m} \left( q_{air} C_D S_{ref} \right) \mathbf{\hat{v}_{air}} \\
     \mathbf{a}_{\text{SRP}}= \left( \frac{P}{4 \pi c} \right) \left( \frac{C_r S_{ref}}{m} \right) \frac{\mathbf{r}_{Ss}}{\|\mathbf{r}_{Ss}\|^3}
 \end{align}
+where $\mathbf{a}_{\text{Aero}}$ is the aerodynamic acceleration, $m$ is the spacecraft mass, $\rho$ is the atmospheric density, $v_{air}$ is the airspeed magnitude, $C_D$ is the drag coefficient, $S_{ref}$ is the reference area, $\mathbf{\hat{v}_{air}}$ is the unit vector in the airspeed direction, $q_{air}$ is the dynamic pressure, $\mathbf{a}_{\text{SRP}}$ is the solar radiation pressure acceleration, $P$ is the solar luminosity, $c$ is the speed of light, $C_r$ is the radiation pressure coefficient, and $\mathbf{r}_{Ss}$ is the position vector from the Sun to JUICE.
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_aero_mag_diff_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/validation_aero_mag_diff_q3.pdf}
     \caption{Difference in Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, between manually calculated and extracted from propagation.}
     \label{fig:aero_mag_diff_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_aero_vector_diff_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/validation_aero_vector_diff_q3.pdf}
     \caption{Difference in Ganymede-centered aerodynamic acceleration vector acting on JUICE, between manually calculated and extracted from propagation.}
     \label{fig:aero_vector_diff_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_srp_mag_diff_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/validation_srp_mag_diff_q3.pdf}
     \caption{Difference in Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, between manually calculated and extracted from propagation}
     \label{fig:validation_srp_mag_diff_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/validation_srp_vector_diff_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/validation_srp_vector_diff_q3.pdf}
     \caption{Difference in Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, between manually calculated and extracted from propagation.}
     \label{fig:validation_srp_vector_diff_q3}
 \end{figure}
@@ -228,46 +244,46 @@ The acceleration magnitude depends on $\cos^2\theta$, which reaches a maximum tw
 
 \subsection*{b}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_magnitude_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/rsw_aero_acceleration_magnitude_q3.pdf}
     \caption{Ganymede-centered aerodynamic acceleration magnitude acting on JUICE, in RSW frame.}
     \label{fig:rsw_aero_acceleration_magnitude_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/rsw_aero_acceleration_vector_local_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/rsw_aero_acceleration_vector_local_q3.pdf}
     \caption{Ganymede-centered aerodynamic acceleration vector acting on JUICE, RSW frame.}
     \label{fig:rsw_aero_acceleration_vector_local_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_magnitude_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/rsw_srp_acceleration_magnitude_q3.pdf}
     \caption{Ganymede-centered Solar Radiation Pressure acceleration magnitude acting on JUICE, in RSW frame}
     \label{fig:rsw_srp_acceleration_magnitude_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/rsw_srp_acceleration_vector_local_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/rsw_srp_acceleration_vector_local_q3.pdf}
     \caption{Ganymede-centered Solar Radiation Pressure acceleration vector acting on JUICE, RSW frame.}
     \label{fig:rsw_srp_acceleration_vector_local_q3}
 \end{figure}
 
 \subsection*{c.i}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_aero_effect_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/position_difference_magnitude_aero_effect_q3.pdf}
     \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without aerodynamic acceleration.}
     \label{fig:position_difference_magnitude_aero_effect_q3}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/position_difference_magnitude_srp_effect_q3.pdf}
+    \includegraphics[width=0.85\textwidth]{../../figures/position_difference_magnitude_srp_effect_q3.pdf}
     \caption{Norm of the difference between the position of JUICE obtained from the nominal propagation and the propagation without SRP acceleration.}
     \label{fig:position_difference_magnitude_srp_effect_q3}
 \end{figure}
@@ -283,14 +299,22 @@ Even though the SRP acceleration magnitude its greater, its long-term effects ar
 
 
 \section*{Question 4}
+
 \subsection*{a}
 Assuming point-mass acceleration from Jupiter:
 \begin{align*}
     {\left(\mathbf{a}_{s}\right)_{J}} 
     & = - \frac{\mu_J}{\|\mathbf{r}_{Js}\|^3} \mathbf{r}_{Js} - \frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs} + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ} \\
     & = - \frac{\mu_J}{\|\mathbf{r}_{Js}\|^3} \mathbf{r}_{Js} - \frac{\mu_G}{\|\mathbf{r}_{GJ} + \mathbf{r}_{Js}\|^3} (\mathbf{r}_{GJ} + \mathbf{r}_{Js}) + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ} 
-    % = - \frac{\mu_J}{\|\mathbf{r}_{JG} + \mathbf{r}_{Gs}\|^3} (\mathbf{r}_{JG} + \mathbf{r}_{Gs}) - \frac{\mu_G}{\|\mathbf{r}_{Gs}\|^3} \mathbf{r}_{Gs}  + \frac{\mu_G}{\|\mathbf{r}_{GJ}\|^3} \mathbf{r}_{GJ}
 \end{align*}
+where $\left(\mathbf{a}_{s}\right)_{J}$ is the Jupiter-centered acceleration of JUICE, $\mu_J$ is the gravitational parameter of Jupiter, $\mathbf{r}_{Js}$ is the position vector from Jupiter to JUICE, $\mu_G$ is the gravitational parameter of Ganymede, $\mathbf{r}_{Gs}$ is the position vector from Ganymede to JUICE, and $\mathbf{r}_{GJ}$ is the position vector from Ganymede to Jupiter.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../figures/propagation_origin_unperturbed_q4.pdf}
+    \caption{Magnitude of the difference in position for the Ganymede-centered and Jupiter-centered unperturbed propagations.}
+    \label{fig:propagation_origin_unperturbed_q4}
+\end{figure}
 
 \subsection*{b}
 \begin{align*}
@@ -298,11 +322,58 @@ Assuming point-mass acceleration from Jupiter:
     & \left(\mathbf{a}_{J,s}\right)_{J} = \nabla U_J(\mathbf{r}_{Js}) \\% = \nabla U_J(\mathbf{r}_{JG} + \mathbf{r}_{Gs}) \\
     & \left(\mathbf{a}_{I,s}\right)_{J} = - \mu_I \frac{\mathbf{r}_{Is}}{\|\mathbf{r}_{Is}\|^3} + \mu_I \frac{\mathbf{r}_{IJ}}{\|\mathbf{r}_{IJ}\|^3} = -\mu_I \left( \frac{\mathbf{r}_{IG} + \mathbf{r}_{Gs}}{\|\mathbf{r}_{IG} + \mathbf{r}_{Gs}\|^3} - \frac{\mathbf{r}_{IJ}}{\|\mathbf{r}_{IJ}\|^3} \right)
 \end{align*}
+where $\left(\mathbf{a}_{G,s}\right)_{J}$ is the Jupiter-centered acceleration of JUICE due to Ganymede, $U_G$ is the gravitational potential of Ganymede, $\mathbf{r}_{Gs}$ is the position vector from Ganymede to JUICE, $\mathbf{r}_{GJ}$ is the position vector from Ganymede to Jupiter, $\mathbf{r}_{Js}$ is the position vector from Jupiter to JUICE, $\left(\mathbf{a}_{J,s}\right)_{J}$ is the Jupiter-centered acceleration of JUICE due to Jupiter, $U_J$ is the gravitational potential of Jupiter, $\left(\mathbf{a}_{I,s}\right)_{J}$ is the Jupiter-centered acceleration of JUICE due to Io, $\mu_I$ is the gravitational parameter of Io, $\mathbf{r}_{Is}$ is the position vector from Io to JUICE, $\mathbf{r}_{IJ}$ is the position vector from Io to Jupiter, and $\mathbf{r}_{IG}$ is the position vector from Io to Ganymede.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../figures/propagation_origin_perturbed_q4.pdf}
+    \caption{Magnitude of the difference in position for the Ganymede-centered and Jupiter-centered perturbed propagations.}
+    \label{fig:propagation_origin_perturbed_q4}
+\end{figure}
 
 \subsection*{c}
-\textit{\textbf{Provide physical and mathematical explanation for the observed behavior}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+% \textit{\textbf{Provide physical and mathematical explanation for the observed behavior}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+The SPICE ephemeris for Ganymede inherently includes all significant gravitational perturbations acting on it: Jupiter's oblateness ($J_2$), and third-body effects from the Sun, Io, Europa, and other Galilean moons. This represents the most accurate dynamical model available.
+
+For cases $i$ and $ii$ (unperturbed), the acceleration model in \textbf{4a} includes only point-mass gravity from Jupiter and Ganymede. Specifically, this model is missing:
+\begin{itemize}
+    \item Jupiter's $J_2$ gravitational harmonics (only $\mu_J/r^3$ included, not $\nabla U_J$)
+    \item Third-body perturbations from Io, Europa, and the Sun
+    \item Ganymede's gravitational harmonics (point-mass only)
+\end{itemize}
+
+Since Ganymede's SPICE ephemeris was generated using these missing perturbations, but our propagation neglects them, the two reference frames (Ganymede-centered vs. Jupiter-centered) diverge significantly. This mathematical inconsistency directly manifests as the large $||\Delta \mathbf{r}(t)||_{i,ii}$ shown in \autoref{fig:propagation_origin_unperturbed_q4}.
+
+In contrast, for cases $iii$ and $iv$ (perturbed), the acceleration model in \textbf{4b} includes Jupiter's full gravitational potential $\nabla U_J$ (with $J_2$), Ganymede's potential $\nabla U_G$, and Io's third-body effects. While still missing the Sun and Europa, this model captures the dominant perturbations present in the SPICE ephemeris. Consequently, our propagated Ganymede trajectory more closely approximates the SPICE reality, resulting in the much smaller $||\Delta \mathbf{r}(t)||_{iii,iv}$ observed in \autoref{fig:propagation_origin_perturbed_q4}.
+
+The reduction in position difference from the unperturbed to the perturbed case confirms that including more realistic dynamics in the propagation reduces the inconsistency between numerical integration and SPICE ephemerides.
+
 
 \subsection*{d}
-\textit{\textbf{Explain why your results here (dis)prove the hypothesis you formulated in question c}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../figures/propagation_origin_unperturbed_d_q4.pdf}
+    \caption{Magnitude of the difference in position for the Ganymede-centered and Jupiter-centered unperturbed propagations, also propagating Ganymede.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../figures/propagation_origin_perturbed_d_q4.pdf}
+    \caption{Magnitude of the difference in position for the Ganymede-centered and Jupiter-centered perturbed propagations, also propagating Ganymede.}
+\end{figure}
+
+% \textit{\textbf{Explain why your results here (dis)prove the hypothesis you formulated in question c}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
+
+The results confirm the hypothesis formulated in \textbf{c} through the principle of \textbf{dynamical consistency}. 
+
+By propagating Ganymede numerically using the exact same truncated force model applied to JUICE—whether the point-mass model from \textbf{4a} or the perturbed model from \textbf{4b}—both bodies now exist within the same simplified mathematical universe. They share identical physics: the same gravitational terms, the same approximations, and the same omissions. 
+
+In contrast, when Ganymede's position is extracted from SPICE (as in parts \textbf{a} and \textbf{b}), it represents the "real" high-fidelity universe that includes all perturbations. The JUICE trajectory, however, is computed in a simplified universe. This mismatch between reference frames—one real, one approximate—causes the massive artificial drift observed in \autoref{fig:propagation_origin_unperturbed_q4} and \autoref{fig:propagation_origin_perturbed_q4}.
+
+When both bodies are propagated with consistent dynamics, this artificial drift vanishes. The position difference $||\Delta \mathbf{r}(t)||$ now reflects only numerical integration errors and frame transformation precision, not the fundamental inconsistency between different physical models. This validates that the large errors in parts \textbf{a--c} arise from referencing an inconsistent dynamical framework, not from inherent inaccuracies in the propagation scheme itself.
+
 
 \end{document}
