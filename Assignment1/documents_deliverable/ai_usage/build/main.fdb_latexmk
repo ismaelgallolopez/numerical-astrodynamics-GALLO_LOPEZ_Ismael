@@ -1,5 +1,5 @@
 # Fdb version 4
-["lualatex"] 1772127027.47946 "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/ai_usage/main.tex" "build/main.pdf" "main" 1772127056.91471 0
+["lualatex"] 1772134847.02104 "/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/ai_usage/main.tex" "build/main.pdf" "main" 1772134866.98279 0
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman12-bold.luc" 1771346324.80836 128281 c6f80f39b6b4f903e4339f6819ec2ecc ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman12-regular.luc" 1771346324.62636 127652 a5bcc9609cb60f4b11aae93e79c7a0c6 ""
   "/home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman17-regular.luc" 1771425147.18761 128903 97a8402bc1f22ad44d704bec94f6c3a8 ""
@@ -233,10 +233,10 @@
   "/usr/share/texmf/fonts/opentype/public/lm/lmroman17-regular.otf" 1255129361 110248 1d75fdc9dbe45e70de83ff6cc79a81c9 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1771345484.23214 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/luahbtex/lualatex.fmt" 1771345782 12240970 04c7b2dfb2c63d905f553a766ef1f07a ""
-  "build/main.aux" 1772127055.25951 164 6cfd81d155bbb8b74058124dc4a98282 "lualatex"
-  "build/main.out" 1772127040.70084 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
+  "build/main.aux" 1772134866.07889 164 69c98fca4669de6471415a6ca6bb04e4 "lualatex"
+  "build/main.out" 1772134852.99799 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
   "main.tex" 1772126959.43758 5706 a4b3793c551fd521c7b172f4c1e60c17 ""
-  "markdown_files/NA_assignment1.pdf" 1772125429.3814 1208468 db597093a27caf75ef30192bb8b0c553 ""
+  "markdown_files/NA_assignment1.pdf" 1772134824.39874 1716612 81a527cfcf6b63c1b82c446897813dbe ""
   (generated)
   "build/main.aux"
   "build/main.log"
