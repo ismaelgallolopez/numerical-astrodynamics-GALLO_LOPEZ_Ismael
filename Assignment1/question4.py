@@ -700,13 +700,11 @@ save2txt(
 ###########################################################################
 
 # Define accelerations acting on vehicle.
-acceleration_settings_on_vehicle_unperturbed_d = dict(Ganymede=[propagation_setup.acceleration.point_mass_gravity()],
-                                                      Jupiter=[propagation_setup.acceleration.point_mass_gravity()])
-acceleration_settings_on_ganymede_unperturbed_d = dict(Jupiter=[propagation_setup.acceleration.point_mass_gravity()])
+acceleration_settings_on_vehicle_unperturbed_d = dict(Ganymede=[propagation_setup.acceleration.point_mass_gravity()])
+# acceleration_settings_on_ganymede_unperturbed_d = dict(Jupiter=[propagation_setup.acceleration.point_mass_gravity()])
 
 # Create global accelerations dictionary.
-acceleration_settings_unperturbed_d = {"JUICE": acceleration_settings_on_vehicle_unperturbed_d,
-                                       "Ganymede": acceleration_settings_on_ganymede_unperturbed_d}
+acceleration_settings_unperturbed_d = {"JUICE": acceleration_settings_on_vehicle_unperturbed_d}
 
 # Create acceleration models.
 acceleration_models_unperturbed_d = propagation_setup.create_acceleration_models(
@@ -857,8 +855,24 @@ while len(lines) <= line_to_replace:
     lines.append('\n')
 
 final_time = time_array[-1]
+
 final_cartesian_state = final_cartesian_2
 output_line = f"{final_time:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e} {final_cartesian_state[6]:.16e}\n"
 lines[line_to_replace] = output_line
 
-final_cartesian_4 = dependent_variables_4[-1, 4:10] # juice position relative to ganymede + ganymede position relative to jupiter = juice position relative to jupiter
+with open(results_path, 'w') as file:
+    file.writelines(lines)
+
+
+line_to_replace = 5  # (change between questions)
+while len(lines) <= line_to_replace:
+    lines.append('\n')
+
+final_cartesian_4 = dependent_variables_4[-1, 4:10] 
+
+final_cartesian_state = final_cartesian_4
+output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
+lines[line_to_replace] = output_line
+
+with open(results_path, 'w') as file:
+    file.writelines(lines)
