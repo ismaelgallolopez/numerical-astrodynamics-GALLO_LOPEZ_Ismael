@@ -834,6 +834,85 @@ print(f"Perturbed _d plot saved to: {pert_d_output_path}")
 
 plt.close()
 
+
+###########################################################################
+# FFT ANALYSIS FOR PERIOD OF MAXIMUM VARIATION ############################
+###########################################################################
+
+norm_delta_pos_unperturbed = position_difference_unperturbed_d - np.mean(position_difference_unperturbed_d, axis=0)
+norm_delta_pos_perturbed = position_difference_perturbed_d - np.mean(position_difference_perturbed_d, axis=0)
+
+number_of_points = len(time_array)
+
+fft_delta_pos_unperturbed = fft(norm_delta_pos_unperturbed[:, 0])  
+fft_delta_pos_perturbed = fft(norm_delta_pos_perturbed[:, 0])
+
+def abs2(x):
+    return x.real**2 + x.imag**2
+
+fft_delta_pos_unperturbed_ampl = abs2(fft_delta_pos_unperturbed)
+fft_delta_pos_perturbed_ampl = abs2(fft_delta_pos_perturbed)
+
+pos_max_delta_pos_unperturbed = np.argmax(fft_delta_pos_unperturbed_ampl)
+pos_max_delta_pos_perturbed = np.argmax(fft_delta_pos_perturbed_ampl)
+
+freq = fftfreq(number_of_points, d=fixed_step_size)
+
+
+freq_max_delta_pos_unperturbed = freq[pos_max_delta_pos_unperturbed]
+period_max_delta_pos_unperturbed = 1/freq_max_delta_pos_unperturbed
+print(f"The period of the variation of the unperturbed position difference is {period_max_delta_pos_unperturbed/3600:.2f} hours")
+
+freq_max_delta_pos_perturbed = freq[pos_max_delta_pos_perturbed]
+period_max_delta_pos_perturbed = 1/freq_max_delta_pos_perturbed
+print(f"The period of the variation of the perturbed position difference is {period_max_delta_pos_perturbed/3600:.2f} hours")
+
+
+###########################################################################
+# PLOT FFT RESULTS - FREQUENCY DOMAIN #####################################
+###########################################################################
+
+# Only use positive frequencies for plotting
+positive_freq_mask = freq > 0
+freq_positive = freq[positive_freq_mask]
+fft_unperturbed_positive = fft_delta_pos_unperturbed_ampl[positive_freq_mask]
+fft_perturbed_positive = fft_delta_pos_perturbed_ampl[positive_freq_mask]
+
+fig_fft, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
+
+ax1.semilogy(freq_positive, fft_unperturbed_positive, label='Unperturbed (i vs v)', color='tab:blue', linewidth=1.5)
+ax1.semilogy(freq_positive, fft_perturbed_positive, label='Perturbed (iii vs vi)', color='tab:orange', linewidth=1.5)
+ax1.axvline(abs(freq_max_delta_pos_unperturbed), color='tab:blue', linestyle='--', alpha=0.7, 
+            label=f'Unperturbed Peak: {abs(freq_max_delta_pos_unperturbed):.6e} Hz')
+ax1.axvline(abs(freq_max_delta_pos_perturbed), color='tab:orange', linestyle='--', alpha=0.7, 
+            label=f'Perturbed Peak: {abs(freq_max_delta_pos_perturbed):.6e} Hz')
+ax1.set_xlabel('Frequency [Hz]', fontsize=12)
+ax1.set_ylabel('Power Spectrum Amplitude', fontsize=12)
+ax1.set_title('FFT Power Spectrum: Position Difference (Frequency Domain)', fontsize=14, fontweight='bold')
+ax1.grid(True, which="both", linestyle="-", alpha=0.3)
+ax1.legend(fontsize=10)
+
+periods_positive = 1 / freq_positive / 3600  # Convert to hours
+ax2.loglog(periods_positive, fft_unperturbed_positive, label='Unperturbed (i vs v)', color='tab:blue', linewidth=1.5)
+ax2.loglog(periods_positive, fft_perturbed_positive, label='Perturbed (iii vs vi)', color='tab:orange', linewidth=1.5)
+ax2.axvline(abs(period_max_delta_pos_unperturbed)/3600, color='tab:blue', linestyle='--', alpha=0.7, 
+            label=f'Unperturbed Peak: {abs(period_max_delta_pos_unperturbed)/3600:.2f} hours')
+ax2.axvline(abs(period_max_delta_pos_perturbed)/3600, color='tab:orange', linestyle='--', alpha=0.7, 
+            label=f'Perturbed Peak: {abs(period_max_delta_pos_perturbed)/3600:.2f} hours')
+ax2.set_xlabel('Period [hours]', fontsize=12)
+ax2.set_ylabel('Power Spectrum Amplitude', fontsize=12)
+ax2.set_title('FFT Power Spectrum: Position Difference (Period Domain)', fontsize=14, fontweight='bold')
+ax2.grid(True, which="both", linestyle="-", alpha=0.3)
+ax2.legend(fontsize=10)
+
+plt.tight_layout()
+fft_output_path = os.path.join(output_dir, "fft_analysis_periods_q4.pdf")
+plt.savefig(fft_output_path)
+print(f"FFT analysis plot saved to: {fft_output_path}")
+
+plt.close()
+
+
 ###########################################################################
 # WRITE TO RESULTS FILE ###################################################
 ###########################################################################
@@ -842,7 +921,8 @@ results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_A1_65
 
 # final_time = time_array[-1]
 # final_cartesian_state = numerical_cartesian[-1, :]
-final_cartesian_2 = state_array_2[-1, :]
+dependant_variables_unperturbed_array = result2array(dependent_variables_unperturbed)
+final_cartesian_2 = dependant_variables_unperturbed_array[-1,4:10]
 
 try:
     with open(results_path, 'r') as file:
@@ -857,7 +937,7 @@ while len(lines) <= line_to_replace:
 final_time = time_array[-1]
 
 final_cartesian_state = final_cartesian_2
-output_line = f"{final_time:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e} {final_cartesian_state[6]:.16e}\n"
+output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
 lines[line_to_replace] = output_line
 
 with open(results_path, 'w') as file:
