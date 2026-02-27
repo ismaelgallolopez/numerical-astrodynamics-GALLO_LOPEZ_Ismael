@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  27 FEB 2026 12:00
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  27 FEB 2026 13:59
  system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment1/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment1_AnswerSheet.tex
@@ -601,7 +601,7 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1
 <../../figures/propagation_origin_unperturbed_d_q4.pdf, id=1319, 722.7pt x 433.62pt>
 File: ../../figures/propagation_origin_unperturbed_d_q4.pdf Graphic file (type pdf)
 <use ../../figures/propagation_origin_unperturbed_d_q4.pdf>
-Package luatex.def Info: ../../figures/propagation_origin_unperturbed_d_q4.pdf  used on input line 359.
+Package luatex.def Info: ../../figures/propagation_origin_unperturbed_d_q4.pdf  used on input line 354.
 (luatex.def)             Requested size: 420.81914pt x 252.49225pt.
  [16
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.17'
@@ -609,7 +609,7 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1
 <../../figures/propagation_origin_perturbed_d_q4.pdf, id=1409, 722.7pt x 433.62pt>
 File: ../../figures/propagation_origin_perturbed_d_q4.pdf Graphic file (type pdf)
 <use ../../figures/propagation_origin_perturbed_d_q4.pdf>
-Package luatex.def Info: ../../figures/propagation_origin_perturbed_d_q4.pdf  used on input line 365.
+Package luatex.def Info: ../../figures/propagation_origin_perturbed_d_q4.pdf  used on input line 360.
 (luatex.def)             Requested size: 420.81914pt x 252.49225pt.
  [17
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.18'
@@ -629,12 +629,12 @@ Here is how much of LuaTeX's memory you used:
  125027,1977958 words of node,token memory allocated
  578 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 3 glue, 4 kern, 5 sub_mlist, 1 glyph, 18 attribute, 55 glue_spec, 18 attribute_list, 1 write nodes
-   avail lists: 2:588,3:163,4:77,5:284,6:49,7:4335,8:97,9:656,10:5,11:346
+   avail lists: 2:588,3:163,4:77,5:283,6:49,7:3714,8:97,9:656,10:5,11:301
  33454 multiletter control sequences out of 65536+600000
  52 fonts using 3851263 bytes
  72i,11n,75p,999b,431s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (18 pages, 1822810 bytes).
+Output written on NumericalAstrodynamics_2026_Assignment1_AnswerSheet.pdf (18 pages, 1820720 bytes).
 
 PDF statistics: 1684 PDF objects out of 1728 (max. 8388607)
  507 compressed objects within 6 object streams

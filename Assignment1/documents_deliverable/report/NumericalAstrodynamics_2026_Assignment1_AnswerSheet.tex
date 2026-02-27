@@ -336,20 +336,15 @@ where $\left(\mathbf{a}_{G,s}\right)_{J}$ is the Jupiter-centered acceleration o
 
 % \textit{\textbf{Provide physical and mathematical explanation for the observed behavior}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
 
-The SPICE ephemeris for Ganymede inherently includes all significant gravitational perturbations acting on it: Jupiter's oblateness ($J_2$), and third-body effects from the Sun, Io, Europa, and other Galilean moons. This represents the most accurate dynamical model available.
+The SPICE ephemeris for Ganymede inherently includes all significant gravitational perturbations acting on it: $J_2$ and third-body effects. This represents the most accurate model available.
 
-For cases $i$ and $ii$ (unperturbed), the acceleration model in \textbf{4a} includes only point-mass gravity from Jupiter and Ganymede. Specifically, this model is missing:
-\begin{itemize}
-    \item Jupiter's $J_2$ gravitational harmonics (only $\mu_J/r^3$ included, not $\nabla U_J$)
-    \item Third-body perturbations from Io, Europa, and the Sun
-    \item Ganymede's gravitational harmonics (point-mass only)
-\end{itemize}
+For cases $i$ and $ii$, the acceleration model in \textbf{4a} includes only point-mass gravity from Jupiter and Ganymede. Specifically, this model is missing: Jupiter's $J_2$ gravitational harmonics; third-body perturbations from Io, Europa, and the Sun; Ganymede's gravitational harmonics (point-mass only).
 
-Since Ganymede's SPICE ephemeris was generated using these missing perturbations, but our propagation neglects them, the two reference frames (Ganymede-centered vs. Jupiter-centered) diverge significantly. This mathematical inconsistency directly manifests as the large $||\Delta \mathbf{r}(t)||_{i,ii}$ shown in \autoref{fig:propagation_origin_unperturbed_q4}.
+Since Ganymede's  SPICE ephemeris was generated using these missing perturbations, but our propagation neglects them, the two reference frames diverge significantly. This mathematical inconsistency directly manifests as the large $||\Delta \mathbf{r}(t)||_{i,ii}$ shown in \ref{fig:propagation_origin_unperturbed_q4}.
 
-In contrast, for cases $iii$ and $iv$ (perturbed), the acceleration model in \textbf{4b} includes Jupiter's full gravitational potential $\nabla U_J$ (with $J_2$), Ganymede's potential $\nabla U_G$, and Io's third-body effects. While still missing the Sun and Europa, this model captures the dominant perturbations present in the SPICE ephemeris. Consequently, our propagated Ganymede trajectory more closely approximates the SPICE reality, resulting in the much smaller $||\Delta \mathbf{r}(t)||_{iii,iv}$ observed in \autoref{fig:propagation_origin_perturbed_q4}.
+In contrast, for cases $iii$ and $iv$, the acceleration model in \textbf{4b} includes Jupiter's full $\nabla U_J$, Ganymede's potential $\nabla U_G$, and Io's third-body effects. While still missing the Sun and Europa, this model captures the dominant perturbations present in the SPICE ephemeris. Consequently, our propagated Ganymede trajectory more closely approximates the SPICE reality, resulting in the much smaller $||\Delta \mathbf{r}(t)||_{iii,iv}$ observed in \ref{fig:propagation_origin_perturbed_q4}.
 
-The reduction in position difference from the unperturbed to the perturbed case confirms that including more realistic dynamics in the propagation reduces the inconsistency between numerical integration and SPICE ephemerides.
+The reduction from the unperturbed to the perturbed case confirms that including more realistic dynamics in the propagation reduces the inconsistency between numerical integration and SPICE ephemerides.
 
 
 \subsection*{d}
@@ -368,13 +363,13 @@ The reduction in position difference from the unperturbed to the perturbed case 
 
 % \textit{\textbf{Explain why your results here (dis)prove the hypothesis you formulated in question c}. Add figures, tables, equations, etc. to support your reasoning. Captions of these (including definition of terms in equations) do not count towards the line limit (within reason).}
 
-The results confirm the hypothesis formulated in \textbf{c} through the principle of \textbf{dynamical consistency}. 
+The results confirm the hypothesis formulated in \textbf{c} through the principle of dynamical consistency. 
 
-By propagating Ganymede numerically using the exact same truncated force model applied to JUICE—whether the point-mass model from \textbf{4a} or the perturbed model from \textbf{4b}—both bodies now exist within the same simplified mathematical universe. They share identical physics: the same gravitational terms, the same approximations, and the same omissions. 
+By propagating Ganymede numerically using the exact same force model applied to JUICE, both bodies now exist within the same simplified mathematical universe. 
 
-In contrast, when Ganymede's position is extracted from SPICE (as in parts \textbf{a} and \textbf{b}), it represents the "real" high-fidelity universe that includes all perturbations. The JUICE trajectory, however, is computed in a simplified universe. This mismatch between reference frames—one real, one approximate—causes the massive artificial drift observed in \autoref{fig:propagation_origin_unperturbed_q4} and \autoref{fig:propagation_origin_perturbed_q4}.
+In contrast, when Ganymede's position is extracted from SPICE (\textbf{a} and \textbf{b}), it represents the "real" high-fidelity universe that includes all perturbations. The JUICE trajectory, however, is computed in a simplified universe. This mismatch between reference frames causes the massive artificial drift observed in \ref{fig:propagation_origin_unperturbed_q4} and \ref{fig:propagation_origin_perturbed_q4}.
 
-When both bodies are propagated with consistent dynamics, this artificial drift vanishes. The position difference $||\Delta \mathbf{r}(t)||$ now reflects only numerical integration errors and frame transformation precision, not the fundamental inconsistency between different physical models. This validates that the large errors in parts \textbf{a--c} arise from referencing an inconsistent dynamical framework, not from inherent inaccuracies in the propagation scheme itself.
+When both bodies are propagated with consistent dynamics, this artificial drift vanishes. $||\Delta \mathbf{r}(t)||$ now reflects only numerical integration errors and frame transformation precision. This validates that the large errors in parts \textbf{a--c} arise from referencing an inconsistent dynamical framework, not from inherent inaccuracies in the propagation scheme itself.
 
 
 \end{document}
