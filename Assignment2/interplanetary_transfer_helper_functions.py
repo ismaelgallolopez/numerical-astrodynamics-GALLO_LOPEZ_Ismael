@@ -10,17 +10,11 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import numpy as np
-from tudatpy import constants, numerical_simulation
+from tudatpy import constants
 from tudatpy.astro import element_conversion, two_body_dynamics
 from tudatpy.data import save2txt
 from tudatpy.interface import spice
-from tudatpy.numerical_simulation import (
-    environment,
-    environment_setup,
-    estimation_setup,
-    propagation,
-    propagation_setup,
-)
+from tudatpy.dynamics import environment_setup, environment, propagation_setup, propagation, parameters_setup, parameters, simulator
 
 # Define departure/arrival epoch - in seconds since J2000
 departure_epoch = XXXX
@@ -35,7 +29,7 @@ fixed_step_size = 3600.0
 
 # DO NOT MODIFY THIS FUNCTION (OR, DO SO AT YOUR OWN RISK)
 def write_propagation_results_to_file(
-    dynamics_simulator: numerical_simulation.SingleArcSimulator,
+    dynamics_simulator: simulator.SingleArcSimulator,
     lambert_arc_ephemeris: environment.Ephemeris,
     file_output_identifier: str,
     output_directory: str,
@@ -47,7 +41,7 @@ def write_propagation_results_to_file(
 
     Parameters
     ----------
-    dynamics_simulator : numerical_simulation.SingleArcSimulator
+    dynamics_simulator : simulator.SingleArcSimulator
         Object that was used to propagate the dynamics, and which contains the numerical state and dependent variable results
 
     lambert_arc_ephemeris : environment.Ephemeris
@@ -236,7 +230,9 @@ def propagate_trajectory(
     lambert_arc_ephemeris: environment.Ephemeris,
     use_perturbations: bool,
     initial_state_correction=np.array([0, 0, 0, 0, 0, 0]),
-) -> numerical_simulation.SingleArcSimulator:
+    use_rsw_acceleration: bool = False,
+    rsw_acceleration_magnitude: np.ndarray = np.array([0,0,0])
+) -> simulator.SingleArcSimulator:
     """
     This function will be repeatedly called throughout the assignment. Propagates the trajectory based
     on several input parameters
@@ -262,6 +258,12 @@ def propagate_trajectory(
     initial_state_correction : np.ndarray, default=np.array([0, 0, 0, 0, 0, 0])
         Cartesian state which is added to the Lambert arc state when computing the numerical initial state
 
+    use_rsw_acceleration: Boolean defining whether an RSW acceleration (used to denote thrust) is to be used
+
+    rsw_acceleration_magnitude: Magnitude of RSW acceleration, to be used if use_rsw_acceleration == True
+                                the entries of this vector denote the acceleration in radial, normal and cross-track,
+                                respectively.
+
     Return
     ------
     Dynamics simulator object from which the state- and dependent variable history can be extracted
@@ -276,7 +278,7 @@ def propagate_trajectory(
     # Get propagator settings for perturbed/unperturbed forwards/backwards arcs
     if use_perturbations:
         propagator_settings = get_perturbed_propagator_settings(
-            bodies, lambert_arc_initial_state, initial_time, termination_condition
+            bodies, lambert_arc_initial_state, initial_time, termination_condition, use_rsw_acceleration, rsw_acceleration_magnitude
         )
 
     else:
@@ -285,7 +287,7 @@ def propagate_trajectory(
         )
 
     # Propagate dynamics with required settings
-    dynamics_simulator = numerical_simulation.create_dynamics_simulator(
+    dynamics_simulator = simulator.create_dynamics_simulator(
         bodies, propagator_settings
     )
 
@@ -299,7 +301,9 @@ def propagate_variational_equations(
     bodies: environment.SystemOfBodies,
     lambert_arc_ephemeris: environment.Ephemeris,
     initial_state_correction=np.array([0, 0, 0, 0, 0, 0]),
-) -> numerical_simulation.SingleArcVariationalSimulator:
+    use_rsw_acceleration: bool = False,
+    rsw_acceleration_magnitude: np.ndarray = np.array([0,0,0])
+) -> simulator.SingleArcVariationalSimulator:
     """
     Propagates the variational equations for a given range of epochs for a perturbed trajectory.
 
@@ -320,6 +324,12 @@ def propagate_variational_equations(
     initial_state_correction : np.ndarray, default=np.array([0, 0, 0, 0, 0, 0])
         Cartesian state which is added to the Lambert arc state when computing the numerical initial state
 
+    use_rsw_acceleration: Boolean defining whether an RSW acceleration (used to denote thrust) is to be used
+
+    rsw_acceleration_magnitude: Magnitude of RSW acceleration, to be used if use_rsw_acceleration == True
+                                the entries of this vector denote the acceleration in radial, normal and cross-track,
+                                respectively.
+
     Return
     ------
     Variational equations solver object, from which the state-, state transition matrix-, and
@@ -337,14 +347,16 @@ def propagate_variational_equations(
         lambert_arc_initial_state,
         initial_time,
         termination_condition,
+        use_rsw_acceleration,
+        rsw_acceleration_magnitude
     )
 
     # Define parameters for variational equations
-    sensitivity_parameters = get_sensitivity_parameter_set(propagator_settings, bodies)
+    sensitivity_parameters = get_sensitivity_parameter_set(propagator_settings, bodies, use_rsw_acceleration)
 
     # Propagate variational equations
     variational_equations_solver = (
-        numerical_simulation.create_variational_equations_solver(
+        simulator.create_variational_equations_solver(
             bodies, propagator_settings, sensitivity_parameters
         )
     )
@@ -356,7 +368,8 @@ def propagate_variational_equations(
 def get_sensitivity_parameter_set(
     propagator_settings: propagation_setup.propagator.PropagatorSettings,
     bodies: environment.SystemOfBodies,
-) -> numerical_simulation.estimation.EstimatableParameterSet:
+    use_rsw_acceleration: bool = False
+) -> parameters.EstimatableParameterSet:
     """
     Function creating the parameters for which the variational equations are to be solved.
 
@@ -368,15 +381,26 @@ def get_sensitivity_parameter_set(
     bodies : environment.SystemOfBodies
         Body objects defining the physical simulation environment
 
+    use_rsw_acceleration : Boolean denoting whether the sensitivity to an RSW acceleration is to be
+                           included. Note that this can only be used (set to True) is the acceleration models
+                           in propagator_settings contain an empirical acceleration
+
     Return
     ------
     Propagation settings of the unperturbed trajectory.
     """
-    parameter_settings = estimation_setup.parameter.initial_states(
+    parameter_settings = parameters_setup.initial_states(
         propagator_settings, bodies
     )
 
-    return estimation_setup.create_parameter_set(
+    if use_rsw_acceleration:
+        parameter_settings.append(
+            parameters_setup.constant_empirical_acceleration_terms(
+                "Spacecraft", "Sun"
+            )
+        )
+
+    return parameters_setup.create_parameter_set(
         parameter_settings, bodies, propagator_settings
     )
 
@@ -425,6 +449,8 @@ def get_perturbed_propagator_settings(
     initial_state: np.ndarray,
     initial_time: float,
     termination_condition: propagation_setup.propagator.PropagationTerminationSettings,
+    use_rsw_acceleration: bool = False,
+    rsw_acceleration_magnitude: np.ndarray = np.array([0,0,0])
 ) -> propagation_setup.propagator.SingleArcPropagatorSettings:
     """
     Creates the propagator settings for a perturbed trajectory.
@@ -443,6 +469,12 @@ def get_perturbed_propagator_settings(
     termination_condition : propagation_setup.propagator.PropagationTerminationSettings
         Settings for condition upon which the propagation will be terminated
 
+    use_rsw_acceleration: Boolean defining whether an RSW acceleration (used to denote thrust) is to be used
+
+    rsw_acceleration_magnitude: Magnitude of RSW acceleration, to be used if use_rsw_acceleration == True
+                                the entries of this vector denote the acceleration in radial, normal and cross-track,
+                                respectively.
+
     Return
     ------
     Propagation settings of the perturbed trajectory.
@@ -450,6 +482,13 @@ def get_perturbed_propagator_settings(
 
     # Define accelerations acting on vehicle.
     acceleration_settings_on_spacecraft = XXXX
+
+    # DO NOT MODIFY, and keep AFTER creation of acceleration_settings_on_spacecraft, but before
+    # call to function create_acceleration_models
+    # (line is added for compatibility with question 4)
+    if use_rsw_acceleration:
+        acceleration_settings_on_spacecraft["Sun"].append(
+            propagation_setup.acceleration.empirical(rsw_acceleration_magnitude))
 
     # Create propagation settings.
     propagator_settings = XXXX
