@@ -1,0 +1,17 @@
+# Latexmk configuration file
+# Automatically builds to the build/ directory
+
+# Use pdflatex
+$pdf_mode = 1;
+
+# Enable shell escape (required for markdown package)
+$pdflatex = 'pdflatex -shell-escape -interaction=nonstopmode -synctex=1 %O %S';
+
+# Output directory for all auxiliary files
+$out_dir = 'build';
+
+# Ensure continuous preview mode regenerates on changes
+$preview_continuous_mode = 1;
+
+# Clean up auxiliary files
+$clean_ext = 'aux log out synctex.gz fls fdb_latexmk markdown.lua markdown.err';
