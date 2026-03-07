@@ -11,18 +11,26 @@ http://tudat.tudelft.nl/LICENSE.
 
 import numpy as np
 from tudatpy import constants
-from tudatpy.astro import element_conversion, two_body_dynamics
+from tudatpy.astro import element_conversion, two_body_dynamics, time_representation
 from tudatpy.data import save2txt
 from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, environment, propagation_setup, propagation, parameters_setup, parameters, simulator
 
 # Define departure/arrival epoch - in seconds since J2000
-departure_epoch = XXXX
-time_of_flight = XXXX
+departure_epoch =  constants.JULIAN_DAY* 2705.437704
+time_of_flight = constants.JULIAN_DAY * 151.7330869
 arrival_epoch = departure_epoch + time_of_flight
-target_body = XXXX
 global_frame_orientation = "ECLIPJ2000"
 fixed_step_size = 3600.0
+
+# Personal aditions
+target_body = 'Venus'
+body_to_propagate = 'Spacecraft'
+
+dependent_variables_to_save = [
+    # empty currently
+]
+
 
 ################ HELPER FUNCTIONS: DO NOT MODIFY ########################################
 
@@ -437,8 +445,41 @@ def get_unperturbed_propagator_settings(
     Propagation settings of the unperturbed trajectory.
     """
 
+    # getting the central bodies
+    central_bodies = ['Sun']
+    bodies_to_propagate = [body_to_propagate]
+    # print(bodies_to_propagate, central_bodies) # debugging
+
+    # setting the integrator settings
+    integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step(
+        fixed_step_size, coefficient_set=propagation_setup.integrator.CoefficientSets.rk_4
+    )
+
+    #create acceleration model
+    acceleration_settings_on_vehicle = dict(
+        Sun=[propagation_setup.acceleration.point_mass_gravity()]
+    )
+
+    acceleration_settings = {body_to_propagate: acceleration_settings_on_vehicle}
+
+    acceleration_model = propagation_setup.create_acceleration_models(
+        bodies, 
+        acceleration_settings,
+        bodies_to_propagate,
+        central_bodies
+    )
+
     # Create propagation settings.
-    propagator_settings = XXXX
+    propagator_settings = propagation_setup.propagator.translational(
+        ['Sun'],
+        acceleration_model,
+        bodies_to_propagate,
+        initial_state,
+        initial_time,
+        integrator_settings,
+        termination_condition,
+        output_variables=dependent_variables_to_save,
+    )
 
     return propagator_settings
 
@@ -515,6 +556,21 @@ def create_simulation_bodies() -> environment.SystemOfBodies:
 
     """
 
-    bodies = XXXX
+    spice.load_standard_kernels()
+
+    bodies_to_create = ["Sun", "Earth", target_body]
+    global_frame_origin = "Sun"
+
+    body_settings = environment_setup.get_default_body_settings(
+        bodies_to_create, global_frame_origin, global_frame_orientation
+    )
+
+    # print(body_to_propagate) #debugging
+
+    body_settings.add_empty_settings(body_to_propagate)
+    # body_settings.add_empty_settings('Spacecraft')
+
+    bodies = environment_setup.create_system_of_bodies(body_settings)
+    # print(bodies.list_of_bodies())
 
     return bodies
