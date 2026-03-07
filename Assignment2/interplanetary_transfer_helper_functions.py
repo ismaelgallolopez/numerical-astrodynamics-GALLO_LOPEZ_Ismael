@@ -10,6 +10,8 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
+
 from tudatpy import constants
 from tudatpy.astro import element_conversion, two_body_dynamics, time_representation
 from tudatpy.data import save2txt
