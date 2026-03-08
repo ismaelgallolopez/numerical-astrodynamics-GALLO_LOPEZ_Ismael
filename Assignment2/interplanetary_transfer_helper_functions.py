@@ -11,8 +11,11 @@ http://tudat.tudelft.nl/LICENSE.
 
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+from pathlib import Path
 
 from tudatpy import constants
+from tudatpy.data import save2txt, read_vector_history_from_file
 from tudatpy.astro import element_conversion, two_body_dynamics, time_representation
 from tudatpy.data import save2txt
 from tudatpy.interface import spice
@@ -576,3 +579,69 @@ def create_simulation_bodies() -> environment.SystemOfBodies:
     # print(bodies.list_of_bodies())
 
     return bodies
+
+
+###########################################################################
+# EXTRA FUNCTIONS #########################################################
+###########################################################################
+
+def save_output_to_file(
+        line: int,
+        results_file_identifier: str,
+        output_directory: str = "./SimulationOutput/",
+        state: int = -1,
+        save_file: str = 'cartesian_results_AE4868_2026_2_6541356.txt',
+        ):
+    
+    """"
+    Writes the output to the .txt file specified for each question
+
+    Parameters
+    ----------
+    line: int
+        line in the file that needs to be replaced (0 indexed)
+
+    results_file_identifier: str
+        same as in 'write_propagation_results_to_file'
+
+    output_directory: str
+        output directory of the .dat files
+
+    state: int
+        by default, returns the last state of the propagation, otherwise specify the state that needs to be returned
+
+    save_file: str
+        file name to which the results will be saved. By default it is the file for A2
+        
+    Return
+    ------
+    none
+
+    """
+
+    os.makedirs("documents_deliverable", exist_ok=True)
+    results_path = Path("documents_deliverable") / save_file
+
+    results_file = Path(output_directory) / f"{results_file_identifier}_numerical_states.dat"
+    states = read_vector_history_from_file(6, str(results_file))
+    state_array = np.vstack(list(states.values()))
+    epochs = np.array(list(states.keys()))
+
+    state_to_save = state_array[state, :]
+    epoch_to_save = epochs[state]
+
+    output_line = (f"{epoch_to_save:.16e} {state_to_save[0]:.16e} {state_to_save[1]:.16e} {state_to_save[2]:.16e} {state_to_save[3]:.16e} {state_to_save[4]:.16e} {state_to_save[5]:.16e}\n")
+
+    try:
+        with open(results_path, 'r') as file:
+            lines = file.readlines()
+    except FileNotFoundError:
+        lines = []
+
+    while len(lines) <= line:
+        lines.append('\n')
+
+    lines[line] = output_line
+
+    with open(results_path, 'w') as file:
+        file.writelines(lines)

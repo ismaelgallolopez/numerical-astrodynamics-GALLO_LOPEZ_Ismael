@@ -9,12 +9,10 @@ a copy of the license with this file. If not, please or visit:
 http://tudat.tudelft.nl/LICENSE.
 """
 
-import os
-
 from interplanetary_transfer_helper_functions import *
 
 # Load spice kernels.
-spice.load_standard_kernels()
+# spice.load_standard_kernels()
 
 # Define directory where simulation output will be written
 output_directory = "./SimulationOutput/"
@@ -54,6 +52,10 @@ if __name__ == "__main__":
     # Evaluate the Lambert arc model at each of the epochs in the state_history
     lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
 
+
+###########################################################################
+# PLOTTING RESULTS ########################################################
+###########################################################################
 
 # 1. Extract data from the state history dictionaries
 # The keys are epochs (seconds since J2000), values are 6x1 numpy arrays (x, y, z, vx, vy, vz)
@@ -117,3 +119,37 @@ figures_directory = "./figures/"
 os.makedirs(figures_directory, exist_ok=True)
 fig1.savefig(figures_directory + "Q1_trajectory_3d.pdf", format="pdf", bbox_inches="tight")
 fig2.savefig(figures_directory + "Q1_cartesian_differences.pdf", format="pdf", bbox_inches="tight")
+
+
+###########################################################################
+# SAVING RESULTS ##########################################################
+###########################################################################
+
+
+# Write to results file
+# os.makedirs('documents_deliverable', exist_ok=True)
+# results_path = Path("./documents_deliverable/cartesian_results_AE4868_2026_2_6541356.txt")
+
+save_output_to_file(0, 'Q1', state=0)
+
+
+
+# final_time = time_array[-1]
+# final_cartesian_state = numerical_cartesian[-1, :]
+
+# try:
+#     with open(results_path, 'r') as file:
+#         lines = file.readlines()
+# except FileNotFoundError:
+#     lines = []
+
+# line_to_replace = 0  # (change between questions)
+# while len(lines) <= line_to_replace:
+#     lines.append('\n')
+
+# output_line = f"{final_time:.16e} {final_cartesian_state[0]:.16e} {final_cartesian_state[1]:.16e} {final_cartesian_state[2]:.16e} {final_cartesian_state[3]:.16e} {final_cartesian_state[4]:.16e} {final_cartesian_state[5]:.16e}\n"
+# lines[line_to_replace] = output_line
+
+# with open(results_path, 'w') as file:
+#     file.writelines(lines)
+
