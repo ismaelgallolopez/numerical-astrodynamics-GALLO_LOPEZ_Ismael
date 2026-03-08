@@ -19,6 +19,8 @@ output_directory = "./SimulationOutput/"
 
 departure_epoch_lambert = departure_epoch
 arrival_epoch_lambert = arrival_epoch
+# Ensure the figures directory exists
+os.makedirs("figures", exist_ok=True)
 
 ###########################################################################
 # RUN CODE FOR QUESTION 2 #################################################
@@ -195,9 +197,44 @@ if __name__ == "__main__":
         velocity_state = state_history_array[:, 3:6]
         velocity_lambert = lambert_history_array[:, 3:6]
         velocity_difference = velocity_state - velocity_lambert
-        velocity_difference = np.linalg.norm(velocity_difference, axis=1)
+        velocity_difference_norm = np.linalg.norm(velocity_difference, axis=1)
 
         acceleration_state = dep_vars_array[:, 1:4] 
         acceleration_lambert = -mu_sun*position_lambert/np.linalg.norm(position_lambert, axis=1)[:, np.newaxis]**3
         acceleration_difference = acceleration_state - acceleration_lambert
         acceleration_difference_norm = np.linalg.norm(acceleration_difference, axis=1)
+
+        # Extract time in days from the start of the propagation for the x-axis
+        epochs = np.array(list(state_history.keys()))
+        time_days = (epochs - epochs[0]) / (constants.JULIAN_DAY) 
+
+        # 2. Create the plots
+        fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+
+        # Plot delta r
+        axs[0].plot(time_days, position_difference_norm, color='blue', linewidth=1.5)
+        axs[0].set_ylabel('$\\Delta r$ [m]', fontsize=12)
+        axs[0].grid(True, linestyle='--', alpha=0.7)
+        axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
+
+        # Plot delta v
+        axs[1].plot(time_days, velocity_difference_norm, color='green', linewidth=1.5)
+        axs[1].set_ylabel('$\\Delta v$ [m/s]', fontsize=12)
+        axs[1].grid(True, linestyle='--', alpha=0.7)
+
+        # Plot delta a
+        axs[2].plot(time_days, acceleration_difference_norm, color='red', linewidth=1.5)
+        axs[2].set_ylabel('$\\Delta a$ [m/s$^2$]', fontsize=12)
+        axs[2].set_xlabel('Time since start of propagation [days]', fontsize=12)
+        axs[2].grid(True, linestyle='--', alpha=0.7)
+
+        # Formatting to ensure legibility as per course reporting instructions
+        plt.tight_layout()
+
+        # 3. Save the figure as a PDF
+        # Example filename: figures/Q2_case_i_deviations.pdf
+        filename_fig = f"figures/Q2_{case}_deviations.pdf"
+        plt.savefig(filename_fig, format='pdf', bbox_inches='tight')
+
+        # Close the figure to free up memory before the next loop iteration
+        plt.close(fig)
