@@ -126,3 +126,4 @@ fig2.savefig(figures_directory + "Q1_cartesian_differences.pdf", format="pdf", b
 ###########################################################################
 
 save_output_to_file(0, 'Q1', state=0)
+save_output_to_file(1, 'Q1', state=-1)

@@ -175,6 +175,17 @@ if __name__ == "__main__":
                 output_directory,
                 paths = True,
             )
+            
+            # save to file
+            if i == 0:
+                save_output_to_file(2, "Q2_" + str(cases.index(case)) + case_suffix, state=0)
+                save_output_to_file(3, "Q2_" + str(cases.index(case)) + case_suffix, state=-1)
+            if i == 1:
+                save_output_to_file(4, "Q2_" + str(cases.index(case)) + case_suffix, state=0)
+                save_output_to_file(5, "Q2_" + str(cases.index(case)) + case_suffix, state=-1)
+            if i == 2:
+                save_output_to_file(6, "Q2_" + str(cases.index(case)) + case_suffix, state=0)
+                save_output_to_file(7, "Q2_" + str(cases.index(case)) + case_suffix, state=-1)
 
             # print(paths_to_dat) # debugging
             filename_dep_vars = paths_to_dat['dependent_variables']
