@@ -17,9 +17,9 @@ from pathlib import Path
 from tudatpy import constants
 from tudatpy.data import save2txt, read_vector_history_from_file
 from tudatpy.astro import element_conversion, two_body_dynamics, time_representation
-from tudatpy.data import save2txt
 from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, environment, propagation_setup, propagation, parameters_setup, parameters, simulator
+from tudatpy.util import result2array
 
 # Define departure/arrival epoch - in seconds since J2000
 departure_epoch =  constants.JULIAN_DAY * 2705.437704
@@ -33,7 +33,7 @@ target_body = 'Venus'
 body_to_propagate = 'Spacecraft'
 
 dependent_variables_to_save = [
-    # empty currently
+    propagation_setup.dependent_variable.total_acceleration( 'Spacecraft' ),
 ]
 
 
@@ -46,6 +46,7 @@ def write_propagation_results_to_file(
     lambert_arc_ephemeris: environment.Ephemeris,
     file_output_identifier: str,
     output_directory: str,
+    paths: bool = False,
 ) -> None:
     """
     This function will write the results of a numerical propagation, as well as the Lambert arc states at the epochs of the
@@ -65,6 +66,10 @@ def write_propagation_results_to_file(
 
     output_directory : str
         Directory to which the files will be written
+
+    paths : bool
+        Boolean denoting whether the output files path is to be returned
+
 
     Files written
     -------------
@@ -109,6 +114,13 @@ def write_propagation_results_to_file(
         filename=output_directory + file_output_identifier + "_lambert_states.dat",
         directory="./",
     )
+
+    if paths:
+        return {
+            "numerical_states": output_directory + file_output_identifier + "_numerical_states.dat",
+            "dependent_variables": output_directory + file_output_identifier + "_dependent_variables.dat",
+            "lambert_states": output_directory + file_output_identifier + "_lambert_states.dat",
+        }
 
     return
 

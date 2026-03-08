@@ -34,9 +34,16 @@ if __name__ == "__main__":
         bodies, target_body, departure_epoch_lambert, arrival_epoch_lambert
     )
 
+    # epochs = np.arange(departure_epoch_lambert, arrival_epoch_lambert, fixed_step_size)
+    # lambert_position = np.empty((len(epochs), 3))
+    # lambert_velocity = np.empty((len(epochs), 3))
+    # lambert_acceleration = np.empty((len(epochs), 3))
+    mu_sun = bodies.get('Sun').gravitational_parameter
+
     # print(lambert_arc_ephemeris)
     # print(departure_epoch_lambert) # debugging
     # print(environment.Ephemeris.cartesian_position(lambert_arc_ephemeris, departure_epoch_lambert)) # debugging
+
 
     """
     case_i: The initial and final propagation time equal to the initial and final times of the Lambert arc.
@@ -73,11 +80,10 @@ if __name__ == "__main__":
             # gravitational parameters of all bodies
             mu_earth = bodies.get('Earth').gravitational_parameter
             mu_venus = bodies.get('Venus').gravitational_parameter
-            mu_sun = bodies.get('Sun').gravitational_parameter
             
 
             epochs = np.arange(departure_epoch, arrival_epoch, fixed_step_size)
-            for epoch in epochs: 
+            for epoch in epochs:
                 # approximate SMA of bodies required
                 position_earth = bodies.get('Earth').ephemeris.cartesian_position(epoch)
                 position_venus = bodies.get('Venus').ephemeris.cartesian_position(epoch)
@@ -144,14 +150,54 @@ if __name__ == "__main__":
             use_perturbations=True,
         )
         
+        # epochs = np.arange(departure_epoch, arrival_epoch, fixed_step_size)
         
+        # for k, epoch in enumerate(epochs):
+        #     # lambert calculation
+        #     lambert_position[k] = lambert_arc_ephemeris.cartesian_position(epoch)
+        #     lambert_velocity[k] = lambert_arc_ephemeris.cartesian_velocity(epoch)
+        #     lambert_acceleration[k] = -mu_sun*lambert_position[k]/np.linalg.norm(lambert_position[k])**3
 
-        write_propagation_results_to_file(
+
+        paths_to_dat = write_propagation_results_to_file(
             dynamics_simulator,
             lambert_arc_ephemeris,
             "Q2_" + str(cases.index(case)),
             output_directory,
+            paths = True,
         )
+
+        # print(paths_to_dat) # debugging
+        filename_dep_vars = paths_to_dat['dependent_variables']
+        # print(filename_dep_vars) # debugging
+
+        with open(filename_dep_vars) as f:
+            line = f.readline()
+            num_cols = len(line.split())
+            # print(num_cols) # debugging
+
+            dep_vars = read_vector_history_from_file(num_cols-1, filename_dep_vars) # first column is time so it does not count
+            dep_vars_array = result2array(dep_vars)
+            # print(dep_vars_array.shape) # debugging
 
         state_history = dynamics_simulator.propagation_results.state_history
         lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
+        # print(lambert_history) # debugging
+        
+        state_history_array = np.vstack(list(state_history.values()))
+        lambert_history_array = np.vstack(list(lambert_history.values()))
+
+        position_state = state_history_array[:, 0:3]
+        position_lambert = lambert_history_array[:, 0:3]
+        position_difference = position_state - position_lambert
+        position_difference_norm = np.linalg.norm(position_difference, axis=1)
+
+        velocity_state = state_history_array[:, 3:6]
+        velocity_lambert = lambert_history_array[:, 3:6]
+        velocity_difference = velocity_state - velocity_lambert
+        velocity_difference = np.linalg.norm(velocity_difference, axis=1)
+
+        acceleration_state = dep_vars_array[:, 1:4] 
+        acceleration_lambert = -mu_sun*position_lambert/np.linalg.norm(position_lambert, axis=1)[:, np.newaxis]**3
+        acceleration_difference = acceleration_state - acceleration_lambert
+        acceleration_difference_norm = np.linalg.norm(acceleration_difference, axis=1)
