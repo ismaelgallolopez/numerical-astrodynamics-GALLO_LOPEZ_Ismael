@@ -601,7 +601,7 @@ def get_perturbed_propagator_settings(
 # STUDENT CODE TASK - full function (except signature and return)
 # NOTE: Keep this function the same for each question (it does no harm if bodies are
 # added that are not used)
-def create_simulation_bodies() -> environment.SystemOfBodies:
+def create_simulation_bodies(mass_spacecraft: float = 1000.0) -> environment.SystemOfBodies:
     """
     Creates the body objects required for the simulation, using the
     environment_setup.create_system_of_bodies for natural bodies,
@@ -633,7 +633,6 @@ def create_simulation_bodies() -> environment.SystemOfBodies:
     # vehicle properties
     rad_press_coeff_spacecraft = 1.2
     ref_area_spacecraft = 20 # m^2
-    mass_spacecraft = 1000 # kg
 
     vehicle_target_settings = environment_setup.radiation_pressure.cannonball_radiation_target(
         ref_area_spacecraft, rad_press_coeff_spacecraft)

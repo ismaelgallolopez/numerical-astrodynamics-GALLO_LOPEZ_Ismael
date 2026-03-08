@@ -56,6 +56,7 @@ if __name__ == "__main__":
     """
     # List cases to iterate over. STUDENT NOTE: feel free to modify if you see fit
     cases = ["case_i", "case_ii", "case_iii", "case_iv"]
+    case_iv_masses = [250.0, 500, 1000.0]
 
     # Run propagation for each of cases i-iii
     for i, case in enumerate(cases):
@@ -143,14 +144,18 @@ if __name__ == "__main__":
                 backward_termination_settings=propagation_setup.propagator.time_termination(initial_epoch),
             )
 
-        # Perform propagation
-        dynamics_simulator = propagate_trajectory(
-            departure_epoch,
-            termination_settings,
-            bodies,
-            lambert_arc_ephemeris,
-            use_perturbations=True,
-        )
+        masses_to_run = case_iv_masses if i == 3 else [bodies.get_body("Spacecraft").mass]
+        for mass_spacecraft in masses_to_run:
+            bodies.get_body("Spacecraft").mass = mass_spacecraft
+
+            # Perform propagation
+            dynamics_simulator = propagate_trajectory(
+                departure_epoch,
+                termination_settings,
+                bodies,
+                lambert_arc_ephemeris,
+                use_perturbations=True,
+            )
         
         # epochs = np.arange(departure_epoch, arrival_epoch, fixed_step_size)
         
@@ -161,80 +166,82 @@ if __name__ == "__main__":
         #     lambert_acceleration[k] = -mu_sun*lambert_position[k]/np.linalg.norm(lambert_position[k])**3
 
 
-        paths_to_dat = write_propagation_results_to_file(
-            dynamics_simulator,
-            lambert_arc_ephemeris,
-            "Q2_" + str(cases.index(case)),
-            output_directory,
-            paths = True,
-        )
+            case_suffix = f"_m{int(mass_spacecraft)}" if i == 3 else ""
 
-        # print(paths_to_dat) # debugging
-        filename_dep_vars = paths_to_dat['dependent_variables']
-        # print(filename_dep_vars) # debugging
+            paths_to_dat = write_propagation_results_to_file(
+                dynamics_simulator,
+                lambert_arc_ephemeris,
+                "Q2_" + str(cases.index(case)) + case_suffix,
+                output_directory,
+                paths = True,
+            )
 
-        with open(filename_dep_vars) as f:
-            line = f.readline()
-            num_cols = len(line.split())
-            # print(num_cols) # debugging
+            # print(paths_to_dat) # debugging
+            filename_dep_vars = paths_to_dat['dependent_variables']
+            # print(filename_dep_vars) # debugging
 
-            dep_vars = read_vector_history_from_file(num_cols-1, filename_dep_vars) # first column is time so it does not count
-            dep_vars_array = result2array(dep_vars)
-            # print(dep_vars_array.shape) # debugging
+            with open(filename_dep_vars) as f:
+                line = f.readline()
+                num_cols = len(line.split())
+                # print(num_cols) # debugging
 
-        state_history = dynamics_simulator.propagation_results.state_history
-        lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
-        # print(lambert_history) # debugging
+                dep_vars = read_vector_history_from_file(num_cols-1, filename_dep_vars) # first column is time so it does not count
+                dep_vars_array = result2array(dep_vars)
+                # print(dep_vars_array.shape) # debugging
+
+            state_history = dynamics_simulator.propagation_results.state_history
+            lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
+            # print(lambert_history) # debugging
         
-        state_history_array = np.vstack(list(state_history.values()))
-        lambert_history_array = np.vstack(list(lambert_history.values()))
+            state_history_array = np.vstack(list(state_history.values()))
+            lambert_history_array = np.vstack(list(lambert_history.values()))
 
-        position_state = state_history_array[:, 0:3]
-        position_lambert = lambert_history_array[:, 0:3]
-        position_difference = position_state - position_lambert
-        position_difference_norm = np.linalg.norm(position_difference, axis=1)
+            position_state = state_history_array[:, 0:3]
+            position_lambert = lambert_history_array[:, 0:3]
+            position_difference = position_state - position_lambert
+            position_difference_norm = np.linalg.norm(position_difference, axis=1)
 
-        velocity_state = state_history_array[:, 3:6]
-        velocity_lambert = lambert_history_array[:, 3:6]
-        velocity_difference = velocity_state - velocity_lambert
-        velocity_difference_norm = np.linalg.norm(velocity_difference, axis=1)
+            velocity_state = state_history_array[:, 3:6]
+            velocity_lambert = lambert_history_array[:, 3:6]
+            velocity_difference = velocity_state - velocity_lambert
+            velocity_difference_norm = np.linalg.norm(velocity_difference, axis=1)
 
-        acceleration_state = dep_vars_array[:, 1:4] 
-        acceleration_lambert = -mu_sun*position_lambert/np.linalg.norm(position_lambert, axis=1)[:, np.newaxis]**3
-        acceleration_difference = acceleration_state - acceleration_lambert
-        acceleration_difference_norm = np.linalg.norm(acceleration_difference, axis=1)
+            acceleration_state = dep_vars_array[:, 1:4] 
+            acceleration_lambert = -mu_sun*position_lambert/np.linalg.norm(position_lambert, axis=1)[:, np.newaxis]**3
+            acceleration_difference = acceleration_state - acceleration_lambert
+            acceleration_difference_norm = np.linalg.norm(acceleration_difference, axis=1)
 
-        # Extract time in days from the start of the propagation for the x-axis
-        epochs = np.array(list(state_history.keys()))
-        time_days = (epochs - epochs[0]) / (constants.JULIAN_DAY) 
+            # Extract time in days from the start of the propagation for the x-axis
+            epochs = np.array(list(state_history.keys()))
+            time_days = (epochs - epochs[0]) / (constants.JULIAN_DAY) 
 
-        # 2. Create the plots
-        fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+            # 2. Create the plots
+            fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
-        # Plot delta r
-        axs[0].plot(time_days, position_difference_norm, color='blue', linewidth=1.5)
-        axs[0].set_ylabel('$\\Delta r$ [m]', fontsize=12)
-        axs[0].grid(True, linestyle='--', alpha=0.7)
-        axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
+            # Plot delta r
+            axs[0].plot(time_days, position_difference_norm, color='blue', linewidth=1.5)
+            axs[0].set_ylabel('$\\Delta r$ [m]', fontsize=12)
+            axs[0].grid(True, linestyle='--', alpha=0.7)
+            axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
 
-        # Plot delta v
-        axs[1].plot(time_days, velocity_difference_norm, color='green', linewidth=1.5)
-        axs[1].set_ylabel('$\\Delta v$ [m/s]', fontsize=12)
-        axs[1].grid(True, linestyle='--', alpha=0.7)
+            # Plot delta v
+            axs[1].plot(time_days, velocity_difference_norm, color='green', linewidth=1.5)
+            axs[1].set_ylabel('$\\Delta v$ [m/s]', fontsize=12)
+            axs[1].grid(True, linestyle='--', alpha=0.7)
 
-        # Plot delta a
-        axs[2].plot(time_days, acceleration_difference_norm, color='red', linewidth=1.5)
-        axs[2].set_ylabel('$\\Delta a$ [m/s$^2$]', fontsize=12)
-        axs[2].set_xlabel('Time since start of propagation [days]', fontsize=12)
-        axs[2].grid(True, linestyle='--', alpha=0.7)
+            # Plot delta a
+            axs[2].plot(time_days, acceleration_difference_norm, color='red', linewidth=1.5)
+            axs[2].set_ylabel('$\\Delta a$ [m/s$^2$]', fontsize=12)
+            axs[2].set_xlabel('Time since start of propagation [days]', fontsize=12)
+            axs[2].grid(True, linestyle='--', alpha=0.7)
 
-        # Formatting to ensure legibility as per course reporting instructions
-        plt.tight_layout()
+            # Formatting to ensure legibility as per course reporting instructions
+            plt.tight_layout()
 
-        # 3. Save the figure as a PDF
-        # Example filename: figures/Q2_case_i_deviations.pdf
-        filename_fig = f"figures/Q2_{case}_deviations.pdf"
-        plt.savefig(filename_fig, format='pdf', bbox_inches='tight')
+            # 3. Save the figure as a PDF
+            # Example filename: figures/Q2_case_i_deviations.pdf
+            filename_fig = f"figures/Q2_{case}{case_suffix}_deviations.pdf"
+            plt.savefig(filename_fig, format='pdf', bbox_inches='tight')
 
-        # Close the figure to free up memory before the next loop iteration
-        plt.close(fig)
+            # Close the figure to free up memory before the next loop iteration
+            plt.close(fig)
