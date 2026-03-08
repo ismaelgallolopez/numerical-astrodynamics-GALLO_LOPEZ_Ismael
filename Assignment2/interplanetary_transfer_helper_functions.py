@@ -22,7 +22,7 @@ from tudatpy.interface import spice
 from tudatpy.dynamics import environment_setup, environment, propagation_setup, propagation, parameters_setup, parameters, simulator
 
 # Define departure/arrival epoch - in seconds since J2000
-departure_epoch =  constants.JULIAN_DAY* 2705.437704
+departure_epoch =  constants.JULIAN_DAY * 2705.437704
 time_of_flight = constants.JULIAN_DAY * 151.7330869
 arrival_epoch = departure_epoch + time_of_flight
 global_frame_orientation = "ECLIPJ2000"
@@ -296,7 +296,7 @@ def propagate_trajectory(
 
     else:
         propagator_settings = get_unperturbed_propagator_settings(
-            bodies, lambert_arc_initial_state, initial_time, termination_condition
+            bodies, lambert_arc_initial_state, initial_time, termination_condition 
         )
 
     # Propagate dynamics with required settings
@@ -449,7 +449,6 @@ def get_unperturbed_propagator_settings(
     ------
     Propagation settings of the unperturbed trajectory.
     """
-
     # getting the central bodies
     central_bodies = ['Sun']
     bodies_to_propagate = [body_to_propagate]
@@ -526,8 +525,31 @@ def get_perturbed_propagator_settings(
     Propagation settings of the perturbed trajectory.
     """
 
+    
     # Define accelerations acting on vehicle.
-    acceleration_settings_on_spacecraft = XXXX
+    acceleration_settings_on_spacecraft = dict(
+        Venus=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Earth=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Moon=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Mars=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Jupiter=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Saturn=[
+            propagation_setup.acceleration.point_mass_gravity()
+        ],
+        Sun=[propagation_setup.acceleration.point_mass_gravity(),
+            propagation_setup.acceleration.radiation_pressure()
+        ]
+    )
 
     # DO NOT MODIFY, and keep AFTER creation of acceleration_settings_on_spacecraft, but before
     # call to function create_acceleration_models
@@ -536,8 +558,30 @@ def get_perturbed_propagator_settings(
         acceleration_settings_on_spacecraft["Sun"].append(
             propagation_setup.acceleration.empirical(rsw_acceleration_magnitude))
 
+    acceleration_settings = {body_to_propagate: acceleration_settings_on_spacecraft}
+
+    acceleration_models_perturbed = propagation_setup.create_acceleration_models(
+        bodies, 
+        acceleration_settings, 
+        [body_to_propagate], 
+        ['Sun']
+    )
+
+    integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step(
+        fixed_step_size, coefficient_set=propagation_setup.integrator.CoefficientSets.rk_4
+    )
+
     # Create propagation settings.
-    propagator_settings = XXXX
+    propagator_settings = propagation_setup.propagator.translational(
+        ['Sun'],
+        acceleration_models_perturbed,
+        [body_to_propagate],
+        initial_state,
+        initial_time,
+        integrator_settings,
+        termination_condition,
+        output_variables=dependent_variables_to_save,
+    )
 
     return propagator_settings
 
@@ -563,7 +607,7 @@ def create_simulation_bodies() -> environment.SystemOfBodies:
 
     spice.load_standard_kernels()
 
-    bodies_to_create = ["Sun", "Earth", target_body]
+    bodies_to_create = ['Venus', 'Earth', 'Moon', 'Mars', 'Jupiter', 'Saturn', 'Sun']
     global_frame_origin = "Sun"
 
     body_settings = environment_setup.get_default_body_settings(
@@ -571,12 +615,23 @@ def create_simulation_bodies() -> environment.SystemOfBodies:
     )
 
     # print(body_to_propagate) #debugging
-
+    #creation of vehicle
     body_settings.add_empty_settings(body_to_propagate)
-    # body_settings.add_empty_settings('Spacecraft')
+
+    # vehicle properties
+    rad_press_coeff_spacecraft = 1.2
+    ref_area_spacecraft = 20 # m^2
+    mass_spacecraft = 1000 # kg
+
+    vehicle_target_settings = environment_setup.radiation_pressure.cannonball_radiation_target(
+        ref_area_spacecraft, rad_press_coeff_spacecraft)
+
+    # Add the radiation pressure interface to the body settings
+    body_settings.get("Spacecraft").radiation_pressure_target_settings = vehicle_target_settings
 
     bodies = environment_setup.create_system_of_bodies(body_settings)
     # print(bodies.list_of_bodies())
+    bodies.get_body("Spacecraft").mass = mass_spacecraft
 
     return bodies
 
