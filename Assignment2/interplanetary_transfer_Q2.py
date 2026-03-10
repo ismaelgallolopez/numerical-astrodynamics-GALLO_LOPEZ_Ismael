@@ -229,23 +229,39 @@ if __name__ == "__main__":
             epochs = np.array(list(state_history.keys()))
             time_days = (epochs - epochs[0]) / (constants.JULIAN_DAY) 
 
+            # Replace zeros (and floating point noise below 1e-16) with NaN
+            # Matplotlib will naturally skip NaNs on a log scale, fixing your axis bounds instantly.
+            noise_floor = 1e-16 
+            position_difference_norm_plot = np.where(position_difference_norm < noise_floor, np.nan, position_difference_norm)
+            velocity_difference_norm_plot = np.where(velocity_difference_norm < noise_floor, np.nan, velocity_difference_norm)
+            acceleration_difference_norm_plot = np.where(acceleration_difference_norm < noise_floor, np.nan, acceleration_difference_norm)
+
+            # In case_iv the propagation starts exactly on the Lambert arc midpoint,
+            # creating a single artificial zero in Δr and Δv that distorts log plots.
+            if i == 3:
+                position_difference_norm_plot[np.argmin(position_difference_norm)] = np.nan
+                velocity_difference_norm_plot[np.argmin(velocity_difference_norm)] = np.nan
+
             # 2. Create the plots
             fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
             # Plot delta r
-            axs[0].plot(time_days, position_difference_norm, color='blue', linewidth=1.5)
-            axs[0].set_ylabel('$\\Delta r$ [m]', fontsize=12)
+            axs[0].plot(time_days, position_difference_norm_plot, color='blue', linewidth=1.5)
+            axs[0].set_yscale('log')
+            axs[0].set_ylabel('$\Delta r$ [m]', fontsize=12)
             axs[0].grid(True, linestyle='--', alpha=0.7)
             axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
 
             # Plot delta v
-            axs[1].plot(time_days, velocity_difference_norm, color='green', linewidth=1.5)
-            axs[1].set_ylabel('$\\Delta v$ [m/s]', fontsize=12)
+            axs[1].plot(time_days, velocity_difference_norm_plot, color='green', linewidth=1.5)
+            axs[1].set_yscale('log')
+            axs[1].set_ylabel('$\Delta v$ [m/s]', fontsize=12)
             axs[1].grid(True, linestyle='--', alpha=0.7)
 
             # Plot delta a
-            axs[2].plot(time_days, acceleration_difference_norm, color='red', linewidth=1.5)
-            axs[2].set_ylabel('$\\Delta a$ [m/s$^2$]', fontsize=12)
+            axs[2].plot(time_days, acceleration_difference_norm_plot, color='red', linewidth=1.5)
+            axs[2].set_yscale('log')
+            axs[2].set_ylabel('$\Delta a$ [m/s$^2$]', fontsize=12)
             axs[2].set_xlabel('Time since start of propagation [days]', fontsize=12)
             axs[2].grid(True, linestyle='--', alpha=0.7)
 
@@ -253,7 +269,6 @@ if __name__ == "__main__":
             plt.tight_layout()
 
             # 3. Save the figure as a PDF
-            # Example filename: figures/Q2_case_i_deviations.pdf
             filename_fig = f"figures/Q2_{case}{case_suffix}_deviations.pdf"
             plt.savefig(filename_fig, format='pdf', bbox_inches='tight')
 
