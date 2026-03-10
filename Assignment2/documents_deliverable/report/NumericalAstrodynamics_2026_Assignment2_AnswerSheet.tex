@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{xkcdcolors}
 \usepackage[]{algorithm2e}
+\usepackage{float}
 
 
 \addtolength{\topmargin}{-.7in}
@@ -40,21 +41,46 @@ Time spent per exercise:
 \end{enumerate} 
 
 People you worked with (if none, state this):
+\begin{itemize}
+    \item Gemini 3
+    \item Andreu Craus Vidal
+    \item Daniel Pérez Trias
+\end{itemize}
 
 \clearpage
 
-\noindent\textit{Use this \LaTeX~file as a template for your report. All text that is not italic should be kept. All text that is italic, and all \ldots~should be removed and replaced by your answers. Only text that replaces \textbf{bold text} counts towards your line limit.}
+% \noindent\textit{Use this \LaTeX~file as a template for your report. All text that is not italic should be kept. All text that is italic, and all \ldots~should be removed and replaced by your answers. Only text that replaces \textbf{bold text} counts towards your line limit.}
 % KC: bold text here > bold text?
 
 \section*{Question 1}
 
-\textit{Insert figures} \\ 
-\\
+% \textit{Insert figures} \\ 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q1_trajectory_3d.pdf}
+    \caption{Trajectory of the spacecraft in the inertial frame.}
+    \label{fig:Q1_trajectory_3d}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q1_cartesian_differences.pdf}
+    \caption{Differences between Cartesian coordinates between the numerical propagation and the analytical solution.}
+    \label{fig:Q1_cartesian_differences}
+\end{figure}
+
 {{List of assumptions }}\\
 \begin{enumerate}
-    \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item ...
+    % \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
+    % \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
+    \item Central body located at the origin (non-moving); True; It comes from the environment definition in tudat.
+    \item Only central body point mass exerts an acceleration; True; Idem.
+    \item Start position w.r.t. central body is defined; True; Idem.
+    \item End position w.r.t. central body is defined; True; Idem.
+    \item Time of flight is defined; True; Is an input parameter of the propagation.
+    \item At most a single revolution around central body (in this case); True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
+    \item Prograde orbit; True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
 \end{enumerate}
 
 \clearpage
