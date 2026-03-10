@@ -70,11 +70,11 @@ People you worked with (if none, state this):
     \label{fig:Q1_cartesian_differences}
 \end{figure}
 
-{{List of assumptions }}\\
+{{List of assumptions: }}\\
 \begin{enumerate}
     % \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
     % \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item Central body located at the origin (non-moving); True; It comes from the environment definition in tudat.
+    \item Central body located at the origin (non-moving); False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
     \item Only central body point mass exerts an acceleration; True; Idem.
     \item Start position w.r.t. central body is defined; True; Idem.
     \item End position w.r.t. central body is defined; True; Idem.
@@ -150,10 +150,28 @@ People you worked with (if none, state this):
 \section*{Question 3}
 
 \subsection*{a}
-\textit{Insert figure}
+% \textit{Insert figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q3_a_discontinuous_trajectory.pdf}
+    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc.}
+    \label{fig:Q3_a_discontinuous_trajectory}
+\end{figure}
+
 \subsection*{b}
-\textit{Provide derivation/assumptions}\\
-$\Delta \mathbf{v}_{i}=...$
+% \textit{Provide derivation/assumptions}\\
+\begin{equation*}
+    \Delta \textbf{x}_{i+1} = \mathbf{\Phi}_i (t_{i+1}, t_i) \Delta \textbf{x}_i ; \quad  \Delta \textbf{x}_i = \begin{pmatrix} \Delta \textbf{r}_i \\ \Delta \textbf{v}_i \end{pmatrix} ; \quad \mathbf{\Phi}_i (t_{i+1}, t_i) = \begin{bmatrix} \mathbf{\Phi}_{rr,i} & \mathbf{\Phi}_{rv,i} \\ \mathbf{\Phi}_{vr,i} & \mathbf{\Phi}_{vv,i} \end{bmatrix}
+\end{equation*}
+
+\begin{equation}
+    \Delta \mathbf{r}_{i+1} = \mathbf{\Phi}_{rr,i} \Delta \mathbf{r}_i + \mathbf{\Phi}_{rv,i} \Delta \mathbf{v}_i \rightarrow \Delta \mathbf{r}_{i+1} - \mathbf{\Phi}_{rr,i} \Delta \mathbf{r}_i = \mathbf{\Phi}_{rv,i} \Delta \mathbf{v}_i
+\end{equation}
+
+Since the initial position is to be kept fixed, ($\Delta \mathbf{r}_i = \mathbf{0}$), and thus:
+\begin{equation}
+    \Delta \mathbf{v}_i = \mathbf{\Phi}_{rv,i}^{-1} \Delta \mathbf{r}_{i+1}
+\end{equation}
 
 \subsection*{c}
 \textit{Insert figure}\\
