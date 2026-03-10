@@ -75,6 +75,8 @@ if __name__ == "__main__":
 
     # Store each arc state history for Q3(a) trajectory plotting
     all_state_histories_q3a = []
+    # Store each corrected arc state history for Q3(c) trajectory plotting
+    all_state_histories_q3c = []
 
     # Compute relevant parameters (dynamics, state transition matrix, Delta V) for each arc
     for arc_index in range(number_of_arcs):
@@ -189,6 +191,9 @@ if __name__ == "__main__":
             use_perturbations=True,
             initial_state_correction=initial_state_correction,
         )
+        all_state_histories_q3c.append(
+            dynamics_simulator.propagation_results.state_history
+        )
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -228,4 +233,38 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.savefig("figures/Q3_a_discontinuous_trajectory.pdf", format='pdf', bbox_inches='tight')
+    plt.close(fig)
+
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for i, arc_state_history in enumerate(all_state_histories_q3c):
+        
+        epochs = np.array(list(arc_state_history.keys()))
+        states_array = np.vstack(list(arc_state_history.values()))
+        position_num = states_array[:, 0:3]
+        
+        lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, arc_state_history)
+        lambert_array = np.vstack(list(lambert_history.values()))
+        position_lam = lambert_array[:, 0:3]
+        
+        delta_r = np.linalg.norm(position_num - position_lam, axis=1)
+        
+        time_days = (epochs - departure_epoch_soi) / constants.JULIAN_DAY
+        
+        color = 'green' if i % 2 == 0 else 'purple'
+        ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
+
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
+    ax.set_xlabel('Time since departure [days]', fontsize=12)
+    ax.set_title('One-Shot Corrected Arc Propagation (Question 3c)', fontsize=14)
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_yscale('log') 
+
+    handles, labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(['Even Arcs (Corrected)', 'Odd Arcs (Corrected)'])
+
+    plt.tight_layout()
+    plt.savefig("figures/Q3_c_single_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
