@@ -189,3 +189,43 @@ if __name__ == "__main__":
             use_perturbations=True,
             initial_state_correction=initial_state_correction,
         )
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Iterate through` each arc's saved state history
+    for i, arc_state_history in enumerate(all_state_histories_q3a):
+        
+        # Extract numerical epochs and states
+        epochs = np.array(list(arc_state_history.keys()))
+        states_array = np.vstack(list(arc_state_history.values()))
+        position_num = states_array[:, 0:3]
+        
+        # Evaluate the Lambert arc at these exact epochs
+        lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, arc_state_history)
+        lambert_array = np.vstack(list(lambert_history.values()))
+        position_lam = lambert_array[:, 0:3]
+        
+        # Calculate position deviation magnitude
+        delta_r = np.linalg.norm(position_num - position_lam, axis=1)
+        
+        # Convert time to days for the x-axis
+        time_days = (epochs - departure_epoch_soi) / constants.JULIAN_DAY
+        
+        # Plot this specific arc (alternating colors can help visualize the discontinuities)
+        color = 'blue' if i % 2 == 0 else 'orange'
+        ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
+
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
+    ax.set_xlabel('Time since departure [days]', fontsize=12)
+    ax.set_title('Discontinuous Uncorrected Arc Propagation (Question 3a)', fontsize=14)
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_yscale('log') # Log scale is highly recommended to see the start of each arc!
+
+    # Create a custom legend to just show the alternating color logic
+    handles, labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(['Even Arcs', 'Odd Arcs'])
+
+    plt.tight_layout()
+    plt.savefig("figures/Q3_a_discontinuous_trajectory.pdf", format='pdf', bbox_inches='tight')
+    plt.close(fig)
