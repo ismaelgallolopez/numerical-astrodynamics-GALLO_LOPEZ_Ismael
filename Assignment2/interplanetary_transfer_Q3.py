@@ -34,7 +34,7 @@ if __name__ == "__main__":
     ##############################################################
     # Compute number of arcs and arc length
     number_of_arcs = 10
-    arc_length = XXXX
+    arc_length = time_of_flight / number_of_arcs
 
     ##############################################################
 
@@ -42,8 +42,8 @@ if __name__ == "__main__":
     for arc_index in range(number_of_arcs):
 
         # Compute initial and final time for arc
-        current_arc_initial_time = XXXX
-        current_arc_final_time = XXXX
+        current_arc_initial_time = departure_epoch + arc_index * arc_length
+        current_arc_final_time = current_arc_initial_time + arc_length
 
         ###########################################################################
         # RUN CODE FOR QUESTION 3a ################################################
