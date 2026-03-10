@@ -90,16 +90,19 @@ if __name__ == "__main__":
                 # approximate SMA of bodies required
                 position_earth = bodies.get('Earth').ephemeris.cartesian_position(epoch)
                 position_venus = bodies.get('Venus').ephemeris.cartesian_position(epoch)
-                
-                # # print(state_earth) # debugging
-                # sma_earth1 = element_conversion.cartesian_to_keplerian(state_earth, mu_sun)[0]
-                # # print(sma_earth) # debugging
-                # sma_venus1 = element_conversion.cartesian_to_keplerian(state_venus, mu_sun)[0]
 
-                # # different way of calculating -->check forum
-                sma_earth = np.linalg.norm(position_earth)
-                # print(sma_earth1) # debugging
-                sma_venus = np.linalg.norm(position_venus)
+                state_earth = bodies.get('Earth').ephemeris.cartesian_state(epoch)
+                state_venus = bodies.get('Venus').ephemeris.cartesian_state(epoch)
+
+                # # print(state_earth) # debugging
+                sma_earth = element_conversion.cartesian_to_keplerian(state_earth, mu_sun)[0]
+                # # print(sma_earth) # debugging
+                sma_venus = element_conversion.cartesian_to_keplerian(state_venus, mu_sun)[0]
+
+                # # # different way of calculating -->check forum
+                # sma_earth = np.linalg.norm(position_earth)
+                # # print(sma_earth1) # debugging
+                # sma_venus = np.linalg.norm(position_venus)
 
                 # sphere of influence radius for each body
                 r_soi_earth = sma_earth*(mu_earth/mu_sun)**0.4
