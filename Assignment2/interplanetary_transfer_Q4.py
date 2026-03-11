@@ -33,13 +33,49 @@ if __name__ == "__main__":
         bodies, target_body, departure_epoch, arrival_epoch
     )
 
+    mu_sun = bodies.get('Sun').gravitational_parameter
+    mu_earth = bodies.get('Earth').gravitational_parameter
+    mu_venus = bodies.get('Venus').gravitational_parameter
+    
+    departure_epoch_soi = departure_epoch
+    search_start = departure_epoch
+    search_end = arrival_epoch
+    epochs_search = np.arange(search_start, search_end, fixed_step_size)
+    
+    for epoch in epochs_search:
+        state_earth = bodies.get('Earth').ephemeris.cartesian_state(epoch)
+        sma_earth = element_conversion.cartesian_to_keplerian(state_earth, mu_sun)[0]
+        r_soi_earth = sma_earth * (mu_earth / mu_sun) ** 0.4
+        
+        position_earth = bodies.get('Earth').ephemeris.cartesian_position(epoch)
+        sc_position = lambert_arc_ephemeris.cartesian_position(epoch)
+        
+        if np.linalg.norm(sc_position - position_earth) > r_soi_earth:
+            departure_epoch_soi = epoch - fixed_step_size
+            break
+    
+    arrival_epoch_soi = arrival_epoch
+    for epoch in reversed(epochs_search):
+        state_venus = bodies.get('Venus').ephemeris.cartesian_state(epoch)
+        sma_venus = element_conversion.cartesian_to_keplerian(state_venus, mu_sun)[0]
+        r_soi_venus = sma_venus * (mu_venus / mu_sun) ** 0.4
+        
+        position_venus = bodies.get('Venus').ephemeris.cartesian_position(epoch)
+        sc_position = lambert_arc_ephemeris.cartesian_position(epoch)
+        
+        if np.linalg.norm(sc_position - position_venus) > r_soi_venus:
+            arrival_epoch_soi = epoch + fixed_step_size
+            break
+    
+    time_of_flight_soi = arrival_epoch_soi - departure_epoch_soi
+
     ###########################################################################
     # RUN CODE FOR QUESTION 4b ################################################
     ###########################################################################
 
     # Set start and end times of full trajectory
-    departure_epoch_with_buffer = XXXX
-    arrival_epoch_with_buffer = XXXX
+    departure_epoch_with_buffer = departure_epoch_soi
+    arrival_epoch_with_buffer = arrival_epoch_soi
 
     # Solve for state transition matrix on current arc
     termination_settings = propagation_setup.propagator.time_termination(
