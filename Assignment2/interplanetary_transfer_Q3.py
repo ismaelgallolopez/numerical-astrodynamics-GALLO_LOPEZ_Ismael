@@ -77,6 +77,12 @@ if __name__ == "__main__":
     all_state_histories_q3a = []
     # Store each corrected arc state history for Q3(c) trajectory plotting
     all_state_histories_q3c = []
+    # Store each iteratively corrected arc state history for Q3(d)
+    all_state_histories_q3d = []
+    # Store number of correction iterations per arc for Q3(d)
+    q3d_iteration_counts = []
+    # Store total velocity correction norm per arc for Q3(d)
+    q3d_total_delta_v_norms = []
 
     # Compute relevant parameters (dynamics, state transition matrix, Delta V) for each arc
     for arc_index in range(number_of_arcs):
@@ -195,6 +201,65 @@ if __name__ == "__main__":
             dynamics_simulator.propagation_results.state_history
         )
 
+        ###########################################################################
+        # RUN CODE FOR QUESTION 3d ################################################
+        ###########################################################################
+
+        total_delta_v = np.zeros(3)
+        iteration_count = 0
+
+        final_state_transition_matrix_d = final_state_transition_matrix
+        final_position_deviation_d = final_position_deviation
+        final_state_history_q3d = dynamics_simulator_arc.propagation_results.state_history
+
+        print('new arc') # debugging
+        while np.linalg.norm(final_position_deviation_d) >= 1.0:
+
+            phi_rv_d = final_state_transition_matrix_d[0:3, 3:6]
+            delta_v_increment = -np.linalg.solve(phi_rv_d, final_position_deviation_d)
+            total_delta_v += delta_v_increment
+
+            initial_state_correction_d = np.hstack((np.zeros(3), total_delta_v))
+
+            variational_equations_solver_d = propagate_variational_equations(
+                current_arc_initial_time,
+                termination_settings,
+                bodies,
+                lambert_arc_ephemeris,
+                initial_state_correction=initial_state_correction_d,
+            )
+
+            state_transition_matrix_history_d = (
+                variational_equations_solver_d.state_transition_matrix_history
+            )
+            state_history_d = variational_equations_solver_d.state_history
+            lambert_history_d = get_lambert_arc_history(lambert_arc_ephemeris, state_history_d)
+
+            final_epoch_d = list(state_transition_matrix_history_d.keys())[-1]
+            final_state_transition_matrix_d = state_transition_matrix_history_d[final_epoch_d]
+
+            final_state_deviation_d = (
+                state_history_d[final_epoch_d] - lambert_history_d[final_epoch_d]
+            )
+            final_position_deviation_d = final_state_deviation_d[0:3]
+            print(np.linalg.norm(final_position_deviation_d)) # debugging
+
+            dynamics_simulator_d = propagate_trajectory(
+                current_arc_initial_time,
+                termination_settings,
+                bodies,
+                lambert_arc_ephemeris,
+                use_perturbations=True,
+                initial_state_correction=initial_state_correction_d,
+            )
+            final_state_history_q3d = dynamics_simulator_d.propagation_results.state_history
+
+            iteration_count += 1
+
+        all_state_histories_q3d.append(final_state_history_q3d)
+        q3d_iteration_counts.append(iteration_count)
+        q3d_total_delta_v_norms.append(np.linalg.norm(total_delta_v))
+
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Iterate through` each arc's saved state history
@@ -249,6 +314,7 @@ if __name__ == "__main__":
         position_lam = lambert_array[:, 0:3]
         
         delta_r = np.linalg.norm(position_num - position_lam, axis=1)
+        # print(delta_r[-1]) # debugging
         
         time_days = (epochs - departure_epoch_soi) / constants.JULIAN_DAY
         
