@@ -83,6 +83,8 @@ if __name__ == "__main__":
     q3d_iteration_counts = []
     # Store total velocity correction norm per arc for Q3(d)
     q3d_total_delta_v_norms = []
+    # Store total velocity vector correction norm per arc for Q3(e)
+    q3d_total_delta_v_vectors = []
 
     # Compute relevant parameters (dynamics, state transition matrix, Delta V) for each arc
     for arc_index in range(number_of_arcs):
@@ -212,7 +214,7 @@ if __name__ == "__main__":
         final_position_deviation_d = final_position_deviation
         final_state_history_q3d = dynamics_simulator_arc.propagation_results.state_history
 
-        print('new arc') # debugging
+        # print('new arc') # debugging
         while np.linalg.norm(final_position_deviation_d) >= 1.0:
 
             phi_rv_d = final_state_transition_matrix_d[0:3, 3:6]
@@ -242,7 +244,7 @@ if __name__ == "__main__":
                 state_history_d[final_epoch_d] - lambert_history_d[final_epoch_d]
             )
             final_position_deviation_d = final_state_deviation_d[0:3]
-            print(np.linalg.norm(final_position_deviation_d)) # debugging
+            # print(np.linalg.norm(final_position_deviation_d)) # debugging
 
             dynamics_simulator_d = propagate_trajectory(
                 current_arc_initial_time,
@@ -259,6 +261,9 @@ if __name__ == "__main__":
         all_state_histories_q3d.append(final_state_history_q3d)
         q3d_iteration_counts.append(iteration_count)
         q3d_total_delta_v_norms.append(np.linalg.norm(total_delta_v))
+        q3d_total_delta_v_vectors.append(total_delta_v)
+        # print(q3d_total_delta_v_norms) # debugging
+        # print(q3d_total_delta_v_vectors) # debugging
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -334,3 +339,74 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig("figures/Q3_c_single_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
+
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for i, arc_state_history in enumerate(all_state_histories_q3d):
+        
+        epochs = np.array(list(arc_state_history.keys()))
+        states_array = np.vstack(list(arc_state_history.values()))
+        position_num = states_array[:, 0:3]
+        
+        lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, arc_state_history)
+        lambert_array = np.vstack(list(lambert_history.values()))
+        position_lam = lambert_array[:, 0:3]
+        
+        delta_r = np.linalg.norm(position_num - position_lam, axis=1)
+        
+        time_days = (epochs - departure_epoch_soi) / constants.JULIAN_DAY
+        
+        color = 'red' if i % 2 == 0 else 'black'
+        ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
+
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
+    ax.set_xlabel('Time since departure [days]', fontsize=12)
+    ax.set_title('Iteratively Corrected Arc Propagation (Question 3d)', fontsize=14)
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_yscale('log') 
+
+    handles, labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(['Even Arcs (Converged)', 'Odd Arcs (Converged)'])
+
+    plt.tight_layout()
+    plt.savefig("figures/Q3_d_iterative_correction.pdf", format='pdf', bbox_inches='tight')
+    plt.close(fig)
+
+    # Print the iteration table required for Q3(d)
+    print("\n--- Question 3(d) Convergence Table ---")
+    print("Arc Index | Iterations to Converge (< 1m)")
+    print("-" * 40)
+    for i, iters in enumerate(q3d_iteration_counts):
+        print(f"  Arc {i:2d}  | {iters:5d}")
+    print("-" * 40)
+
+    ###########################################################################
+    # RUN CODE FOR QUESTION 3e ################################################
+    ###########################################################################
+
+    total_mission_dv = 0.0
+    node_dv_list = []
+
+    for arc_idx in range(number_of_arcs - 1):
+
+        state_hist_curr = all_state_histories_q3d[arc_idx]
+        state_hist_next = all_state_histories_q3d[arc_idx + 1]
+
+        t_arr = list(state_hist_curr.keys())[-1]
+        state_arr = state_hist_curr[t_arr]
+        v_arr = state_arr[3:6]
+
+        t_dep = list(state_hist_next.keys())[0]
+        state_dep = state_hist_next[t_dep]
+        v_dep = state_dep[3:6]
+
+        # delta v at this node
+        dv_node = np.linalg.norm(v_dep - v_arr)
+        node_dv_list.append(dv_node)
+        total_mission_dv += dv_node
+
+    print(node_dv_list) # debugging
+    print(total_mission_dv) # debugging
+    
