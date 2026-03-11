@@ -214,6 +214,8 @@ if __name__ == "__main__":
 
     print(rsw_acceleration_magnitude_1) # debugging
     print(rsw_acceleration_magnitude_2) # debugging
+    print(np.linalg.norm(rsw_acceleration_magnitude_1)) # debugging
+    print(np.linalg.norm(rsw_acceleration_magnitude_2)) # debugging
 
     dynamics_arc2 = propagate_trajectory(
         midpoint_epoch,
@@ -227,3 +229,42 @@ if __name__ == "__main__":
     )
     state_history_arc2 = dynamics_arc2.propagation_results.state_history
 
+
+    # Combine the dictionaries to form the full trajectory
+    full_state_history_q4c = {**state_history_arc1, **state_history_arc2}
+
+    # Extract states and epochs
+    epochs_q4c = np.array(list(full_state_history_q4c.keys()))
+    states_array_q4c = np.vstack(list(full_state_history_q4c.values()))
+    position_num_q4c = states_array_q4c[:, 0:3]
+
+    lambert_history_q4c = get_lambert_arc_history(lambert_arc_ephemeris, full_state_history_q4c)
+    lambert_array_q4c = np.vstack(list(lambert_history_q4c.values()))
+    position_lam_q4c = lambert_array_q4c[:, 0:3]
+
+    # Calculate deviation magnitude
+    delta_r_q4c = np.linalg.norm(position_num_q4c - position_lam_q4c, axis=1)
+    time_days_q4c = (epochs_q4c - departure_epoch_with_buffer) / constants.JULIAN_DAY
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Plot the full continuous trajectory
+    ax.plot(time_days_q4c, delta_r_q4c, color='purple', linewidth=2, label='Converged Two-Arc Trajectory')
+
+    # Mark the midpoint where Arc 1 ends and Arc 2 begins
+    midpoint_day = (midpoint_epoch - departure_epoch_with_buffer) / constants.JULIAN_DAY
+    ax.axvline(x=midpoint_day, color='black', linestyle='--', alpha=0.5, label='Arc Boundary')
+
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
+    ax.set_xlabel('Time since departure [days]', fontsize=12)
+    ax.set_title('Two-Arc Continuous Low-Thrust Correction (Question 4c)', fontsize=14)
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_yscale('log')
+    ax.legend()
+
+    plt.tight_layout()
+    plt.savefig("figures/Q4_c_two_arc_correction.pdf", format='pdf', bbox_inches='tight')
+    plt.close(fig)
+
+    
