@@ -10,6 +10,7 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 from interplanetary_transfer_helper_functions import *
+import time
 
 # Load spice kernels.
 spice.load_standard_kernels()
@@ -267,4 +268,113 @@ if __name__ == "__main__":
     plt.savefig("figures/Q4_c_two_arc_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
 
-    
+    ###########################################################################
+    # RUN CODE FOR QUESTION 4d ################################################
+    ###########################################################################
+
+    p_b = rsw_acceleration_magnitude
+    std_dev = 0.4 * np.linalg.norm(p_b)
+
+    n_monte_carlo = 10
+    average_thrust_list = []
+    p1_deviation_list = []
+
+    lowest_cost = np.inf
+    best_p1 = None
+    best_p2 = None
+
+    mc_start_time = time.time()
+
+    print('starting monte carlo')
+
+    for mc_idx in range(n_monte_carlo):
+
+        if mc_idx % 1 == 0:
+            print(f"run {mc_idx}/{n_monte_carlo} (time so far: {time.time() - mc_start_time} s)")
+
+        p1_trial = np.random.normal(loc=p_b, scale=std_dev, size=3)
+
+        dynamics_arc1_mc = propagate_trajectory(
+            departure_epoch_with_buffer,
+            termination_arc1,
+            bodies,
+            lambert_arc_ephemeris,
+            use_perturbations=True,
+            use_rsw_acceleration=True,
+            rsw_acceleration_magnitude=p1_trial,
+        )
+        state_history_arc1_mc = dynamics_arc1_mc.propagation_results.state_history
+        state_mid_mc = state_history_arc1_mc[midpoint_epoch]
+
+        lambert_state_mid_mc = lambert_arc_ephemeris.cartesian_state(midpoint_epoch)
+        arc2_init_corr_mc = state_mid_mc - lambert_state_mid_mc
+
+        p2_trial = np.zeros(3)
+
+        var_solver_arc2_mc = propagate_variational_equations(
+            midpoint_epoch,
+            termination_arc2,
+            bodies,
+            lambert_arc_ephemeris,
+            initial_state_correction=arc2_init_corr_mc,
+            use_rsw_acceleration=True,
+            rsw_acceleration_magnitude=p2_trial,
+        )
+        sh_arc2_mc = var_solver_arc2_mc.state_history
+        lh_arc2_mc = get_lambert_arc_history(lambert_arc_ephemeris, sh_arc2_mc)
+        smh_arc2_mc = var_solver_arc2_mc.sensitivity_matrix_history
+
+        pos_dev_arc2_mc = (
+            lh_arc2_mc[arrival_epoch_with_buffer][0:3]
+            - sh_arc2_mc[arrival_epoch_with_buffer][0:3]
+        )
+
+        iter_mc = 0
+        while np.linalg.norm(pos_dev_arc2_mc) >= 1.0:
+
+            S_arc2_mc = smh_arc2_mc[arrival_epoch_with_buffer][0:3, :]
+            delta_p2_mc = np.linalg.solve(S_arc2_mc, pos_dev_arc2_mc)
+            p2_trial = p2_trial + delta_p2_mc
+
+            var_solver_arc2_mc = propagate_variational_equations(
+                midpoint_epoch,
+                termination_arc2,
+                bodies,
+                lambert_arc_ephemeris,
+                initial_state_correction=arc2_init_corr_mc,
+                use_rsw_acceleration=True,
+                rsw_acceleration_magnitude=p2_trial,
+            )
+            sh_arc2_mc = var_solver_arc2_mc.state_history
+            lh_arc2_mc = get_lambert_arc_history(lambert_arc_ephemeris, sh_arc2_mc)
+            smh_arc2_mc = var_solver_arc2_mc.sensitivity_matrix_history
+
+            pos_dev_arc2_mc = (
+                lh_arc2_mc[arrival_epoch_with_buffer][0:3]
+                - sh_arc2_mc[arrival_epoch_with_buffer][0:3]
+            )
+
+            iter_mc += 1
+            if iter_mc > 50:
+                print('non converging monte carlo. run', mc_idx)
+                break
+
+        average_thrust = (np.linalg.norm(p1_trial) + np.linalg.norm(p2_trial))/2
+        p1_deviation = np.linalg.norm(p1_trial - p_b)
+
+        average_thrust_list.append(average_thrust)
+        p1_deviation_list.append(p1_deviation)
+
+        if average_thrust < lowest_cost:
+            lowest_cost = average_thrust
+            best_p1 = p1_trial.copy()
+            best_p2 = p2_trial.copy()
+
+    mc_end_time = time.time()
+    mc_elapsed_seconds = mc_end_time - mc_start_time
+    print(f"monte carlo time: {mc_elapsed_seconds/60.0:.2f} min, average per run {mc_elapsed_seconds/n_monte_carlo}")
+
+    print('best average thrust', lowest_cost) # what the assignment asks to plot
+    print('best p1', best_p1)
+    print('best p2', best_p2)
+
