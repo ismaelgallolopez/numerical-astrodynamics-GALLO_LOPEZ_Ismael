@@ -132,6 +132,14 @@ if __name__ == "__main__":
             dynamics_simulator_arc.propagation_results.state_history
         )
 
+        # if arc_index == 0 or arc_index == 4:
+        write_propagation_results_to_file(
+            dynamics_simulator_arc,
+            lambert_arc_ephemeris,
+            f"Q3_a_arc{arc_index}",
+            output_directory,
+        )
+
         ###########################################################################
         # RUN CODE FOR QUESTION 3c/d/e ############################################
         ###########################################################################
@@ -409,4 +417,9 @@ if __name__ == "__main__":
 
     print(node_dv_list) # debugging
     print(total_mission_dv) # debugging
+
+    save_output_to_file(8,  "Q3_a_arc0", output_directory, state=0)
+    save_output_to_file(9,  "Q3_a_arc0", output_directory, state=-1)
+    save_output_to_file(10, "Q3_a_arc4", output_directory, state=0)
+    save_output_to_file(11, "Q3_a_arc4", output_directory, state=-1)
     
