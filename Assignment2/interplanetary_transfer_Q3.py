@@ -394,7 +394,7 @@ if __name__ == "__main__":
     # RUN CODE FOR QUESTION 3e ################################################
     ###########################################################################
 
-    total_mission_dv = 0.0
+    total_mission_dv = q3d_total_delta_v_norms[0]
     node_dv_list = []
 
     for arc_idx in range(number_of_arcs - 1):
