@@ -23,7 +23,7 @@ output_directory = "./SimulationOutput/"
 
 if __name__ == "__main__":
 
-    rsw_acceleration_magnitude = [0, 0, 0]
+    # rsw_acceleration_magnitude = [0, 0, 0]
 
     # Create body objects
     bodies = create_simulation_bodies()
@@ -92,9 +92,25 @@ if __name__ == "__main__":
     state_history = variational_equations_solver.state_history
     lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
 
+    r_num_final = state_history[arrival_epoch_with_buffer][0:3]
+    r_lam_final = lambert_history[arrival_epoch_with_buffer][0:3]
+    delta_r_final = r_lam_final - r_num_final
+
+    final_sensitivity_matrix = sensitivity_matrix_history[arrival_epoch_with_buffer]
+    S_r = final_sensitivity_matrix[0:3, :]  
+
     # Compute low-thrust RSW acceleration to meet required final position
-    rsw_acceleration_magnitude = XXXX
+    rsw_acceleration_magnitude = np.linalg.solve(S_r, delta_r_final)
+    print(rsw_acceleration_magnitude) # debugging
 
     # Propagate dynamics with RSW acceleration. NOTE: use the rsw_acceleration_magnitude as
     # input to the propagate_trajectory function
-    dynamics_simulator = XXXX
+    dynamics_simulator = propagate_trajectory(
+        departure_epoch_with_buffer,
+        termination_settings,
+        bodies,
+        lambert_arc_ephemeris,
+        use_perturbations=True,
+        use_rsw_acceleration=True,
+        rsw_acceleration_magnitude=rsw_acceleration_magnitude,
+    )
