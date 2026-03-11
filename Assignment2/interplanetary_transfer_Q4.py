@@ -114,3 +114,31 @@ if __name__ == "__main__":
         use_rsw_acceleration=True,
         rsw_acceleration_magnitude=rsw_acceleration_magnitude,
     )
+
+    # Extract the corrected state history
+    state_history_q4 = dynamics_simulator.propagation_results.state_history
+    epochs_q4 = np.array(list(state_history_q4.keys()))
+    states_array_q4 = np.vstack(list(state_history_q4.values()))
+    position_num_q4 = states_array_q4[:, 0:3]
+
+    lambert_history_q4 = get_lambert_arc_history(lambert_arc_ephemeris, state_history_q4)
+    lambert_array_q4 = np.vstack(list(lambert_history_q4.values()))
+    position_lam_q4 = lambert_array_q4[:, 0:3]
+
+    # Calculate deviation magnitude
+    delta_r_q4 = np.linalg.norm(position_num_q4 - position_lam_q4, axis=1)
+    time_days_q4 = (epochs_q4 - departure_epoch_with_buffer) / constants.JULIAN_DAY
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(time_days_q4, delta_r_q4, color='teal', linewidth=2)
+
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
+    ax.set_xlabel('Time since departure [days]', fontsize=12)
+    ax.set_title('Continuous Low-Thrust Corrected Propagation (Question 4c)', fontsize=14)
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_yscale('log') # Log scale helps visualize the deviation growth before the forced target matching
+
+    plt.tight_layout()
+    plt.savefig("figures/Q4_b_continuous_thrust_correction.pdf", format='pdf', bbox_inches='tight')
+    plt.close(fig)
