@@ -142,3 +142,88 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig("figures/Q4_b_continuous_thrust_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
+
+    ###########################################################################
+    # RUN CODE FOR QUESTION 4c ################################################
+    ###########################################################################
+
+    #arc 1
+    rsw_acceleration_magnitude_1 = rsw_acceleration_magnitude
+    midpoint_epoch = (departure_epoch_with_buffer + arrival_epoch_with_buffer) / 2
+
+    termination_arc1 = propagation_setup.propagator.time_termination(midpoint_epoch)
+    dynamics_arc1 = propagate_trajectory(
+        departure_epoch_with_buffer,
+        termination_arc1,
+        bodies,
+        lambert_arc_ephemeris,
+        use_perturbations=True,
+        use_rsw_acceleration=True,
+        rsw_acceleration_magnitude=rsw_acceleration_magnitude_1,
+    )
+    state_history_arc1 = dynamics_arc1.propagation_results.state_history
+    state_at_midpoint = state_history_arc1[midpoint_epoch]
+
+    #arc 2
+    lambert_state_at_midpoint = lambert_arc_ephemeris.cartesian_state(midpoint_epoch)
+    arc2_initial_state_correction = state_at_midpoint - lambert_state_at_midpoint
+
+    termination_arc2 = propagation_setup.propagator.time_termination(arrival_epoch_with_buffer)
+
+    rsw_acceleration_magnitude_2 = np.zeros(3)
+
+    var_solver_arc2 = propagate_variational_equations(
+        midpoint_epoch,
+        termination_arc2,
+        bodies,
+        lambert_arc_ephemeris,
+        initial_state_correction=arc2_initial_state_correction,
+        use_rsw_acceleration=True,
+        rsw_acceleration_magnitude=rsw_acceleration_magnitude_2,
+    )
+    sh_arc2 = var_solver_arc2.state_history
+    lh_arc2 = get_lambert_arc_history(lambert_arc_ephemeris, sh_arc2)
+    smh_arc2 = var_solver_arc2.sensitivity_matrix_history
+
+    pos_dev_arc2 = lh_arc2[arrival_epoch_with_buffer][0:3] - sh_arc2[arrival_epoch_with_buffer][0:3]
+
+    # iter_count = 0 # debugging
+    while np.linalg.norm(pos_dev_arc2) >= 1.0:
+
+        S_arc2 = smh_arc2[arrival_epoch_with_buffer][0:3, :]
+        delta_rsw_2 = np.linalg.solve(S_arc2, pos_dev_arc2)
+        rsw_acceleration_magnitude_2 = rsw_acceleration_magnitude_2 + delta_rsw_2
+
+        var_solver_arc2 = propagate_variational_equations(
+            midpoint_epoch,
+            termination_arc2,
+            bodies,
+            lambert_arc_ephemeris,
+            initial_state_correction=arc2_initial_state_correction,
+            use_rsw_acceleration=True,
+            rsw_acceleration_magnitude=rsw_acceleration_magnitude_2,
+        )
+        sh_arc2 = var_solver_arc2.state_history
+        lh_arc2 = get_lambert_arc_history(lambert_arc_ephemeris, sh_arc2)
+        smh_arc2 = var_solver_arc2.sensitivity_matrix_history
+
+        pos_dev_arc2 = lh_arc2[arrival_epoch_with_buffer][0:3] - sh_arc2[arrival_epoch_with_buffer][0:3]
+
+        # iter_count += 1 # debugging
+        # print(iter_count) # debugging
+
+    print(rsw_acceleration_magnitude_1) # debugging
+    print(rsw_acceleration_magnitude_2) # debugging
+
+    dynamics_arc2 = propagate_trajectory(
+        midpoint_epoch,
+        termination_arc2,
+        bodies,
+        lambert_arc_ephemeris,
+        use_perturbations=True,
+        initial_state_correction=arc2_initial_state_correction,
+        use_rsw_acceleration=True,
+        rsw_acceleration_magnitude=rsw_acceleration_magnitude_2,
+    )
+    state_history_arc2 = dynamics_arc2.propagation_results.state_history
+
