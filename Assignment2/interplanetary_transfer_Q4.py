@@ -11,6 +11,7 @@ http://tudat.tudelft.nl/LICENSE.
 
 from interplanetary_transfer_helper_functions import *
 import time
+import datetime
 
 # Load spice kernels.
 spice.load_standard_kernels()
@@ -372,9 +373,21 @@ if __name__ == "__main__":
 
     mc_end_time = time.time()
     mc_elapsed_seconds = mc_end_time - mc_start_time
-    print(f"monte carlo time: {mc_elapsed_seconds/60.0:.2f} min, average per run {mc_elapsed_seconds/n_monte_carlo}")
+    print(f"monte carlo time: {mc_elapsed_seconds/60.0:.2f} min, average per run {mc_elapsed_seconds/n_monte_carlo} s")
 
     print('best average thrust', lowest_cost) # what the assignment asks to plot
     print('best p1', best_p1)
     print('best p2', best_p2)
+
+    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    mc_log_path = os.path.join("monte_carlo_results.txt")
+    with open(mc_log_path, 'a') as mc_log:
+        mc_log.write("=" * 60 + "\n")
+        mc_log.write(f"Date           : {date}\n")
+        mc_log.write(f"Runs           : {n_monte_carlo}\n")
+        mc_log.write(f"Elapsed        : {mc_elapsed_seconds/60.0:.2f} min\n")
+        mc_log.write(f"Best avg thrust: {lowest_cost:.6e} m/s^2\n")
+        mc_log.write(f"best_p1 (R,S,W): {best_p1[0]:.6e}  {best_p1[1]:.6e}  {best_p1[2]:.6e} m/s^2\n")
+        mc_log.write(f"best_p2 (R,S,W): {best_p2[0]:.6e}  {best_p2[1]:.6e}  {best_p2[2]:.6e} m/s^2\n")
+        mc_log.write("=" * 60 + "\n\n")
 
