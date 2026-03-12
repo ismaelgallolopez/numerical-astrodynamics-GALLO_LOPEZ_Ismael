@@ -12,6 +12,7 @@ http://tudat.tudelft.nl/LICENSE.
 from interplanetary_transfer_helper_functions import *
 import time
 import datetime
+import csv
 
 # Load spice kernels.
 spice.load_standard_kernels()
@@ -276,21 +277,44 @@ if __name__ == "__main__":
     p_b = rsw_acceleration_magnitude
     std_dev = 0.4 * np.linalg.norm(p_b)
 
-    n_monte_carlo = 10
-    average_thrust_list = []
-    p1_deviation_list = []
+    n_monte_carlo = 1000
+    monte_carlo_csv_path = os.path.join(output_directory, "q4_monte_carlo_runs.csv")
+    os.makedirs(output_directory, exist_ok=True)
 
-    lowest_cost = np.inf
-    best_p1 = None
-    best_p2 = None
+    if not os.path.exists(monte_carlo_csv_path):
+        with open(monte_carlo_csv_path, 'w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(
+                [
+                    "run_idx",
+                    "converged",
+                    "iter_arc2",
+                    "p1_r",
+                    "p1_s",
+                    "p1_w",
+                    "p2_r",
+                    "p2_s",
+                    "p2_w",
+                    "average_thrust",
+                    "p1_deviation",
+                ]
+            )
+        existing_rows = 0
+    else:
+        with open(monte_carlo_csv_path, 'r', newline='') as csv_file:
+            existing_rows = sum(1 for _ in csv_file) - 1
+        if existing_rows < 0:
+            existing_rows = 0
+
+    start_run = min(existing_rows, n_monte_carlo)
 
     mc_start_time = time.time()
 
-    print('starting monte carlo')
+    print(f"starting monte carlo from run {start_run}/{n_monte_carlo}")
 
-    for mc_idx in range(n_monte_carlo):
+    for mc_idx in range(start_run, n_monte_carlo):
 
-        if mc_idx % 1 == 0:
+        if mc_idx % 10 == 0:
             print(f"run {mc_idx}/{n_monte_carlo} (time so far: {time.time() - mc_start_time} s)")
 
         p1_trial = np.random.normal(loc=p_b, scale=std_dev, size=3)
@@ -360,21 +384,64 @@ if __name__ == "__main__":
                 print('non converging monte carlo. run', mc_idx)
                 break
 
-        average_thrust = (np.linalg.norm(p1_trial) + np.linalg.norm(p2_trial))/2
-        p1_deviation = np.linalg.norm(p1_trial - p_b)
+        if iter_mc > 50:
+            converged = 0
+            average_thrust = np.nan
+            p1_deviation = np.nan
+            p2_to_write = np.array([np.nan, np.nan, np.nan])
+        else:
+            converged = 1
+            average_thrust = (np.linalg.norm(p1_trial) + np.linalg.norm(p2_trial))/2
+            p1_deviation = np.linalg.norm(p1_trial - p_b)
+            p2_to_write = p2_trial.copy()
 
-        average_thrust_list.append(average_thrust)
-        p1_deviation_list.append(p1_deviation)
+        with open(monte_carlo_csv_path, 'a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(
+                [
+                    mc_idx,
+                    converged,
+                    iter_mc,
+                    p1_trial[0],
+                    p1_trial[1],
+                    p1_trial[2],
+                    p2_to_write[0],
+                    p2_to_write[1],
+                    p2_to_write[2],
+                    average_thrust,
+                    p1_deviation,
+                ]
+            )
 
-        if average_thrust < lowest_cost:
-            lowest_cost = average_thrust
-            best_p1 = p1_trial.copy()
-            best_p2 = p2_trial.copy()
+    mc_raw = np.genfromtxt(
+        monte_carlo_csv_path,
+        delimiter=',',
+        names=True,
+        dtype=None,
+        encoding='utf-8',
+    )
+    mc_raw = np.atleast_1d(mc_raw)
+
+    converged_mask = mc_raw['converged'] == 1
+    if not np.any(converged_mask):
+        raise RuntimeError("No converged Monte Carlo runs found in CSV file.")
+
+    converged_data = mc_raw[converged_mask]
+
+    average_thrust_list = converged_data['average_thrust'].tolist()
+    p1_deviation_list = converged_data['p1_deviation'].tolist()
+
+    best_local_idx = int(np.argmin(converged_data['average_thrust']))
+    best_row = converged_data[best_local_idx]
+    lowest_cost = float(best_row['average_thrust'])
+    best_run = int(best_row['run_idx'])
+    best_p1 = np.array([best_row['p1_r'], best_row['p1_s'], best_row['p1_w']], dtype=float)
+    best_p2 = np.array([best_row['p2_r'], best_row['p2_s'], best_row['p2_w']], dtype=float)
 
     mc_end_time = time.time()
     mc_elapsed_seconds = mc_end_time - mc_start_time
     print(f"monte carlo time: {mc_elapsed_seconds/60.0:.2f} min, average per run {mc_elapsed_seconds/n_monte_carlo} s")
-
+    print('best run', best_run)
     print('best average thrust', lowest_cost) # what the assignment asks to plot
     print('best p1', best_p1)
     print('best p2', best_p2)
@@ -386,8 +453,71 @@ if __name__ == "__main__":
         mc_log.write(f"Date           : {date}\n")
         mc_log.write(f"Runs           : {n_monte_carlo}\n")
         mc_log.write(f"Elapsed        : {mc_elapsed_seconds/60.0:.2f} min\n")
+        mc_log.write(f"Converged runs : {len(average_thrust_list)}\n")
         mc_log.write(f"Best avg thrust: {lowest_cost:.6e} m/s^2\n")
         mc_log.write(f"best_p1 (R,S,W): {best_p1[0]:.6e}  {best_p1[1]:.6e}  {best_p1[2]:.6e} m/s^2\n")
         mc_log.write(f"best_p2 (R,S,W): {best_p2[0]:.6e}  {best_p2[1]:.6e}  {best_p2[2]:.6e} m/s^2\n")
         mc_log.write("=" * 60 + "\n\n")
 
+    if n_monte_carlo >= 1000: # to avoid overwriting if it is not compliant with the assignment
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        ax.scatter(p1_deviation_list, average_thrust_list, alpha=0.6, edgecolors='w', s=40)
+        
+        # Optional: Plot a distinct marker for the optimum point
+        best_dev = np.linalg.norm(best_p1 - p_b)
+        ax.scatter(best_dev, lowest_cost, color='red', marker='*', s=200, label='Optimum Found')
+
+        ax.set_xlabel('Deviation from initial guess $||p_1 - p^{(b)}||$ [m/s$^2$]', fontsize=12)
+        ax.set_ylabel('Average Thrust $(||p_1|| + ||p_2||)/2$ [m/s$^2$]', fontsize=12)
+        ax.set_title('Monte Carlo Analysis: Low-Thrust Optimization (Question 4d)', fontsize=14)
+        ax.set_yscale('log')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.legend()
+
+        plt.tight_layout()
+        plt.savefig("figures/Q4_d_monte_carlo_scatter.pdf", format='pdf', bbox_inches='tight')
+        plt.close(fig)
+
+
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+        # Time arrays for plotting
+        time_arc1_days = (np.array(list(state_history_arc1.keys())) - departure_epoch_with_buffer) / constants.JULIAN_DAY
+        time_arc2_days = (np.array(list(sh_arc2.keys())) - departure_epoch_with_buffer) / constants.JULIAN_DAY
+        time_full_days = np.concatenate((time_arc1_days, time_arc2_days))
+
+        # --- Top Subplot: Baseline Model (Question 4b) ---
+        # The baseline is just the constant p_b vector across the whole transfer
+        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[0]), label='Radial (R)', color='tab:blue')
+        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[1]), label='Along-track (S)', color='tab:orange')
+        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[2]), label='Cross-track (W)', color='tab:green')
+        
+        ax1.set_ylabel('Acceleration [m/s$^2$]')
+        ax1.set_title('Baseline Single-Arc Thrust Profile (Question 4b)')
+        ax1.grid(True, linestyle='--', alpha=0.7)
+        ax1.legend()
+
+        # --- Bottom Subplot: Optimal Model (Question 4d) ---
+        # The optimal model uses best_p1 for Arc 1 and best_p2 for Arc 2
+        r_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[0]), np.full_like(time_arc2_days, best_p2[0])))
+        s_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[1]), np.full_like(time_arc2_days, best_p2[1])))
+        w_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[2]), np.full_like(time_arc2_days, best_p2[2])))
+
+        ax2.plot(time_full_days, r_opt, label='Radial (R)', color='tab:blue')
+        ax2.plot(time_full_days, s_opt, label='Along-track (S)', color='tab:orange')
+        ax2.plot(time_full_days, w_opt, label='Cross-track (W)', color='tab:green')
+        
+        midpoint_day = (midpoint_epoch - departure_epoch_with_buffer) / constants.JULIAN_DAY
+        ax2.axvline(x=midpoint_day, color='black', linestyle='--', alpha=0.5, label='Arc Switch')
+
+        ax2.set_xlabel('Time since departure [days]')
+        ax2.set_ylabel('Acceleration [m/s$^2$]')
+        ax2.set_title('Optimal Two-Arc Thrust Profile (Question 4d)')
+        ax2.grid(True, linestyle='--', alpha=0.7)
+        ax2.legend()
+
+        plt.tight_layout()
+        plt.savefig("figures/Q4_d_optimal_thrust_profile.pdf", format='pdf', bbox_inches='tight')
+        plt.close(fig)
