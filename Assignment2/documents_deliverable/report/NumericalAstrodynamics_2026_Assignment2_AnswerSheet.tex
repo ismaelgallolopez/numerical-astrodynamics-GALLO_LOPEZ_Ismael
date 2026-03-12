@@ -59,7 +59,7 @@ People you worked with (if none, state this):
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{../../figures/Q1_trajectory_3d.pdf}
+    \includegraphics[width=0.7\textwidth]{../../figures/Q1_trajectory_3d.pdf}
     \caption{Trajectory of the spacecraft in the inertial frame.}
     \label{fig:Q1_trajectory_3d}
 \end{figure}
@@ -156,8 +156,8 @@ That evaluation results in \autoref{eq:fom}:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{../../figures/Q2_Figure_of_Merit.pdf}
-    \caption{Figure of Merit for spacecraft masses of 250 and 500 kg compared to the baseline (1000 kg).}
+    \includegraphics[width=0.8\textwidth]{../../figures/Q2_Figure_of_Merit.pdf}SS
+    \caption{Figure of Merit (FoM) for spacecraft masses of 250 and 500 kg compared to the baseline (1000 kg).}
     \label{fig:Q2_Figure_of_Merit}
 \end{figure}
 
@@ -170,7 +170,7 @@ This can be explained by the fact that the linearization assumption breaks down 
 
 \subsection*{a}
 % \textit{Insert figure}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{../../figures/Q3_a_discontinuous_trajectory.pdf}
     \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc.}
@@ -188,34 +188,68 @@ This can be explained by the fact that the linearization assumption breaks down 
 \end{equation}
 
 Since the initial position is to be kept fixed, ($\Delta \mathbf{r}_i = \mathbf{0}$), and thus:
-\begin{equation}
+\begin{equation} \label{eq:linear_change_velocity}
     \Delta \mathbf{v}_i = \mathbf{\Phi}_{rv,i}^{-1} \Delta \mathbf{r}_{i+1}
 \end{equation}
 
 \subsection*{c}
 % \textit{Insert figure}\\
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{../../figures/Q3_c_single_correction.pdf}
-    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, for modified with the differential equations formulation.}
+    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, corrected with the linearized equations formulation.}
     \label{fig:Q3_c_single_correction}
 \end{figure}
 
 \subsection*{d}
 % \textit{Insert figure}\\
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{../../figures/Q3_d_iterative_correction.pdf}
     \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, for iterative modified final position.}
     \label{fig:Q3_d_iterative_correction}
 \end{figure}
-\textit{Insert table}\\
-\textbf{\textit{Provide explanation why some arcs require more iterations than others.}}
+
+\begin{table}[H]
+    \centering
+    \caption{Number of iterations required for each arc to converge to within 1 m of Lambert arc.}
+    \label{tab:Q3_d_convergence}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        Arc (\#) & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+        \hline
+        Iterations to converge & 2 & 2 & 2 & 1 & 1 & 1 & 1 & 1 & 2 & 3 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% \textbf{\textit{Provide explanation why some arcs require more iterations than others.}}
+From \autoref{tab:Q3_d_convergence} it can be observed that the arcs in the middle of the propagation require less iterations than the middle ones.
+The underlying reason is that the equation solved in \autoref{fig:Q3_c_single_correction} (\autoref{eq:linear_change_velocity}), is a linear approximation. 
+Hence, in the extremes of the simulation, non-linearities are stronger and thus require to iterate further from the linear correction.
 
 \subsection*{e}
-\textit{Provide derivation/assumptions}\\
-$\Delta V=$.... (equation)\\
-$\Delta V=$.... (number)
+% \textit{Provide derivation/assumptions}\\
+% $\Delta V=$.... (equation)\\
+% $\Delta V=$.... (number)
+
+Assumptions:
+\begin{enumerate}
+    \item Maneuvers are impulsive and occur instantaneously at the start of each arc.
+    \item Remaining position errors (< 1 m) between arcs are ignored for the $\Delta V$ budget.
+\end{enumerate}
+
+The total mission $\Delta V$ is the sum of the magnitude of the initial correction maneuver and the magnitudes of the velocity jumps at each of the $N-1$ intermediate nodes:
+\begin{equation}
+    \Delta V = \|\Delta \mathbf{v}_0\| + \sum_{i=0}^{N-2} \|\mathbf{v}_{i+1}(t_{0,i+1}) - \mathbf{v}_i(t_{f,i})\|
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item $\|\Delta \mathbf{v}_0\|$ is the norm of the first impulsive correction at departure.
+    \item $\mathbf{v}_i(t_{f,i})$ is the state vector velocity at the end of arc $i$.
+    \item $\mathbf{v}_{i+1}(t_{0,i+1})$ is the state vector velocity at the start of arc $i+1$
+\end{itemize}
 
 \clearpage
 
