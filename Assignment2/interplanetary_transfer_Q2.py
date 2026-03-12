@@ -57,6 +57,9 @@ if __name__ == "__main__":
     # List cases to iterate over. STUDENT NOTE: feel free to modify if you see fit
     cases = ["case_i", "case_ii", "case_iii", "case_iv"]
     case_iv_masses = [250.0, 500, 1000.0]
+    
+    case_iv_state_histories = {}
+    case_iv_lambert_histories = {}
 
     # Run propagation for each of cases i-iii
     for i, case in enumerate(cases):
@@ -206,6 +209,10 @@ if __name__ == "__main__":
             state_history = dynamics_simulator.propagation_results.state_history
             lambert_history = get_lambert_arc_history(lambert_arc_ephemeris, state_history)
             # print(lambert_history) # debugging
+            
+            if i == 3:
+                case_iv_state_histories[int(mass_spacecraft)] = state_history
+                case_iv_lambert_histories[int(mass_spacecraft)] = lambert_history
         
             state_history_array = np.vstack(list(state_history.values()))
             lambert_history_array = np.vstack(list(lambert_history.values()))
@@ -243,27 +250,33 @@ if __name__ == "__main__":
                 velocity_difference_norm_plot[np.argmin(velocity_difference_norm)] = np.nan
 
             # 2. Create the plots
-            fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+            fig, axs = plt.subplots(3, 1, figsize=(10, 5), sharex=True)
 
             # Plot delta r
             axs[0].plot(time_days, position_difference_norm_plot, color='blue', linewidth=1.5)
             axs[0].set_yscale('log')
-            axs[0].set_ylabel('$\Delta r$ [m]', fontsize=12)
+            axs[0].set_ylabel('$\Delta r$ [m]', fontsize=16)
+            axs[0].tick_params(axis='both', labelsize=15)
             axs[0].grid(True, linestyle='--', alpha=0.7)
-            axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
+            # axs[0].set_title(f'Trajectory Deviations: {case.replace("_", " ").title()}', fontsize=14)
 
             # Plot delta v
             axs[1].plot(time_days, velocity_difference_norm_plot, color='green', linewidth=1.5)
             axs[1].set_yscale('log')
-            axs[1].set_ylabel('$\Delta v$ [m/s]', fontsize=12)
+            axs[1].set_ylabel('$\Delta v$ [m/s]', fontsize=16)
+            axs[1].tick_params(axis='both', labelsize=15)
             axs[1].grid(True, linestyle='--', alpha=0.7)
 
             # Plot delta a
             axs[2].plot(time_days, acceleration_difference_norm_plot, color='red', linewidth=1.5)
             axs[2].set_yscale('log')
-            axs[2].set_ylabel('$\Delta a$ [m/s$^2$]', fontsize=12)
-            axs[2].set_xlabel('Time since start of propagation [days]', fontsize=12)
+            axs[2].set_ylabel('$\Delta a$ [m/s$^2$]', fontsize=16)
+            axs[2].set_xlabel('Time since start of propagation [days]', fontsize=16)
+            axs[2].tick_params(axis='both', labelsize=15)
             axs[2].grid(True, linestyle='--', alpha=0.7)
+
+            # axs[2].set_xlim([time_days[0], time_days[-1]])
+
 
             # Formatting to ensure legibility as per course reporting instructions
             plt.tight_layout()
@@ -274,3 +287,52 @@ if __name__ == "__main__":
 
             # Close the figure to free up memory before the next loop iteration
             plt.close(fig)
+
+if 1000 in case_iv_state_histories and 500 in case_iv_state_histories and 250 in case_iv_state_histories:
+        
+        state_1000 = np.vstack(list(case_iv_state_histories[1000].values()))[:, 0:3]
+        state_500 = np.vstack(list(case_iv_state_histories[500].values()))[:, 0:3]
+        state_250 = np.vstack(list(case_iv_state_histories[250].values()))[:, 0:3]
+        
+        diff_500 = np.linalg.norm(state_500 - state_1000, axis=1)
+        diff_250 = np.linalg.norm(state_250 - state_1000, axis=1)
+        
+        threshold = 0.0
+        FoM = np.where(diff_500 > threshold, diff_250 / (3.0 * diff_500), np.nan)
+        
+        epochs = np.array(list(case_iv_state_histories[1000].keys()))
+        time_days = (epochs - epochs[0]) / constants.JULIAN_DAY
+        
+        print("\n--- Figure of Merit vs Time ---")
+        print("FoM Mean   :", np.nanmean(FoM))
+        print("FoM Std    :", np.nanstd(FoM))
+
+        # Create the figure
+        fig_fom, ax_fom = plt.subplots(figsize=(10, 6))
+
+        # Plot the FoM data
+        ax_fom.plot(time_days, FoM, color='darkred', linewidth=2, label='Actual / Expected Ratio')
+
+        # Add a horizontal line at 1.0 to represent perfect linearity
+        ax_fom.axhline(y=1.0, color='black', linestyle='--', alpha=0.8, label='Perfect Linearity (FoM = 1.0)')
+
+        # Formatting the plot for the report
+        ax_fom.set_xlabel('Time since departure [days]', fontsize=12)
+        ax_fom.set_ylabel('Figure of Merit (FoM)', fontsize=12)
+        ax_fom.set_title('Linearity of Mass Perturbation Effect over Time', fontsize=14)
+        ax_fom.grid(True, linestyle='--', alpha=0.7)
+        ax_fom.legend(fontsize=12)
+
+        # Constrain the x-axis to exactly match the data bounds
+        ax_fom.set_xlim([time_days[0], time_days[-1]])
+
+        # Optional: You can set y-limits if the FoM is very close to 1, to prevent auto-scaling issues
+        # ax_fom.set_ylim([0.9, 1.1]) 
+
+        plt.tight_layout()
+
+        # Save the figure
+        figures_directory = "./figures/"
+        os.makedirs(figures_directory, exist_ok=True)
+        fig_fom.savefig(os.path.join(figures_directory, "Q2_Figure_of_Merit.pdf"), format="pdf", bbox_inches="tight")
+        plt.close(fig_fom)
