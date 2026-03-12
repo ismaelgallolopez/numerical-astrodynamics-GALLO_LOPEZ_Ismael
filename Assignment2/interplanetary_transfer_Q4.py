@@ -146,6 +146,14 @@ if __name__ == "__main__":
     plt.savefig("figures/Q4_b_continuous_thrust_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
 
+    write_propagation_results_to_file(
+        dynamics_simulator,
+        lambert_arc_ephemeris,
+        "Q4_b",
+        output_directory,
+    )
+    save_output_to_file(13, "Q4_b", output_directory, state=-1)
+
     ###########################################################################
     # RUN CODE FOR QUESTION 4c ################################################
     ###########################################################################
@@ -269,6 +277,14 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig("figures/Q4_c_two_arc_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
+
+    write_propagation_results_to_file(
+        dynamics_arc2,
+        lambert_arc_ephemeris,
+        "Q4_c",
+        output_directory,
+    )
+    save_output_to_file(14, "Q4_c", output_directory, state=-1)
 
     ###########################################################################
     # RUN CODE FOR QUESTION 4d ################################################
