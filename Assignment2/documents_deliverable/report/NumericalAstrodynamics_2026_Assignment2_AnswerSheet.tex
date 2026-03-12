@@ -12,8 +12,9 @@
 \usepackage{float}
 
 
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{.6in}
+% \addtolength{\topmargin}{-.7in}
+% \addtolength{\textheight}{.6in}
+\usepackage[a4paper, left=1.80cm, right=1.80cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry} 
 
 
 \begin{document}
@@ -74,13 +75,13 @@ People you worked with (if none, state this):
 \begin{enumerate}
     % \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
     % \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item Central body located at the origin (non-moving); False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
-    \item Only central body point mass exerts an acceleration; True; Idem.
-    \item Start position w.r.t. central body is defined; True; Idem.
-    \item End position w.r.t. central body is defined; True; Idem.
-    \item Time of flight is defined; True; Is an input parameter of the propagation.
-    \item At most a single revolution around central body (in this case); True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
-    \item Prograde orbit; True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
+    \item \textbf{Central body located at the origin (non-moving)}; False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
+    \item \textbf{Only central body point mass exerts an acceleration}; True; Imposed by the environment.
+    \item \textbf{Start position w.r.t. central body is defined}; True; Idem.
+    \item \textbf{End position w.r.t. central body is defined}; False; in the propagation, the end position is a result of the integration, not a predefined value.
+    \item \textbf{Time of flight is defined}; True; Is an input parameter of the propagation.
+    % \item At most a single revolution around central body (in this case); True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
+    % \item Prograde orbit; True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
 \end{enumerate}
 
 \clearpage
@@ -106,6 +107,9 @@ People you worked with (if none, state this):
 \end{figure}
 
 \begin{figure}[H]
+
+
+    
     \centering
     \includegraphics[width=0.8\textwidth]{../../figures/Q2_case_iii_deviations.pdf}
     \caption{Differences between the numerical propagation and the environment-provided positions, case \textit{iii}.}
@@ -119,32 +123,47 @@ People you worked with (if none, state this):
     \label{fig:Q2_case_iv_m1000_deviations}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../../figures/Q2_case_iv_m500_deviations.pdf}
-    \caption{Differences between the numerical propagation and the environment-provided positions, case \textit{iv}, with mass of 500 kg.}
-    \label{fig:Q2_case_iv_m500_deviations}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../../figures/Q2_case_iv_m250_deviations.pdf}
-    \caption{Differences between the numerical propagation and the environment-provided positions, case \textit{iv}, with mass of 250 kg.}
-    \label{fig:Q2_case_iv_m250_deviations}
-\end{figure}
-
-
-
 \subsection*{b}
-\textbf{\textit{Provide reason that increasing buffer time generally reduces $\Delta r$ }}\\
-\textbf{\textit{Provide that propagating from arc center leads to lower $\Delta r$}}
+% \textbf{\textit{Provide reason that increasing buffer time generally reduces $\Delta r$ }}\\
+% \textbf{\textit{Provide that propagating from arc center leads to lower $\Delta r$}}
+The reason why increassing buffer time generally reduces $\Delta r$ is very simple. 
+By avoiding the center of mass of the celestial bodies at the beginning and at the end of the propagation, the singularity of the acceleration is avoided ($\mathbf{a} \propto 1/r^2$). 
+This can be observed in the figures for cases \textit{i} and \textit{ii}, where the acceleration for case \textit{i} is of order $10^{22}$ m/s$^2$ (\autoref{fig:Q2_case_i_deviations}); while for the case in \autoref{fig:Q2_case_ii_deviations} it is much lower, on the order of 10 m/s$^2$.
+
+In the other habnd the reason why propagating from the arc center leads to lower $\Delta r$ is that propagation errors build with non linearly.
+Thus, forward-only propagation lets errors build up for the whole duration of the arc, while propagating from the center allows to split the error build-up in two, thus reducing the final error. 
 
 \subsection*{c}
 
-\textit{Insert figure(s)}\\
-\textit{Define linearity figure of merit (mathematically)}\\
-\textbf{\textit{Explain why figure of merit is a good one for this purpose}}\\
-\textbf{\textit{Answer question on linearity}}\\
+% \textit{Insert figure(s)}\\
+% \textit{Define linearity figure of merit (mathematically)}\\
+% \textbf{\textit{Explain why figure of merit is a good one for this purpose}}\\
+% \textbf{\textit{Answer question on linearity}}\\
+
+Because the $a_{SRP} \propto 1/m$, $\Delta r$ has to be evaluated as the inverse of the mass.
+That evaluation results in \autoref{eq:fom}:
+
+\begin{equation} \label{eq:fom}
+    \text{FoM} = \frac{||\Delta \mathbf{r}_{250}||}{3 ||\Delta \mathbf{r}_{500}||}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q2_Mass_Position_Difference.pdf}
+    \caption{Position differences for different spacecraft masses.}
+    \label{fig:Q2_Mass_Position_Difference}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q2_Figure_of_Merit.pdf}
+    \caption{Figure of Merit for spacecraft masses of 250 and 500 kg compared to the baseline (1000 kg).}
+    \label{fig:Q2_Figure_of_Merit}
+\end{figure}
+
+From \autoref{fig:Q2_Figure_of_Merit} it can be observed that the FoM is close to 1 for most of the propagation, which indicates that the effect is close to being linear.
+However, at the beginning and at the end of the propagation, the FoM deviates significantly from 1, which indicates that the effect does not hold for cases with bigger accelerations and deviations (as it can be seen in \autoref{fig:Q2_Mass_Position_Difference}.)
+This can be explained by the fact that the linearization assumption breaks down in regions of high acceleration or large deviations.
 
 \clearpage
 \section*{Question 3}
@@ -174,10 +193,22 @@ Since the initial position is to be kept fixed, ($\Delta \mathbf{r}_i = \mathbf{
 \end{equation}
 
 \subsection*{c}
-\textit{Insert figure}\\
+% \textit{Insert figure}\\
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q3_c_single_correction.pdf}
+    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, for modified with the differential equations formulation.}
+    \label{fig:Q3_c_single_correction}
+\end{figure}
 
 \subsection*{d}
-\textit{Insert figure}\\
+% \textit{Insert figure}\\
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q3_d_iterative_correction.pdf}
+    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, for iterative modified final position.}
+    \label{fig:Q3_d_iterative_correction}
+\end{figure}
 \textit{Insert table}\\
 \textbf{\textit{Provide explanation why some arcs require more iterations than others.}}
 
