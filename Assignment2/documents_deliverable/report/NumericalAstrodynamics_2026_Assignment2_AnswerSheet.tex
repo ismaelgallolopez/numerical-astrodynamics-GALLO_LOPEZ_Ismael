@@ -34,10 +34,10 @@ Github link: \textit{\href{https://github.com/ismaelgallolopez/numerical-astrody
 
 Time spent per exercise:
 \begin{enumerate}
-    \item \ldots
-    \item \ldots
-    \item \ldots
-    \item \ldots
+    \item 5 hours
+    \item 8 hours
+    \item 12 hours
+    \item 10 hours
 
 \end{enumerate} 
 
@@ -75,11 +75,11 @@ People you worked with (if none, state this):
 \begin{enumerate}
     % \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
     % \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item \textbf{Central body located at the origin (non-moving)}; False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
     \item \textbf{Only central body point mass exerts an acceleration}; True; Imposed by the environment.
     \item \textbf{Start position w.r.t. central body is defined}; True; Idem.
-    \item \textbf{End position w.r.t. central body is defined}; False; in the propagation, the end position is a result of the integration, not a predefined value.
+    \item \textbf{End position w.r.t. central body is defined}; False; The end position is a result of the integration.
     \item \textbf{Time of flight is defined}; True; Is an input parameter of the propagation.
+    \item \textbf{Central body located at the origin (non-moving)}; False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
     % \item At most a single revolution around central body (in this case); True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
     % \item Prograde orbit; True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
 \end{enumerate}
@@ -256,39 +256,144 @@ Where:
 \section*{Question 4}
 
 \subsection*{a}
-\textit{Provide derivation/assumptions}\\
-$\mathbf{p}=...$
+% \textit{Provide derivation/assumptions}\\
+% $\mathbf{p}=...$
+
+The full linearized relationsip that links the changes in the initial state and system parameters to a change in the final state is:
+\begin{equation} \label{eq:full_linear_params}
+    \Delta \mathbf{x}(t_E) = \Phi(t_E, t_0)\Delta \mathbf{x}(t_0) + S(t_E)\mathbf{p}
+\end{equation}
+
+But the initial condition is that the numerical propagation starts at the same initial state as the Lambert arc: $\Delta \mathbf{x}(t_0) = \mathbf{0}$; hence \autoref{eq:full_linear_params} simplifies to:
+\begin{equation}
+    \Delta \mathbf{x}(t_E) = S(t_E)\mathbf{p}
+\end{equation}
+
+Isolating the parameter vector as done in \autoref{eq:linear_change_velocity}, the equation can be rewritten as:
+\begin{equation}
+    \mathbf{p} = S_r(t_E)^{-1} \Delta \mathbf{r}(t_E)
+\end{equation}
 
 \subsection*{b}
-\textit{Insert figure}\\
-The derived model is valid: \textbf{\textit{yes/no}}\\ 
-\textbf{\textit{Provide argumentation why you conclude your model is (not) valid.}}
+% \textit{Insert figure}\\
+% The derived model is valid: \textbf{\textit{yes/no}}\\ 
+% \textbf{\textit{Provide argumentation why you conclude your model is (not) valid.}}
+
+The validity of the model developed in \textbf{a} is a little subjective. 
+Even though the model reduces the final position deviation in comparison with the one shown in \autoref{fig:Q2_case_iii_deviations}, the position residual is still much greater than what would be an acceptable value, as can be seen in \autoref{fig:Q4_b_continuous_thrust_correction}. 
+Becayse of the limitations of the linearized model, the correction is not sufficient to reduce the position error to an acceptable level, and thus, the model cannot be considered valid for this purpose.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q4_b_continuous_thrust_correction.pdf}
+    \caption{Deviation of position for discontinuous propagated trajectory with respect to Lambert arc, for correction of system parameters.}
+    \label{fig:Q4_b_continuous_thrust_correction}
+\end{figure}
 
 \subsection*{c.i}
 
-\textit{Provide derivation/assumptions}\\
-$\mathbf{p}_{2}=...$\\
-\textbf{\textit{Write out procedure for computing $\mathbf{p}_{2}$}}\\
-\begin{itemize}
-    \item $\mathbf{p}_{1}=...$ (from 4a)
-    \item ...
-    \item ...
-    \item $\mathbf{p}_{2}=...$ (from this question)
-\end{itemize}
+% \textit{Provide derivation/assumptions}\\
+% $\mathbf{p}_{2}=...$\\
+% \textbf{\textit{Write out procedure for computing $\mathbf{p}_{2}$}}\\
+% \begin{itemize}
+%     \item $\mathbf{p}_{1}=...$ (from 4a)
+%     \item ...
+%     \item ...
+%     \item $\mathbf{p}_{2}=...$ (from this question)
+% \end{itemize}
+
+One of the assumptions is that continuity in the state vector is imposed in the midpoint. 
+Another assumption is that the system is enough non-linear to require an iterative solution search. 
+
+For Arc 2, the change in the final position due to a change in the thrust vector is mapped by the position sensitivity matrix. 
+At any iteration, the residual position error is $\Delta \mathbf{r}^{(k)} = \bar{\mathbf{r}}(t_E) - \mathbf{r}_2^{(k)}(t_E)$. 
+We solve the linearized relation $\Delta \mathbf{r}^{(k)} = S_{r,2}(t_E) \Delta \mathbf{p}_2$ for the required thrust adjustment, and add it to our current guess.
+\begin{equation}
+    \mathbf{p}_{2}^{(k+1)} = \mathbf{p}_{2}^{(k)} + S_{r,2}(t_E)^{-1} \left( \bar{\mathbf{r}}(t_E) - \mathbf{r}_{2}^{(k)}(t_E) \right)
+\end{equation}
+
+Procedure for computing $\mathbf{p}_2$:
+\begin{enumerate}
+    \item $\mathbf{p}_{1}=\mathbf{p}^{(b)}$ (from \textbf{a})
+    \item Propagate the dynamics of Arc 1 from $t_0$ to $t_{mid}$ using the Lambert initial state and the constant thrust $\mathbf{p}_1$. 
+    \item Extract the final state $\mathbf{x}_1(t_{mid})$.
+    \item Set the initial state of Arc 2 exactly to $\mathbf{x}_2(t_{mid}) = \mathbf{x}_1(t_{mid})$ and initialize the thrust guess as $\mathbf{p}_2^{(0)} = \mathbf{0}$.
+    \item Iteratively propagate the variational equations for Arc 2 from $t_{mid}$ to $t_E$ to obtain the numerical position $\mathbf{r}_2^{(k)}(t_E)$ and the sensitivity matrix $S_{r,2}(t_E)$, applying the derived update equation for $\mathbf{p}_2$ until the boundary error $||\bar{\mathbf{r}}(t_E) - \mathbf{r}_2(t_E)|| < 1$ m.
+    \item The final converged acceleration vector from the iterative loop $\rightarrow \mathbf{p}_{2}$.
+\end{enumerate}
 
 \subsection*{c.ii}
 
-\textbf{\textit{Answer question on value of $\mathbf{p}_{2}$}}
+% \textbf{\textit{Answer question on value of $\mathbf{p}_{2}$}}
+
+The value of $\mathbf{p}_2$ is not substantially different from $\mathbf{p}^{(b)}$. 
+As seen in \autoref{tab:p1_vs_p2}, both vectors have roughly the same magnitude and point in almost exactly the same direction, with the component dominating in both cases.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparison of continuous thrust acceleration vectors for Arc 1 and Arc 2.}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Radial ($a_R$)} & \textbf{Along-track ($a_S$)} & \textbf{Cross-track ($a_W$)} & \textbf{Magnitude ($||\mathbf{p}||$)} \\
+         & [m/s$^2$] & [m/s$^2$] & [m/s$^2$] & [m/s$^2$] \\
+        \hline
+        $\mathbf{p}_1$ (or $\mathbf{p}^{(b)}$) & $-4.7698 \times 10^{-5}$ & $-1.5101 \times 10^{-5}$ & $5.4854 \times 10^{-7}$ & $5.0035 \times 10^{-5}$ \\
+        \hline
+        $\mathbf{p}_2$ & $-4.7154 \times 10^{-5}$ & $-9.6424 \times 10^{-6}$ & $4.3066 \times 10^{-6}$ & $4.8322 \times 10^{-5}$ \\
+        \hline
+    \end{tabular}
+    \label{tab:p1_vs_p2}
+\end{table}
+
+The vector $\mathbf{p}^{(b)}$ was computed in \textbf{a} to completely eliminate the final position deviation over the entire transfer duration, relying on the linear approximation $\Delta \mathbf{r}(t_E) = S_r(t_E) \mathbf{p}$. 
+By setting $\mathbf{p}_1 = \mathbf{p}^{(b)}$ for the first arc, the spacecraft is placed on a trajectory that fundamentally corrects the vast majority of the Lambert deviation right from the start. 
+
+If the orbital dynamics were perfectly linear, the spacecraft would hit the exact target at $t_E$ simply by maintaining $\mathbf{p}^{(b)}$ for the second arc as well. 
+However, because the N-body gravitational field contains slight non-linearities, a small residual error accumulates by the time the spacecraft reaches the midpoint ($t_{mid}$). 
+
+Therefore, the differential correction algorithm for the second arc does not have to correct the massive initial unperturbed Lambert discrepancy; it only has to compute a thrust $\mathbf{p}_2$ that compensates for the minor non-linear residuals accumulated during Arc 1. 
+Because these non-linear effects are relatively small over this specific interplanetary transfer, the required $\mathbf{p}_2$ correction remains very close to the original $\mathbf{p}^{(b)}$ linear guess.
 
 \subsection*{d.i}
 
-\textit{Insert figure(s)}
+% \textit{Insert figure(s)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q4_d_monte_carlo_scatter.pdf}
+    \caption{Monte Carlo results for Arc 2.}
+    \label{fig:Q4_d_monte_carlo_results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../../figures/Q4_d_optimal_thrust_profile.pdf}
+    \caption{Optimal thrust profile for Arc 2.}
+    \label{fig:Q4_d_optimal_thrust_profile}
+\end{figure}
 
 \subsection*{d.ii}
 
-\textbf{\textit{Discuss observed behaviour of optimal thrust profile and answer the question}}
+% \textbf{\textit{Discuss observed behaviour of optimal thrust profile and answer the question}}
 
+Based on the Monte Carlo analysis and the resulting thrust profiles, the optimal two-arc solution found does provide a lower average thrust than the single-arc baseline solution from \textbf{b} and the highly constrained two-arc solution from \textbf{c}. 
 
+Looking at the thrust profile comparison, the single-arc baseline applies a constant, unchanging acceleration vector over the entire 150-day transfer. 
+In contrast, the optimal two-arc profile exhibits a distinct switching behaviour. 
+During Arc 1, the optimal thrust deviates from the baseline, thrusting more strongly in the negative along-track direction and less in the negative radial direction. 
+At the midpoint, the thrust vector drastically shifts, flipping to a positive radial and positive along-track acceleration. 
+
+This reduction in average thrust is achieved because the two-arc model with a randomized $p_1$ introduces an intermediate degree of freedom, allowing the spacecraft to exploit the natural orbital dynamics rather than fighting them. 
+
+The constant single-arc model is extremely rigid. 
+Its inefficiency stems from the fact that orbital sensitivity (how much a change in velocity affects the final position) varies greatly depending on the spacecraft's true anomaly and its distance from the Sun. 
+Forcing the exact same continuous thrust vector regardless of orbital phase means the spacecraft is thrusting highly inefficiently during certain parts of the transfer just to satisfy the rigid mathematical constraint of $p(t) = \text{constant}$. 
+In contrast, by exploiting orbital sensitivity through allowing $p_1$ to vary, the Monte Carlo method explores different intermediate trajectories. 
+The optimizer finds a specific $p_1$ that places the spacecraft into a region of the perturbed gravitational field where the sensitivity matrix is highly favourable, essentially using Arc 1 to set up an intermediate state where the required corrective thrust for Arc 2 is extremely cheap. 
+This optimal solution exhibits a remarkable thrust reversal; the sign flip in the $R$ and $S$ components perfectly illustrates orbital reshaping. 
+The most efficient way to correct the Lambert targeter's miss distance in this specific N-body environment is to brake/pull inwards during the first half of the transfer, and then accelerate/push outwards during the second half. 
+The single-arc model mathematically cannot reverse its thrust direction, so it must compromise with a higher-magnitude "average" brute-force push to reach the same final target point.
 
 % \section*{Question 2}
 

@@ -136,9 +136,10 @@ if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(time_days_q4, delta_r_q4, color='teal', linewidth=2)
 
-    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
-    ax.set_xlabel('Time since departure [days]', fontsize=12)
-    ax.set_title('Continuous Low-Thrust Corrected Propagation (Question 4c)', fontsize=14)
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+    ax.set_xlabel('Time since departure [days]', fontsize=16)
+    ax.tick_params(axis='both', which='major', labelsize=15)
+    # ax.set_title('Continuous Low-Thrust Corrected Propagation (Question 4c)', fontsize=14)
     ax.grid(True, linestyle='--', alpha=0.7)
     ax.set_yscale('log') # Log scale helps visualize the deviation growth before the forced target matching
 
@@ -198,7 +199,7 @@ if __name__ == "__main__":
 
     pos_dev_arc2 = lh_arc2[arrival_epoch_with_buffer][0:3] - sh_arc2[arrival_epoch_with_buffer][0:3]
 
-    # iter_count = 0 # debugging
+    iter_count = 0 # debugging
     while np.linalg.norm(pos_dev_arc2) >= 1.0:
 
         S_arc2 = smh_arc2[arrival_epoch_with_buffer][0:3, :]
@@ -220,7 +221,7 @@ if __name__ == "__main__":
 
         pos_dev_arc2 = lh_arc2[arrival_epoch_with_buffer][0:3] - sh_arc2[arrival_epoch_with_buffer][0:3]
 
-        # iter_count += 1 # debugging
+        iter_count += 1 # debugging
         # print(iter_count) # debugging
 
     print(rsw_acceleration_magnitude_1) # debugging
@@ -267,12 +268,13 @@ if __name__ == "__main__":
     midpoint_day = (midpoint_epoch - departure_epoch_with_buffer) / constants.JULIAN_DAY
     ax.axvline(x=midpoint_day, color='black', linestyle='--', alpha=0.5, label='Arc Boundary')
 
-    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
-    ax.set_xlabel('Time since departure [days]', fontsize=12)
-    ax.set_title('Two-Arc Continuous Low-Thrust Correction (Question 4c)', fontsize=14)
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+    ax.set_xlabel('Time since departure [days]', fontsize=16)
+    ax.tick_params(axis='both', which='major', labelsize=15)
+    # ax.set_title('Two-Arc Continuous Low-Thrust Correction (Question 4c)', fontsize=14)
     ax.grid(True, linestyle='--', alpha=0.7)
     ax.set_yscale('log')
-    ax.legend()
+    ax.legend(fontsize=16)
 
     plt.tight_layout()
     plt.savefig("figures/Q4_c_two_arc_correction.pdf", format='pdf', bbox_inches='tight')
@@ -350,7 +352,7 @@ if __name__ == "__main__":
         lambert_state_mid_mc = lambert_arc_ephemeris.cartesian_state(midpoint_epoch)
         arc2_init_corr_mc = state_mid_mc - lambert_state_mid_mc
 
-        p2_trial = np.zeros(3)
+        p2_trial = p1_trial.copy()
 
         var_solver_arc2_mc = propagate_variational_equations(
             midpoint_epoch,
@@ -396,11 +398,11 @@ if __name__ == "__main__":
             )
 
             iter_mc += 1
-            if iter_mc > 50:
+            if iter_mc > 100:
                 print('non converging monte carlo. run', mc_idx)
                 break
 
-        if iter_mc > 50:
+        if iter_mc > 100:
             converged = 0
             average_thrust = np.nan
             p1_deviation = np.nan
@@ -477,6 +479,9 @@ if __name__ == "__main__":
 
     if n_monte_carlo >= 1000: # to avoid overwriting if it is not compliant with the assignment
 
+        # ---------------------------------------------------------------------
+        # PLOT 1: MONTE CARLO SCATTER PLOT
+        # ---------------------------------------------------------------------
         fig, ax = plt.subplots(figsize=(10, 6))
 
         ax.scatter(p1_deviation_list, average_thrust_list, alpha=0.6, edgecolors='w', s=40)
@@ -485,54 +490,59 @@ if __name__ == "__main__":
         best_dev = np.linalg.norm(best_p1 - p_b)
         ax.scatter(best_dev, lowest_cost, color='red', marker='*', s=200, label='Optimum Found')
 
-        ax.set_xlabel('Deviation from initial guess $||p_1 - p^{(b)}||$ [m/s$^2$]', fontsize=12)
-        ax.set_ylabel('Average Thrust $(||p_1|| + ||p_2||)/2$ [m/s$^2$]', fontsize=12)
-        ax.set_title('Monte Carlo Analysis: Low-Thrust Optimization (Question 4d)', fontsize=14)
+        ax.set_xlabel('Deviation from initial guess $||p_1 - p^{(b)}||$ [m/s$^2$]', fontsize=16)
+        ax.set_ylabel('Average Thrust $(||p_1|| + ||p_2||)/2$ [m/s$^2$]', fontsize=16)
+        ax.tick_params(axis='both', which='major', labelsize=15)
         ax.set_yscale('log')
         ax.grid(True, linestyle='--', alpha=0.7)
-        ax.legend()
+        ax.legend(fontsize=16)
 
         plt.tight_layout()
         plt.savefig("figures/Q4_d_monte_carlo_scatter.pdf", format='pdf', bbox_inches='tight')
         plt.close(fig)
 
 
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+        # ---------------------------------------------------------------------
+        # PLOT 2: THRUST COMPONENTS VS TIME (3 SUBPLOTS)
+        # ---------------------------------------------------------------------
+        fig, axs = plt.subplots(3, 1, figsize=(10, 10), sharex=True)
 
         # Time arrays for plotting
         time_arc1_days = (np.array(list(state_history_arc1.keys())) - departure_epoch_with_buffer) / constants.JULIAN_DAY
         time_arc2_days = (np.array(list(sh_arc2.keys())) - departure_epoch_with_buffer) / constants.JULIAN_DAY
         time_full_days = np.concatenate((time_arc1_days, time_arc2_days))
+        midpoint_day = (midpoint_epoch - departure_epoch_with_buffer) / constants.JULIAN_DAY
 
-        # --- Top Subplot: Baseline Model (Question 4b) ---
-        # The baseline is just the constant p_b vector across the whole transfer
-        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[0]), label='Radial (R)', color='tab:blue')
-        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[1]), label='Along-track (S)', color='tab:orange')
-        ax1.plot(time_full_days, np.full_like(time_full_days, p_b[2]), label='Cross-track (W)', color='tab:green')
-        
-        ax1.set_ylabel('Acceleration [m/s$^2$]')
-        ax1.set_title('Baseline Single-Arc Thrust Profile (Question 4b)')
-        ax1.grid(True, linestyle='--', alpha=0.7)
-        ax1.legend()
-
-        # --- Bottom Subplot: Optimal Model (Question 4d) ---
         # The optimal model uses best_p1 for Arc 1 and best_p2 for Arc 2
         r_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[0]), np.full_like(time_arc2_days, best_p2[0])))
         s_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[1]), np.full_like(time_arc2_days, best_p2[1])))
         w_opt = np.concatenate((np.full_like(time_arc1_days, best_p1[2]), np.full_like(time_arc2_days, best_p2[2])))
 
-        ax2.plot(time_full_days, r_opt, label='Radial (R)', color='tab:blue')
-        ax2.plot(time_full_days, s_opt, label='Along-track (S)', color='tab:orange')
-        ax2.plot(time_full_days, w_opt, label='Cross-track (W)', color='tab:green')
-        
-        midpoint_day = (midpoint_epoch - departure_epoch_with_buffer) / constants.JULIAN_DAY
-        ax2.axvline(x=midpoint_day, color='black', linestyle='--', alpha=0.5, label='Arc Switch')
+        # --- Top Subplot: Radial (R) ---
+        axs[0].plot(time_full_days, np.full_like(time_full_days, p_b[0]), label='Single-Arc Baseline', color='tab:blue', linestyle='-', linewidth=2)
+        axs[0].plot(time_full_days, r_opt, label='Two-Arc Optimal', color='tab:blue', linestyle='--', linewidth=2)
+        axs[0].set_ylabel('Radial [m/s$^2$]', fontsize=14)
 
-        ax2.set_xlabel('Time since departure [days]')
-        ax2.set_ylabel('Acceleration [m/s$^2$]')
-        ax2.set_title('Optimal Two-Arc Thrust Profile (Question 4d)')
-        ax2.grid(True, linestyle='--', alpha=0.7)
-        ax2.legend()
+        # --- Middle Subplot: Along-track (S) ---
+        axs[1].plot(time_full_days, np.full_like(time_full_days, p_b[1]), label='Single-Arc Baseline', color='tab:orange', linestyle='-', linewidth=2)
+        axs[1].plot(time_full_days, s_opt, label='Two-Arc Optimal', color='tab:orange', linestyle='--', linewidth=2)
+        axs[1].set_ylabel('Along-track [m/s$^2$]', fontsize=14)
+
+        # --- Bottom Subplot: Cross-track (W) ---
+        axs[2].plot(time_full_days, np.full_like(time_full_days, p_b[2]), label='Single-Arc Baseline', color='tab:green', linestyle='-', linewidth=2)
+        axs[2].plot(time_full_days, w_opt, label='Two-Arc Optimal', color='tab:green', linestyle='--', linewidth=2)
+        axs[2].set_ylabel('Cross-track [m/s$^2$]', fontsize=14)
+        axs[2].set_xlabel('Time since departure [days]', fontsize=16)
+
+        # Apply formatting to all subplots
+        for ax in axs:
+            ax.axvline(x=midpoint_day, color='black', linestyle=':', alpha=0.5, label='Arc Switch')
+            ax.tick_params(axis='both', which='major', labelsize=13)
+            ax.grid(True, linestyle='--', alpha=0.7)
+            # ax.legend(loc='best', fontsize=12) # Uncomment if you want legends on every subplot
+        
+        # Add a single legend to the top subplot to save space
+        axs[0].legend(loc='best', fontsize=12, ncol=3)
 
         plt.tight_layout()
         plt.savefig("figures/Q4_d_optimal_thrust_profile.pdf", format='pdf', bbox_inches='tight')

@@ -10,6 +10,7 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 from interplanetary_transfer_helper_functions import *
+from matplotlib.lines import Line2D
 
 # Load spice kernels.
 spice.load_standard_kernels()
@@ -273,7 +274,7 @@ if __name__ == "__main__":
         # print(q3d_total_delta_v_norms) # debugging
         # print(q3d_total_delta_v_vectors) # debugging
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 5))
 
     # Iterate through` each arc's saved state history
     for i, arc_state_history in enumerate(all_state_histories_q3a):
@@ -298,16 +299,18 @@ if __name__ == "__main__":
         color = 'blue' if i % 2 == 0 else 'orange'
         ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
 
-    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
-    ax.set_xlabel('Time since departure [days]', fontsize=12)
-    ax.set_title('Discontinuous Uncorrected Arc Propagation (Question 3a)', fontsize=14)
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+    ax.set_xlabel('Time since departure [days]', fontsize=16)
+    # ax.set_title('Discontinuous Uncorrected Arc Propagation (Question 3a)', fontsize=14)
     ax.grid(True, linestyle='--', alpha=0.7)
+    # ax.axhline(y=1.0, color='red', linestyle='--', alpha=0.7, label='Convergence Threshold (1 m)')
     ax.set_yscale('log') # Log scale is highly recommended to see the start of each arc!
+    ax.tick_params(axis='both', labelsize=15)
 
     # Create a custom legend to just show the alternating color logic
-    handles, labels = ax.get_legend_handles_labels()
-    if handles:
-        ax.legend(['Even Arcs', 'Odd Arcs'])
+    custom_lines = [Line2D([0], [0], color='blue', lw=1.5),
+                    Line2D([0], [0], color='orange', lw=1.5)]
+    ax.legend(custom_lines, ['Even Arcs', 'Odd Arcs'], fontsize=16)
 
     plt.tight_layout()
     plt.savefig("figures/Q3_a_discontinuous_trajectory.pdf", format='pdf', bbox_inches='tight')
@@ -333,23 +336,27 @@ if __name__ == "__main__":
         
         color = 'green' if i % 2 == 0 else 'purple'
         ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
+        ax.plot(time_days[-1], delta_r[-1], marker='o', color=color, markersize=5)
 
-    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
-    ax.set_xlabel('Time since departure [days]', fontsize=12)
-    ax.set_title('One-Shot Corrected Arc Propagation (Question 3c)', fontsize=14)
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+    ax.set_xlabel('Time since departure [days]', fontsize=16)
+    # ax.set_title('One-Shot Corrected Arc Propagation (Question 3c)', fontsize=14)
     ax.grid(True, linestyle='--', alpha=0.7)
-    ax.set_yscale('log') 
+    ax.axhline(y=1.0, color='red', linestyle='--', alpha=0.7, label='Threshold')
+    ax.set_yscale('log')
+    ax.tick_params(axis='both', labelsize=15)
 
-    handles, labels = ax.get_legend_handles_labels()
-    if handles:
-        ax.legend(['Even Arcs (Corrected)', 'Odd Arcs (Corrected)'])
+    custom_lines = [Line2D([0], [0], color='green', lw=1.5),
+                    Line2D([0], [0], color='purple', lw=1.5),
+                    Line2D([0], [0], color='red', lw=1.5, linestyle='--')]
+    ax.legend(custom_lines, ['Even Arcs', 'Odd Arcs', 'Threshold'], fontsize=16)
 
     plt.tight_layout()
     plt.savefig("figures/Q3_c_single_correction.pdf", format='pdf', bbox_inches='tight')
     plt.close(fig)
 
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 5))
 
     for i, arc_state_history in enumerate(all_state_histories_q3d):
         
@@ -367,16 +374,20 @@ if __name__ == "__main__":
         
         color = 'red' if i % 2 == 0 else 'black'
         ax.plot(time_days, delta_r, color=color, linewidth=1.5, label=f'Arc {i}' if i < 2 else "")
+        ax.plot(time_days[-1], delta_r[-1], marker='o', color=color, markersize=5)
 
-    ax.set_ylabel('$\\Delta r$ [m]', fontsize=12)
-    ax.set_xlabel('Time since departure [days]', fontsize=12)
-    ax.set_title('Iteratively Corrected Arc Propagation (Question 3d)', fontsize=14)
+    ax.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+    ax.set_xlabel('Time since departure [days]', fontsize=16)
+    # ax.set_title('Iteratively Corrected Arc Propagation (Question 3d)', fontsize=14)
     ax.grid(True, linestyle='--', alpha=0.7)
-    ax.set_yscale('log') 
+    ax.axhline(y=1.0, color='red', linestyle='--', alpha=0.7, label='Threshold')
+    ax.set_yscale('log')
+    ax.tick_params(axis='both', labelsize=15)
 
-    handles, labels = ax.get_legend_handles_labels()
-    if handles:
-        ax.legend(['Even Arcs (Converged)', 'Odd Arcs (Converged)'])
+    custom_lines = [Line2D([0], [0], color='red', lw=1.5),
+                    Line2D([0], [0], color='black', lw=1.5),
+                    Line2D([0], [0], color='red', lw=1.5, linestyle='--')]
+    ax.legend(custom_lines, ['Even Arcs', 'Odd Arcs', 'Threshold'], fontsize=16)
 
     plt.tight_layout()
     plt.savefig("figures/Q3_d_iterative_correction.pdf", format='pdf', bbox_inches='tight')

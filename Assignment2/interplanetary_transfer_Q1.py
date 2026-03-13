@@ -58,19 +58,15 @@ if __name__ == "__main__":
 ###########################################################################
 
 # 1. Extract data from the state history dictionaries
-# The keys are epochs (seconds since J2000), values are 6x1 numpy arrays (x, y, z, vx, vy, vz)
 epochs = np.array(list(state_history.keys()))
 time_days = (epochs - epochs[0]) / (24 * 3600)  # Convert seconds to days for readability
 
-# Stack the dictionary values into 2D arrays for easier slicing
 num_states = np.vstack(list(state_history.values()))
 lam_states = np.vstack(list(lambert_history.values()))
 
-# Extract position components (first 3 columns)
 num_x, num_y, num_z = num_states[:, 0], num_states[:, 1], num_states[:, 2]
 lam_x, lam_y, lam_z = lam_states[:, 0], lam_states[:, 1], lam_states[:, 2]
 
-# Calculate the difference for each Cartesian component
 diff_x = num_x - lam_x
 diff_y = num_y - lam_y
 diff_z = num_z - lam_z
@@ -86,38 +82,72 @@ ax1.plot(lam_x, lam_y, lam_z, label='Lambert $\\bar{x}(t)$', color='red', linest
 # Plot the Sun at the origin
 ax1.scatter([0], [0], [0], color='orange', s=100, label='Sun')
 
-ax1.set_xlabel('X Position [m]')
-ax1.set_ylabel('Y Position [m]')
-ax1.set_zlabel('Z Position [m]')
-ax1.set_title('Unperturbed Interplanetary Transfer Trajectory')
-ax1.legend()
+# --- PROJECTIONS ON CARTESIAN PLANES ---
+# Find the min/max boundaries to draw the "walls" of the 3D plot
+min_x = min(num_x.min(), lam_x.min(), 0)
+max_x = max(num_x.max(), lam_x.max(), 0)
+min_y = min(num_y.min(), lam_y.min(), 0)
+max_y = max(num_y.max(), lam_y.max(), 0)
+min_z = min(num_z.min(), lam_z.min(), 0)
+max_z = max(num_z.max(), lam_z.max(), 0)
+
+# Lock the axes limits so the projections sit flush against the bounding box
+ax1.set_xlim([min_x, max_x])
+ax1.set_ylim([min_y, max_y])
+ax1.set_zlim([min_z, max_z])
+
+# XY Plane Projection (Project down to the "floor" where Z = min_z)
+ax1.plot(num_x, num_y, zs=min_z, zdir='z', color='blue', alpha=0.2, linestyle='-')
+ax1.plot(lam_x, lam_y, zs=min_z, zdir='z', color='red', alpha=0.2, linestyle='--')
+
+# XZ Plane Projection (Project back to the "wall" where Y = max_y)
+ax1.plot(num_x, num_z, zs=max_y, zdir='y', color='blue', alpha=0.2, linestyle='-')
+ax1.plot(lam_x, lam_z, zs=max_y, zdir='y', color='red', alpha=0.2, linestyle='--')
+
+# YZ Plane Projection (Project left to the "wall" where X = min_x)
+ax1.plot(num_y, num_z, zs=min_x, zdir='x', color='blue', alpha=0.2, linestyle='-')
+ax1.plot(lam_y, lam_z, zs=min_x, zdir='x', color='red', alpha=0.2, linestyle='--')
+# ---------------------------------------
+
+ax1.set_xlabel('X Position [m]', labelpad=15, fontsize=16)
+ax1.set_ylabel('Y Position [m]', labelpad=15, fontsize=16)
+ax1.set_zlabel('Z Position [m]', labelpad=10, fontsize=16)
+ax1.legend(fontsize=16)
+
+fig1.subplots_adjust(left=0.0, right=0.85)
+plt.tight_layout()
 
 # 3. Plotting the difference in Cartesian position components
-fig2, axs = plt.subplots(3, 1, figsize=(10, 10), sharex=True)
+fig2, axs = plt.subplots(3, 1, figsize=(10, 6), sharex=True)
 
 # Plot delta X
 axs[0].plot(time_days, diff_x, color='purple')
-axs[0].set_ylabel('$\\Delta$X [m]')
-axs[0].grid(True, linestyle=':')
+axs[0].set_ylabel('$\\Delta$X [m]', fontsize=16)
+axs[0].tick_params(axis='both', labelsize=13)
+axs[0].grid(True, linestyle='--')
 
 # Plot delta Y
 axs[1].plot(time_days, diff_y, color='green')
-axs[1].set_ylabel('$\\Delta$Y [m]')
-axs[1].grid(True, linestyle=':')
+axs[1].set_ylabel('$\\Delta$Y [m]', fontsize=16)
+axs[1].tick_params(axis='both', labelsize=13)
+axs[1].grid(True, linestyle='--')
 
 # Plot delta Z
 axs[2].plot(time_days, diff_z, color='teal')
-axs[2].set_ylabel('$\\Delta$Z [m]')
-axs[2].set_xlabel('Time since departure [days]')
-axs[2].grid(True, linestyle=':')
+axs[2].set_ylabel('$\\Delta$Z [m]', fontsize=16)
+axs[2].set_xlabel('Time since departure [days]', fontsize=16)
+axs[2].tick_params(axis='both', labelsize=13)
+axs[2].grid(True, linestyle='--')
 
-fig2.suptitle('Difference Between Numerical Propagation and Lambert Targeter')
+# axs[2].set_xlim([time_days[0], time_days[-1]])
+
+# fig2.suptitle('Difference Between Numerical Propagation and Lambert Targeter')
 plt.tight_layout()
 
 # Save figures as PDF files in a dedicated folder.
 figures_directory = "./figures/"
 os.makedirs(figures_directory, exist_ok=True)
-fig1.savefig(figures_directory + "Q1_trajectory_3d.pdf", format="pdf", bbox_inches="tight")
+fig1.savefig(figures_directory + "Q1_trajectory_3d.pdf", format="pdf", bbox_inches="tight", pad_inches=0.4)
 fig2.savefig(figures_directory + "Q1_cartesian_differences.pdf", format="pdf", bbox_inches="tight")
 
 

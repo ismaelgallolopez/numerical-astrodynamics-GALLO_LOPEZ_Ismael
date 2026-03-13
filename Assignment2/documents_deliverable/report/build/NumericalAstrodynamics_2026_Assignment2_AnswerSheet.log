@@ -1,8 +1,8 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.2.17)  6 MAR 2026 18:11
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.3.10)  13 MAR 2026 11:47
  system commands enabled.
  file:line:error style messages enabled.
-**/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
-(/home/ismag/workspace/tud/numerical_astrodynamics/numerical-astrodynamics-2026/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
+**/home/ismag/workspace/tud/numerical-astrodynamics/numerical-astrodynamics-GALLO_LOPEZ_Ismael/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
+(/home/ismag/workspace/tud/numerical-astrodynamics/numerical-astrodynamics-GALLO_LOPEZ_Ismael/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 Lua module: luaotfload 2023-08-31 3.26 Lua based OpenType font support
@@ -320,73 +320,127 @@ Package: relsize 2013/03/29 ver 4.1
 \c@algocf=\count288
 \algocf@algoframe=\box59
 \algocf@algobox=\box60
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count289
+\float@exts=\toks25
+\float@box=\box61
+\@float@everytoks=\toks26
+\@floatcapt=\box62
+) (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+ (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count290
+\Gm@cntv=\count291
+\c@Gm@tempcnt=\count292
+\Gm@bindingoffset=\dimen161
+\Gm@wd@mp=\dimen162
+\Gm@odd@mp=\dimen163
+\Gm@even@mp=\dimen164
+\Gm@layoutwidth=\dimen165
+\Gm@layoutheight=\dimen166
+\Gm@layouthoffset=\dimen167
+\Gm@layoutvoffset=\dimen168
+\Gm@dimlist=\toks27
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-luatex.def
 File: l3backend-luatex.def 2024-01-04 L3 backend support: PDF output (LuaTeX)
-\l__color_backend_stack_int=\count289
+\l__color_backend_stack_int=\count293
 Inserting `l3color' in `luaotfload.parse_color'.
-\l__pdf_internal_box=\box61
+\l__pdf_internal_box=\box63
 ) (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux)
 \openout1 = NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 20.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-Package hyperref Info: Link coloring ON on input line 18.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+Package hyperref Info: Link coloring ON on input line 20.
  (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.out) (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.out)
 \@outlinefile=\write3
 
 \openout3 = NumericalAstrodynamics_2026_Assignment2_AnswerSheet.out
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count290
-\scratchdimen=\dimen161
-\scratchbox=\box62
-\nofMPsegments=\count291
-\nofMParguments=\count292
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count293
-\MPscratchDim=\dimen162
-\MPnumerator=\count294
-\makeMPintoPDFobject=\count295
-\everyMPtoPDFconversion=\toks26
+\scratchcounter=\count294
+\scratchdimen=\dimen169
+\scratchbox=\box64
+\nofMPsegments=\count295
+\nofMParguments=\count296
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count297
+\MPscratchDim=\dimen170
+\MPnumerator=\count298
+\makeMPintoPDFobject=\count299
+\everyMPtoPDFconversion=\toks29
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Underfull \hbox (badness 10000) in paragraph at lines 22--24
+*geometry* driver: auto-detecting
+*geometry* detected driver: luatex
+*geometry* verbose mode - [ preamble ] result:
+* driver: luatex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(51.21504pt, 495.07779pt, 51.21504pt)
+* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=495.07779pt
+* \textheight=731.23584pt
+* \oddsidemargin=-21.05495pt
+* \evensidemargin=-21.05495pt
+* \topmargin=-52.36449pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--24
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 25--26
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
 
  []
 
@@ -405,42 +459,136 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--32
 
  []
 
-[1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 51--55
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
+[1
 
-Underfull \hbox (badness 10000) in paragraph at lines 51--55
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<../../figures/Q1_trajectory_3d.pdf, id=19, 617.45937pt x 614.295pt>
+File: ../../figures/Q1_trajectory_3d.pdf Graphic file (type pdf)
+<use ../../figures/Q1_trajectory_3d.pdf>
+Package luatex.def Info: ../../figures/Q1_trajectory_3d.pdf  used on input line 62.
+(luatex.def)             Requested size: 346.55293pt x 344.78084pt.
+<../../figures/Q1_cartesian_differences.pdf, id=20, 713.40904pt x 424.93004pt>
+File: ../../figures/Q1_cartesian_differences.pdf Graphic file (type pdf)
+<use ../../figures/Q1_cartesian_differences.pdf>
+Package luatex.def Info: ../../figures/Q1_cartesian_differences.pdf  used on input line 69.
+(luatex.def)             Requested size: 396.06374pt x 235.9038pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 74--78
 
  []
 
 [2
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 74--78
 
- []
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1'
 
-[3
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.2'
+<../../figures/Q1_trajectory_3d.pdf><../../figures/Q1_cartesian_differences.pdf>] [3]
+<../../figures/Q2_case_i_deviations.pdf, id=129, 714.13469pt x 352.03098pt>
+File: ../../figures/Q2_case_i_deviations.pdf Graphic file (type pdf)
+<use ../../figures/Q2_case_i_deviations.pdf>
+Package luatex.def Info: ../../figures/Q2_case_i_deviations.pdf  used on input line 97.
+(luatex.def)             Requested size: 396.06374pt x 195.23984pt.
+<../../figures/Q2_case_ii_deviations.pdf, id=130, 714.01674pt x 353.1594pt>
+File: ../../figures/Q2_case_ii_deviations.pdf Graphic file (type pdf)
+<use ../../figures/Q2_case_ii_deviations.pdf>
+Package luatex.def Info: ../../figures/Q2_case_ii_deviations.pdf  used on input line 104.
+(luatex.def)             Requested size: 396.06374pt x 195.898pt.
+<../../figures/Q2_case_iii_deviations.pdf, id=131, 713.6441pt x 353.1594pt>
+File: ../../figures/Q2_case_iii_deviations.pdf Graphic file (type pdf)
+<use ../../figures/Q2_case_iii_deviations.pdf>
+Package luatex.def Info: ../../figures/Q2_case_iii_deviations.pdf  used on input line 114.
+(luatex.def)             Requested size: 396.06374pt x 196.00038pt.
+ [4
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 89--90
 
- []
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.3'
 
-[4
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.4'
+<../../figures/Q2_case_i_deviations.pdf><../../figures/Q2_case_ii_deviations.pdf>]
+<../../figures/Q2_case_iv_m1000_deviations.pdf, id=231, 713.83607pt x 353.1594pt>
+File: ../../figures/Q2_case_iv_m1000_deviations.pdf Graphic file (type pdf)
+<use ../../figures/Q2_case_iv_m1000_deviations.pdf>
+Package luatex.def Info: ../../figures/Q2_case_iv_m1000_deviations.pdf  used on input line 121.
+(luatex.def)             Requested size: 396.06374pt x 195.95187pt.
+<../../figures/Q2_Mass_Position_Difference.pdf, id=235, 713.84824pt x 425.4294pt>
+File: ../../figures/Q2_Mass_Position_Difference.pdf Graphic file (type pdf)
+<use ../../figures/Q2_Mass_Position_Difference.pdf>
+Package luatex.def Info: ../../figures/Q2_Mass_Position_Difference.pdf  used on input line 152.
+(luatex.def)             Requested size: 396.06374pt x 236.03821pt.
+ [5
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.5'
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 116--119
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.6'
+<../../figures/Q2_case_iii_deviations.pdf><../../figures/Q2_case_iv_m1000_deviations.pdf>]
+<../../figures/Q2_Figure_of_Merit.pdf, id=345, 714.40276pt x 425.4294pt>
+File: ../../figures/Q2_Figure_of_Merit.pdf Graphic file (type pdf)
+<use ../../figures/Q2_Figure_of_Merit.pdf>
+Package luatex.def Info: ../../figures/Q2_Figure_of_Merit.pdf  used on input line 159.
+(luatex.def)             Requested size: 396.06374pt x 235.86293pt.
+ [6
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.7'
 
- []
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.8'
+<../../figures/Q2_Mass_Position_Difference.pdf><../../figures/Q2_Figure_of_Merit.pdf>]
+<../../figures/Q3_a_discontinuous_trajectory.pdf, id=447, 713.74661pt x 353.1594pt>
+File: ../../figures/Q3_a_discontinuous_trajectory.pdf Graphic file (type pdf)
+<use ../../figures/Q3_a_discontinuous_trajectory.pdf>
+Package luatex.def Info: ../../figures/Q3_a_discontinuous_trajectory.pdf  used on input line 175.
+(luatex.def)             Requested size: 396.06374pt x 195.97343pt.
+<../../figures/Q3_c_single_correction.pdf, id=448, 714.32188pt x 425.4294pt>
+File: ../../figures/Q3_c_single_correction.pdf Graphic file (type pdf)
+<use ../../figures/Q3_c_single_correction.pdf>
+Package luatex.def Info: ../../figures/Q3_c_single_correction.pdf  used on input line 199.
+(luatex.def)             Requested size: 396.06374pt x 235.8824pt.
+<../../figures/Q3_d_iterative_correction.pdf, id=449, 713.94925pt x 353.1594pt>
+File: ../../figures/Q3_d_iterative_correction.pdf Graphic file (type pdf)
+<use ../../figures/Q3_d_iterative_correction.pdf>
+Package luatex.def Info: ../../figures/Q3_d_iterative_correction.pdf  used on input line 208.
+(luatex.def)             Requested size: 396.06374pt x 195.91415pt.
+ [7
 
-[5
 
-] (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux)
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.9'
+
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.10'
+<../../figures/Q3_a_discontinuous_trajectory.pdf><../../figures/Q3_c_single_correction.pdf>] [8
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.11'
+
+warning  (pdf backend): ignoring duplicate destination with the name 'table.0.1'
+<../../figures/Q3_d_iterative_correction.pdf>]
+<../../figures/Q4_b_continuous_thrust_correction.pdf, id=624, 713.74661pt x 425.4294pt>
+File: ../../figures/Q4_b_continuous_thrust_correction.pdf Graphic file (type pdf)
+<use ../../figures/Q4_b_continuous_thrust_correction.pdf>
+Package luatex.def Info: ../../figures/Q4_b_continuous_thrust_correction.pdf  used on input line 288.
+(luatex.def)             Requested size: 396.06374pt x 236.07715pt.
+ [9
+
+
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.12'
+<../../figures/Q4_b_continuous_thrust_correction.pdf>]
+<../../figures/Q4_d_monte_carlo_scatter.pdf, id=682, 713.20245pt x 423.39342pt>
+File: ../../figures/Q4_d_monte_carlo_scatter.pdf Graphic file (type pdf)
+<use ../../figures/Q4_d_monte_carlo_scatter.pdf>
+Package luatex.def Info: ../../figures/Q4_d_monte_carlo_scatter.pdf  used on input line 364.
+(luatex.def)             Requested size: 396.06374pt x 235.1218pt.
+<../../figures/Q4_d_optimal_thrust_profile.pdf, id=683, 712.80127pt x 713.68256pt>
+File: ../../figures/Q4_d_optimal_thrust_profile.pdf Graphic file (type pdf)
+<use ../../figures/Q4_d_optimal_thrust_profile.pdf>
+Package luatex.def Info: ../../figures/Q4_d_optimal_thrust_profile.pdf  used on input line 371.
+(luatex.def)             Requested size: 396.06374pt x 396.55588pt.
+ [10
+warning  (pdf backend): ignoring duplicate destination with the name 'table.0.2'
+
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.13'
+<../../figures/Q4_d_monte_carlo_scatter.pdf>] [11
+warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.14'
+<../../figures/Q4_d_optimal_thrust_profile.pdf>] [12] (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -450,19 +598,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment2_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 12013 strings out of 476553
+ 12789 strings out of 476553
  125027,1977958 words of node,token memory allocated
- 599 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 7 attribute, 73 glue_spec, 7 attribute_list, 1 write, 1 pdf_action nodes
-   avail lists: 2:314,3:150,4:46,5:119,6:34,7:1362,8:7,9:180,10:3,11:68
- 33770 multiletter control sequences out of 65536+600000
- 38 fonts using 2708815 bytes
- 72i,5n,75p,482b,341s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman7-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (5 pages, 68791 bytes).
+ 652 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 23 attribute, 72 glue_spec, 23 attribute_list, 1 write nodes
+   avail lists: 2:592,3:183,4:65,5:276,6:44,7:5647,8:54,9:449,10:10,11:490
+ 34448 multiletter control sequences out of 65536+600000
+ 41 fonts using 3103943 bytes
+ 72i,10n,75p,574b,432s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (12 pages, 404351 bytes).
 
-PDF statistics: 112 PDF objects out of 1000 (max. 8388607)
- 84 compressed objects within 1 object stream
- 31 named destinations out of 1000 (max. 131072)
+PDF statistics: 874 PDF objects out of 1000 (max. 8388607)
+ 340 compressed objects within 4 object streams
+ 72 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

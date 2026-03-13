@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import os
 from pathlib import Path
 
-from tudatpy import constants
+from tudatpy import constants, plotting
 from tudatpy.data import save2txt, read_vector_history_from_file
 from tudatpy.astro import element_conversion, two_body_dynamics, time_representation
 from tudatpy.interface import spice

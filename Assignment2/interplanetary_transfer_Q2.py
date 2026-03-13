@@ -314,14 +314,15 @@ if 1000 in case_iv_state_histories and 500 in case_iv_state_histories and 250 in
         ax_fom.plot(time_days, FoM, color='darkred', linewidth=2, label='Actual / Expected Ratio')
 
         # Add a horizontal line at 1.0 to represent perfect linearity
-        ax_fom.axhline(y=1.0, color='black', linestyle='--', alpha=0.8, label='Perfect Linearity (FoM = 1.0)')
+        ax_fom.axhline(y=1.0, color='black', linestyle='--', linewidth=6, alpha=0.4, label='Perfect Linearity')
 
         # Formatting the plot for the report
-        ax_fom.set_xlabel('Time since departure [days]', fontsize=12)
-        ax_fom.set_ylabel('Figure of Merit (FoM)', fontsize=12)
-        ax_fom.set_title('Linearity of Mass Perturbation Effect over Time', fontsize=14)
+        ax_fom.set_xlabel('Time since departure [days]', fontsize=16)
+        ax_fom.set_ylabel('FoM', fontsize=16)
+        # ax_fom.set_title('Linearity of Mass Perturbation Effect over Time', fontsize=14)
         ax_fom.grid(True, linestyle='--', alpha=0.7)
-        ax_fom.legend(fontsize=12)
+        ax_fom.tick_params(axis='both', labelsize=15)
+        ax_fom.legend(fontsize=16)
 
         # Constrain the x-axis to exactly match the data bounds
         ax_fom.set_xlim([time_days[0], time_days[-1]])
@@ -336,3 +337,44 @@ if 1000 in case_iv_state_histories and 500 in case_iv_state_histories and 250 in
         os.makedirs(figures_directory, exist_ok=True)
         fig_fom.savefig(os.path.join(figures_directory, "Q2_Figure_of_Merit.pdf"), format="pdf", bbox_inches="tight")
         plt.close(fig_fom)
+
+
+# Create the figure for position differences
+fig_diff, ax_diff = plt.subplots(figsize=(10, 6))
+
+# # Crop the first and last indices to remove boundary misalignment artifacts
+# time_days_plot = time_days[1:-1]
+# diff_500_plot = diff_500[1:-1]
+# diff_250_plot = diff_250[1:-1]
+
+# # Now swap these into your plotting functions!
+# ax_diff.plot(time_days_plot, diff_500_plot, label='500 kg vs Baseline (1000 kg)', color='orange', linewidth=2)
+# ax_diff.plot(time_days_plot, diff_250_plot, label='250 kg vs Baseline (1000 kg)', color='red', linewidth=2)
+
+# Plot the position deviations
+ax_diff.plot(time_days, diff_500, label='500 kg vs Baseline', color='orange', linewidth=2)
+ax_diff.plot(time_days, diff_250, label='250 kg vs Baseline', color='red', linewidth=2)
+
+# Formatting the plot
+ax_diff.set_xlabel('Time since departure [days]', fontsize=16)
+ax_diff.set_ylabel('$\\Delta r$ [m]', fontsize=16)
+# ax_diff.set_title('Effect of Spacecraft Mass on Trajectory (SRP Perturbation)', fontsize=14)
+ax_diff.set_yscale('log')
+ax_diff.grid(True, linestyle='--', alpha=0.7)
+ax_diff.tick_params(axis='both', labelsize=15)
+ax_diff.legend(fontsize=16)
+
+# Constrain the x-axis to exactly match the data bounds
+ax_diff.set_xlim([time_days[0], time_days[-1]])
+
+# Note: If the deviation grows exponentially over many orders of magnitude, 
+# you can uncomment the next line to make the early-stage separation visible:
+# ax_diff.set_yscale('log')
+
+plt.tight_layout()
+
+# Save the figure
+figures_directory = "./figures/"
+os.makedirs(figures_directory, exist_ok=True)
+fig_diff.savefig(os.path.join(figures_directory, "Q2_Mass_Position_Difference.pdf"), format="pdf", bbox_inches="tight")
+plt.close(fig_diff)
