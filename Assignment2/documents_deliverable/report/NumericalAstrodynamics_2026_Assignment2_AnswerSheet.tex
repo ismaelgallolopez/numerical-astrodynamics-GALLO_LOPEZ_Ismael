@@ -75,11 +75,21 @@ People you worked with (if none, state this):
 \begin{enumerate}
     % \item Assumption: ... ; True: yes/no  ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
     % \item Assumption: ... ; True: yes/no ;   \textbf{\textit{Explanation of why it is (not) true. If not true, explain whether it influences your propagation }}
-    \item \textbf{Only central body point mass exerts an acceleration}; True; Imposed by the environment.
-    \item \textbf{Start position w.r.t. central body is defined}; True; Idem.
-    \item \textbf{End position w.r.t. central body is defined}; False; The end position is a result of the integration.
-    \item \textbf{Time of flight is defined}; True; Is an input parameter of the propagation.
-    \item \textbf{Central body located at the origin (non-moving)}; False; In reality, the central body (Sun) is not static, but at the scales of the problem (movement of the Sun with respect to Solar System dynamics), it has no effect.
+    \item Only central body point mass exerts an acceleration; True; 
+    
+    Imposed by the environment.
+    \item Start position w.r.t. central body is defined; True; 
+    
+    Idem.
+    \item End position w.r.t. central body is defined; False; 
+    
+    The end position is a result of the integration.
+    \item Time of flight is defined; True; 
+    
+    Is an input parameter of the propagation.
+    \item Central body located at the origin (non-moving); False; 
+    
+    In reality, the Sun is not static, but at the scales of the problem, it has no effect.
     % \item At most a single revolution around central body (in this case); True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
     % \item Prograde orbit; True; The propagation complies with that (see \autoref{fig:Q1_trajectory_3d}).
 \end{enumerate}
@@ -106,10 +116,7 @@ People you worked with (if none, state this):
     \label{fig:Q2_case_ii_deviations}
 \end{figure}
 
-\begin{figure}[H]
-
-
-    
+\begin{figure}[H]   
     \centering
     \includegraphics[width=0.8\textwidth]{../../figures/Q2_case_iii_deviations.pdf}
     \caption{Differences between the numerical propagation and the environment-provided positions, case \textit{iii}.}
@@ -126,12 +133,11 @@ People you worked with (if none, state this):
 \subsection*{b}
 % \textbf{\textit{Provide reason that increasing buffer time generally reduces $\Delta r$ }}\\
 % \textbf{\textit{Provide that propagating from arc center leads to lower $\Delta r$}}
-The reason why increassing buffer time generally reduces $\Delta r$ is very simple. 
-By avoiding the center of mass of the celestial bodies at the beginning and at the end of the propagation, the singularity of the acceleration is avoided ($\mathbf{a} \propto 1/r^2$). 
-This can be observed in the figures for cases \textit{i} and \textit{ii}, where the acceleration for case \textit{i} is of order $10^{22}$ m/s$^2$ (\autoref{fig:Q2_case_i_deviations}); while for the case in \autoref{fig:Q2_case_ii_deviations} it is much lower, on the order of 10 m/s$^2$.
 
-In the other habnd the reason why propagating from the arc center leads to lower $\Delta r$ is that propagation errors build with non linearly.
-Thus, forward-only propagation lets errors build up for the whole duration of the arc, while propagating from the center allows to split the error build-up in two, thus reducing the final error. 
+Increasing buffer time avoids the ($\mathbf{a} \propto 1/r^2$) at the boundaries, drastically reducing numerical errors. 
+This is evident when comparing initial accelerations: in case \textit{i} versus in case \textit{ii}. 
+Additionally, propagating from the arc center halves the continuous integration time. 
+Since dynamical errors grow non-linearly over time, splitting the integration duration significantly limits the maximum accumulated $\Delta r$ at the endpoints.
 
 \subsection*{c}
 
@@ -140,8 +146,8 @@ Thus, forward-only propagation lets errors build up for the whole duration of th
 % \textbf{\textit{Explain why figure of merit is a good one for this purpose}}\\
 % \textbf{\textit{Answer question on linearity}}\\
 
-Because the $a_{SRP} \propto 1/m$, $\Delta r$ has to be evaluated as the inverse of the mass.
-That evaluation results in \autoref{eq:fom}:
+Since the SRP perturbation scales as $a_{SRP} \propto 1/m$, the expected position deviations scale linearly with the difference in inverse masses relative to the baseline. 
+This yields the following FoM\footnote{Figure of Merit}:
 
 \begin{equation} \label{eq:fom}
     \text{FoM} = \frac{||\Delta \mathbf{r}_{250}||}{3 ||\Delta \mathbf{r}_{500}||}
@@ -161,9 +167,8 @@ That evaluation results in \autoref{eq:fom}:
     \label{fig:Q2_Figure_of_Merit}
 \end{figure}
 
-From \autoref{fig:Q2_Figure_of_Merit} it can be observed that the FoM is close to 1 for most of the propagation, which indicates that the effect is close to being linear.
-However, at the beginning and at the end of the propagation, the FoM deviates significantly from 1, which indicates that the effect does not hold for cases with bigger accelerations and deviations (as it can be seen in \autoref{fig:Q2_Mass_Position_Difference}.)
-This can be explained by the fact that the linearization assumption breaks down in regions of high acceleration or large deviations.
+The FoM remains near 1 for most of the transfer (\ref{fig:Q2_Figure_of_Merit}), indicating a highly linear response to mass variations. 
+However, near the planetary boundaries, the FoM diverges from 1. 
 
 \clearpage
 \section*{Question 3}
@@ -224,8 +229,8 @@ Since the initial position is to be kept fixed, ($\Delta \mathbf{r}_i = \mathbf{
 \end{table}
 
 % \textbf{\textit{Provide explanation why some arcs require more iterations than others.}}
-From \autoref{tab:Q3_d_convergence} it can be observed that the arcs in the middle of the propagation require less iterations than the middle ones.
-The underlying reason is that the equation solved in \autoref{fig:Q3_c_single_correction} (\autoref{eq:linear_change_velocity}), is a linear approximation. 
+From \ref{tab:Q3_d_convergence} it can be observed that the arcs in the middle of the propagation require less iterations than the middle ones.
+The underlying reason is that the equation solved in \ref{fig:Q3_c_single_correction} (\ref{eq:linear_change_velocity}), is a linear approximation. 
 Hence, in the extremes of the simulation, non-linearities are stronger and thus require to iterate further from the linear correction.
 
 \subsection*{e}
@@ -259,7 +264,7 @@ Where:
 % \textit{Provide derivation/assumptions}\\
 % $\mathbf{p}=...$
 
-The full linearized relationsip that links the changes in the initial state and system parameters to a change in the final state is:
+The full linearized relationship that links the changes in the initial state and system parameters to a change in the final state is:
 \begin{equation} \label{eq:full_linear_params}
     \Delta \mathbf{x}(t_E) = \Phi(t_E, t_0)\Delta \mathbf{x}(t_0) + S(t_E)\mathbf{p}
 \end{equation}
@@ -281,7 +286,7 @@ Isolating the parameter vector as done in \autoref{eq:linear_change_velocity}, t
 
 The validity of the model developed in \textbf{a} is a little subjective. 
 Even though the model reduces the final position deviation in comparison with the one shown in \autoref{fig:Q2_case_iii_deviations}, the position residual is still much greater than what would be an acceptable value, as can be seen in \autoref{fig:Q4_b_continuous_thrust_correction}. 
-Becayse of the limitations of the linearized model, the correction is not sufficient to reduce the position error to an acceptable level, and thus, the model cannot be considered valid for this purpose.
+Because of the limitations of the linearized model, the correction is not sufficient to reduce the position error to an acceptable level, and thus, the model cannot be considered valid for this purpose.
 
 \begin{figure}[H]
     \centering
@@ -326,8 +331,9 @@ Procedure for computing $\mathbf{p}_2$:
 
 % \textbf{\textit{Answer question on value of $\mathbf{p}_{2}$}}
 
-The value of $\mathbf{p}_2$ is not substantially different from $\mathbf{p}^{(b)}$. 
-As seen in \autoref{tab:p1_vs_p2}, both vectors have roughly the same magnitude and point in almost exactly the same direction, with the component dominating in both cases.
+The value of $\mathbf{p}_2$ is almost identical to $\mathbf{p}^{(b)}$; both share roughly the same magnitude and point in the same direction (in each axis), with the radial component dominating. 
+Because $\mathbf{p}^{(b)}$ was computed to completely eliminate the final position deviation under a linear assumption, applying it to Arc 1 corrects the vast majority of the trajectory. 
+Consequently, $\mathbf{p}_2$ does not have to correct the massive initial Lambert discrepancy; it only needs to compensate for the minor non-linear residual errors accumulated during Arc 1.
 
 \begin{table}[H]
     \centering
@@ -345,15 +351,6 @@ As seen in \autoref{tab:p1_vs_p2}, both vectors have roughly the same magnitude 
     \end{tabular}
     \label{tab:p1_vs_p2}
 \end{table}
-
-The vector $\mathbf{p}^{(b)}$ was computed in \textbf{a} to completely eliminate the final position deviation over the entire transfer duration, relying on the linear approximation $\Delta \mathbf{r}(t_E) = S_r(t_E) \mathbf{p}$. 
-By setting $\mathbf{p}_1 = \mathbf{p}^{(b)}$ for the first arc, the spacecraft is placed on a trajectory that fundamentally corrects the vast majority of the Lambert deviation right from the start. 
-
-If the orbital dynamics were perfectly linear, the spacecraft would hit the exact target at $t_E$ simply by maintaining $\mathbf{p}^{(b)}$ for the second arc as well. 
-However, because the N-body gravitational field contains slight non-linearities, a small residual error accumulates by the time the spacecraft reaches the midpoint ($t_{mid}$). 
-
-Therefore, the differential correction algorithm for the second arc does not have to correct the massive initial unperturbed Lambert discrepancy; it only has to compute a thrust $\mathbf{p}_2$ that compensates for the minor non-linear residuals accumulated during Arc 1. 
-Because these non-linear effects are relatively small over this specific interplanetary transfer, the required $\mathbf{p}_2$ correction remains very close to the original $\mathbf{p}^{(b)}$ linear guess.
 
 \subsection*{d.i}
 
@@ -377,23 +374,10 @@ Because these non-linear effects are relatively small over this specific interpl
 
 % \textbf{\textit{Discuss observed behaviour of optimal thrust profile and answer the question}}
 
-Based on the Monte Carlo analysis and the resulting thrust profiles, the optimal two-arc solution found does provide a lower average thrust than the single-arc baseline solution from \textbf{b} and the highly constrained two-arc solution from \textbf{c}. 
-
-Looking at the thrust profile comparison, the single-arc baseline applies a constant, unchanging acceleration vector over the entire 150-day transfer. 
-In contrast, the optimal two-arc profile exhibits a distinct switching behaviour. 
-During Arc 1, the optimal thrust deviates from the baseline, thrusting more strongly in the negative along-track direction and less in the negative radial direction. 
-At the midpoint, the thrust vector drastically shifts, flipping to a positive radial and positive along-track acceleration. 
-
-This reduction in average thrust is achieved because the two-arc model with a randomized $p_1$ introduces an intermediate degree of freedom, allowing the spacecraft to exploit the natural orbital dynamics rather than fighting them. 
-
-The constant single-arc model is extremely rigid. 
-Its inefficiency stems from the fact that orbital sensitivity (how much a change in velocity affects the final position) varies greatly depending on the spacecraft's true anomaly and its distance from the Sun. 
-Forcing the exact same continuous thrust vector regardless of orbital phase means the spacecraft is thrusting highly inefficiently during certain parts of the transfer just to satisfy the rigid mathematical constraint of $p(t) = \text{constant}$. 
-In contrast, by exploiting orbital sensitivity through allowing $p_1$ to vary, the Monte Carlo method explores different intermediate trajectories. 
-The optimizer finds a specific $p_1$ that places the spacecraft into a region of the perturbed gravitational field where the sensitivity matrix is highly favourable, essentially using Arc 1 to set up an intermediate state where the required corrective thrust for Arc 2 is extremely cheap. 
-This optimal solution exhibits a remarkable thrust reversal; the sign flip in the $R$ and $S$ components perfectly illustrates orbital reshaping. 
-The most efficient way to correct the Lambert targeter's miss distance in this specific N-body environment is to brake/pull inwards during the first half of the transfer, and then accelerate/push outwards during the second half. 
-The single-arc model mathematically cannot reverse its thrust direction, so it must compromise with a higher-magnitude "average" brute-force push to reach the same final target point.
+The optimal two-arc solution yields a lower average thrust because it exploits the varying orbital sensitivity along the trajectory. 
+The rigid single-arc baseline forces a constant acceleration, often thrusting inefficiently against natural N-body gravity gradients. 
+By allowing $\mathbf{p}_1$ to vary, the optimizer places the spacecraft into a dynamically favorable intermediate state at $t_{mid}$. 
+This enables a highly efficient thrust reversal, braking inwards during Arc 1 and pushing outwards during Arc 2 (indicated by the sign flip in the $R$ and $S$ components), which minimizes the total corrective effort compared to a continuous brute-force push.
 
 % \section*{Question 2}
 

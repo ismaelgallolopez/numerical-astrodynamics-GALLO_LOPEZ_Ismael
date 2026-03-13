@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.3.10)  13 MAR 2026 11:47
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.3.10)  13 MAR 2026 12:25
  system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical-astrodynamics/numerical-astrodynamics-GALLO_LOPEZ_Ismael/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
@@ -489,20 +489,20 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1
 
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.2'
 <../../figures/Q1_trajectory_3d.pdf><../../figures/Q1_cartesian_differences.pdf>] [3]
-<../../figures/Q2_case_i_deviations.pdf, id=129, 714.13469pt x 352.03098pt>
+<../../figures/Q2_case_i_deviations.pdf, id=128, 714.13469pt x 352.03098pt>
 File: ../../figures/Q2_case_i_deviations.pdf Graphic file (type pdf)
 <use ../../figures/Q2_case_i_deviations.pdf>
-Package luatex.def Info: ../../figures/Q2_case_i_deviations.pdf  used on input line 97.
+Package luatex.def Info: ../../figures/Q2_case_i_deviations.pdf  used on input line 107.
 (luatex.def)             Requested size: 396.06374pt x 195.23984pt.
-<../../figures/Q2_case_ii_deviations.pdf, id=130, 714.01674pt x 353.1594pt>
+<../../figures/Q2_case_ii_deviations.pdf, id=129, 714.01674pt x 353.1594pt>
 File: ../../figures/Q2_case_ii_deviations.pdf Graphic file (type pdf)
 <use ../../figures/Q2_case_ii_deviations.pdf>
-Package luatex.def Info: ../../figures/Q2_case_ii_deviations.pdf  used on input line 104.
+Package luatex.def Info: ../../figures/Q2_case_ii_deviations.pdf  used on input line 114.
 (luatex.def)             Requested size: 396.06374pt x 195.898pt.
-<../../figures/Q2_case_iii_deviations.pdf, id=131, 713.6441pt x 353.1594pt>
+<../../figures/Q2_case_iii_deviations.pdf, id=130, 713.6441pt x 353.1594pt>
 File: ../../figures/Q2_case_iii_deviations.pdf Graphic file (type pdf)
 <use ../../figures/Q2_case_iii_deviations.pdf>
-Package luatex.def Info: ../../figures/Q2_case_iii_deviations.pdf  used on input line 114.
+Package luatex.def Info: ../../figures/Q2_case_iii_deviations.pdf  used on input line 121.
 (luatex.def)             Requested size: 396.06374pt x 196.00038pt.
  [4
 
@@ -511,25 +511,25 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.3
 
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.4'
 <../../figures/Q2_case_i_deviations.pdf><../../figures/Q2_case_ii_deviations.pdf>]
-<../../figures/Q2_case_iv_m1000_deviations.pdf, id=231, 713.83607pt x 353.1594pt>
+<../../figures/Q2_case_iv_m1000_deviations.pdf, id=230, 713.83607pt x 353.1594pt>
 File: ../../figures/Q2_case_iv_m1000_deviations.pdf Graphic file (type pdf)
 <use ../../figures/Q2_case_iv_m1000_deviations.pdf>
-Package luatex.def Info: ../../figures/Q2_case_iv_m1000_deviations.pdf  used on input line 121.
+Package luatex.def Info: ../../figures/Q2_case_iv_m1000_deviations.pdf  used on input line 128.
 (luatex.def)             Requested size: 396.06374pt x 195.95187pt.
-<../../figures/Q2_Mass_Position_Difference.pdf, id=235, 713.84824pt x 425.4294pt>
+<../../figures/Q2_Mass_Position_Difference.pdf, id=232, 713.84824pt x 425.4294pt>
 File: ../../figures/Q2_Mass_Position_Difference.pdf Graphic file (type pdf)
 <use ../../figures/Q2_Mass_Position_Difference.pdf>
-Package luatex.def Info: ../../figures/Q2_Mass_Position_Difference.pdf  used on input line 152.
+Package luatex.def Info: ../../figures/Q2_Mass_Position_Difference.pdf  used on input line 158.
 (luatex.def)             Requested size: 396.06374pt x 236.03821pt.
  [5
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.5'
 
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.6'
 <../../figures/Q2_case_iii_deviations.pdf><../../figures/Q2_case_iv_m1000_deviations.pdf>]
-<../../figures/Q2_Figure_of_Merit.pdf, id=345, 714.40276pt x 425.4294pt>
+<../../figures/Q2_Figure_of_Merit.pdf, id=346, 714.40276pt x 425.4294pt>
 File: ../../figures/Q2_Figure_of_Merit.pdf Graphic file (type pdf)
 <use ../../figures/Q2_Figure_of_Merit.pdf>
-Package luatex.def Info: ../../figures/Q2_Figure_of_Merit.pdf  used on input line 159.
+Package luatex.def Info: ../../figures/Q2_Figure_of_Merit.pdf  used on input line 165.
 (luatex.def)             Requested size: 396.06374pt x 235.86293pt.
  [6
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.7'
@@ -539,17 +539,17 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.8
 <../../figures/Q3_a_discontinuous_trajectory.pdf, id=447, 713.74661pt x 353.1594pt>
 File: ../../figures/Q3_a_discontinuous_trajectory.pdf Graphic file (type pdf)
 <use ../../figures/Q3_a_discontinuous_trajectory.pdf>
-Package luatex.def Info: ../../figures/Q3_a_discontinuous_trajectory.pdf  used on input line 175.
+Package luatex.def Info: ../../figures/Q3_a_discontinuous_trajectory.pdf  used on input line 180.
 (luatex.def)             Requested size: 396.06374pt x 195.97343pt.
 <../../figures/Q3_c_single_correction.pdf, id=448, 714.32188pt x 425.4294pt>
 File: ../../figures/Q3_c_single_correction.pdf Graphic file (type pdf)
 <use ../../figures/Q3_c_single_correction.pdf>
-Package luatex.def Info: ../../figures/Q3_c_single_correction.pdf  used on input line 199.
+Package luatex.def Info: ../../figures/Q3_c_single_correction.pdf  used on input line 204.
 (luatex.def)             Requested size: 396.06374pt x 235.8824pt.
 <../../figures/Q3_d_iterative_correction.pdf, id=449, 713.94925pt x 353.1594pt>
 File: ../../figures/Q3_d_iterative_correction.pdf Graphic file (type pdf)
 <use ../../figures/Q3_d_iterative_correction.pdf>
-Package luatex.def Info: ../../figures/Q3_d_iterative_correction.pdf  used on input line 208.
+Package luatex.def Info: ../../figures/Q3_d_iterative_correction.pdf  used on input line 213.
 (luatex.def)             Requested size: 396.06374pt x 195.91415pt.
  [7
 
@@ -562,10 +562,10 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1
 
 warning  (pdf backend): ignoring duplicate destination with the name 'table.0.1'
 <../../figures/Q3_d_iterative_correction.pdf>]
-<../../figures/Q4_b_continuous_thrust_correction.pdf, id=624, 713.74661pt x 425.4294pt>
+<../../figures/Q4_b_continuous_thrust_correction.pdf, id=625, 713.74661pt x 425.4294pt>
 File: ../../figures/Q4_b_continuous_thrust_correction.pdf Graphic file (type pdf)
 <use ../../figures/Q4_b_continuous_thrust_correction.pdf>
-Package luatex.def Info: ../../figures/Q4_b_continuous_thrust_correction.pdf  used on input line 288.
+Package luatex.def Info: ../../figures/Q4_b_continuous_thrust_correction.pdf  used on input line 293.
 (luatex.def)             Requested size: 396.06374pt x 236.07715pt.
  [9
 
@@ -575,12 +575,12 @@ warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.1
 <../../figures/Q4_d_monte_carlo_scatter.pdf, id=682, 713.20245pt x 423.39342pt>
 File: ../../figures/Q4_d_monte_carlo_scatter.pdf Graphic file (type pdf)
 <use ../../figures/Q4_d_monte_carlo_scatter.pdf>
-Package luatex.def Info: ../../figures/Q4_d_monte_carlo_scatter.pdf  used on input line 364.
+Package luatex.def Info: ../../figures/Q4_d_monte_carlo_scatter.pdf  used on input line 361.
 (luatex.def)             Requested size: 396.06374pt x 235.1218pt.
 <../../figures/Q4_d_optimal_thrust_profile.pdf, id=683, 712.80127pt x 713.68256pt>
 File: ../../figures/Q4_d_optimal_thrust_profile.pdf Graphic file (type pdf)
 <use ../../figures/Q4_d_optimal_thrust_profile.pdf>
-Package luatex.def Info: ../../figures/Q4_d_optimal_thrust_profile.pdf  used on input line 371.
+Package luatex.def Info: ../../figures/Q4_d_optimal_thrust_profile.pdf  used on input line 368.
 (luatex.def)             Requested size: 396.06374pt x 396.55588pt.
  [10
 warning  (pdf backend): ignoring duplicate destination with the name 'table.0.2'
@@ -588,7 +588,7 @@ warning  (pdf backend): ignoring duplicate destination with the name 'table.0.2'
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.13'
 <../../figures/Q4_d_monte_carlo_scatter.pdf>] [11
 warning  (pdf backend): ignoring duplicate destination with the name 'figure.0.14'
-<../../figures/Q4_d_optimal_thrust_profile.pdf>] [12] (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux)
+<../../figures/Q4_d_optimal_thrust_profile.pdf>] (./build/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -598,19 +598,19 @@ Package rerunfilecheck Info: File `NumericalAstrodynamics_2026_Assignment2_Answe
 )
 
 Here is how much of LuaTeX's memory you used:
- 12789 strings out of 476553
+ 12801 strings out of 476553
  125027,1977958 words of node,token memory allocated
- 652 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 23 attribute, 72 glue_spec, 23 attribute_list, 1 write nodes
-   avail lists: 2:592,3:183,4:65,5:276,6:44,7:5647,8:54,9:449,10:10,11:490
- 34448 multiletter control sequences out of 65536+600000
- 41 fonts using 3103943 bytes
+ 663 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 3 glue, 4 kern, 1 glyph, 24 attribute, 72 glue_spec, 24 attribute_list, 1 write nodes
+   avail lists: 2:534,3:183,4:66,5:261,6:43,7:4558,8:54,9:401,10:5,11:314
+ 34460 multiletter control sequences out of 65536+600000
+ 53 fonts using 3988551 bytes
  72i,10n,75p,574b,432s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (12 pages, 404351 bytes).
+</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (11 pages, 403370 bytes).
 
-PDF statistics: 874 PDF objects out of 1000 (max. 8388607)
- 340 compressed objects within 4 object streams
+PDF statistics: 887 PDF objects out of 1000 (max. 8388607)
+ 345 compressed objects within 4 object streams
  72 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

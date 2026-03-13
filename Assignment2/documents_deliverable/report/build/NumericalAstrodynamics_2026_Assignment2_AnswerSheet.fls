@@ -139,7 +139,6 @@ INPUT ../../figures/Q1_trajectory_3d.pdf
 INPUT ../../figures/Q1_trajectory_3d.pdf
 INPUT ../../figures/Q1_cartesian_differences.pdf
 INPUT ../../figures/Q1_cartesian_differences.pdf
-INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc
 INPUT ../../figures/Q2_case_i_deviations.pdf
 INPUT ../../figures/Q2_case_i_deviations.pdf
 INPUT ../../figures/Q2_case_ii_deviations.pdf
@@ -164,6 +163,18 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-regular.luc
+INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman8-regular.luc
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
+INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman6-regular.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman5-regular.luc
 INPUT ../../figures/Q2_Mass_Position_Difference.pdf
 INPUT ../../figures/Q2_Mass_Position_Difference.pdf
@@ -171,6 +182,7 @@ INPUT ../../figures/Q2_Figure_of_Merit.pdf
 INPUT ../../figures/Q2_Figure_of_Merit.pdf
 INPUT ../../figures/Q3_a_discontinuous_trajectory.pdf
 INPUT ../../figures/Q3_a_discontinuous_trajectory.pdf
+INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman7-bold.luc
 INPUT /home/ismag/.texlive2023/texmf-var/luatex-cache/generic/fonts/otl/lmroman5-bold.luc
 INPUT ../../figures/Q3_c_single_correction.pdf
