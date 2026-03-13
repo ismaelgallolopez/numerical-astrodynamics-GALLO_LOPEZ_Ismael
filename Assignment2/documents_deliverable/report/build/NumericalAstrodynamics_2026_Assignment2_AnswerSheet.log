@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.3.10)  13 MAR 2026 12:25
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2026.3.10)  13 MAR 2026 12:36
  system commands enabled.
  file:line:error style messages enabled.
 **/home/ismag/workspace/tud/numerical-astrodynamics/numerical-astrodynamics-GALLO_LOPEZ_Ismael/Assignment2/documents_deliverable/report/NumericalAstrodynamics_2026_Assignment2_AnswerSheet.tex
@@ -607,7 +607,7 @@ Here is how much of LuaTeX's memory you used:
  53 fonts using 3988551 bytes
  72i,10n,75p,574b,432s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman6-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf></usr/share/texmf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (11 pages, 403370 bytes).
+Output written on NumericalAstrodynamics_2026_Assignment2_AnswerSheet.pdf (11 pages, 403342 bytes).
 
 PDF statistics: 887 PDF objects out of 1000 (max. 8388607)
  345 compressed objects within 4 object streams
