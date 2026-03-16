@@ -1,0 +1,149 @@
+\documentclass{report}
+
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=xkcdBlue, citecolor=xkcdRed, urlcolor=xkcdGreen]{hyperref}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{xcolor}
+\usepackage{xkcdcolors}
+\usepackage[]{algorithm2e}
+
+
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{.6in}
+
+
+\begin{document}
+
+
+\Large
+\textbf{AE4868-II (2025/2026) - Assignment 3} \\
+\normalsize \\
+
+Name: \ldots \\
+
+Student number: \ldots \\
+
+Github link: \ldots \textit{\href{https://github.com/my_github_username/my_private_repo}{this is a sample link}} \\
+
+Time spent per exercise:
+\begin{enumerate}
+    \item \ldots
+    \item \ldots
+    \item \ldots
+    \item \ldots
+        \item \ldots
+
+\end{enumerate} 
+
+People you worked with (if none, state this):
+
+\clearpage
+
+\noindent\textit{Use this \LaTeX~file as a template for your report. All text that is not italic should be kept. All text that is italic, and all \ldots~should be removed and replaced by your answers. Only text that replaces \textbf{bold text} counts towards your line limit.}
+% KC: bold text here > bold text?
+
+\section*{Question 1}
+
+\subsection*{a}
+\textit{Insert figures}
+\subsection*{b}
+\textit{Insert figure(s)}
+\subsection*{c}
+i. Mathematical equation that describes behavior in maximum truncation error with time step: \textit{provide answer}\\
+\\
+ii. Range of time steps where truncation error is dominant (GCO500): {\textit{Provide answer}}\\
+\\
+ii. Range of time steps where truncation error is dominant (flyby): {\textit{Provide answer}}\\
+\\
+iii. \textbf{\textit{Explain why these results are (not) consistent with question (a)}}.
+\\
+\clearpage
+
+\section*{Question 2}
+
+\subsection*{a}
+\textit{Insert figure(s)}\\
+\\
+Mathematical assumption behind error quantification: {\textit{Provide answer}}
+\subsection*{b}
+\textit{Insert figure(s)}\\
+\\
+Mathematical assumption behind error quantification: {\textit{Provide answer}}
+\subsection*{c}
+Range of time steps where results match reasonably well between questions (a) and (b), per phase: {\textit{Provide answer}}\\
+\\
+Range of time steps where results do not match reasonably well between questions (a) and (b), per phase: {\textit{Provide answer}}\\
+\\
+\textbf{\textit{Briefly explain the underlying reasons why the results from (a) and (b) do (not) match well where they do.}}
+\subsection*{d}
+For the time steps where truncation error is dominant, do the error estimates obtained in questions 1 and 2b correspond well: yes/no.\\
+\\
+\textbf{\textit{Explain the underlying reasons why the two do (not) correspond well to one another.}}
+
+\clearpage
+\section*{Question 3}
+\subsection*{a}
+Influence of tolerance on observed error:
+\begin{itemize}
+\item Expected behaviour: \textbf{\textit{Provide answer}}
+\item Observed behaviour: \textbf{\textit{Provide answer}}
+% \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
+\end{itemize}
+Visible presence of truncation/rounding error in the figures:
+\begin{itemize}
+\item Expected behaviour: \textbf{\textit{Provide answer}}
+\item Observed behaviour: \textbf{\textit{Provide answer}}
+% \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
+\end{itemize}
+\subsection*{b}
+\textit{Insert figures}
+\subsection*{c}
+% Reason for once-per-orbit trend in time step: \textbf{\textit{Provide answer}}\\
+% \\
+Reason for sharp decreases in time step: \textbf{\textit{Provide answer}}
+\subsection*{d}
+\textbf{\textit{Explain your choice of modification to time step control (provide exact lines of code in report)}}\\
+\\
+\textit{Insert figure for corrected time step as function of time}\\
+\\
+
+\clearpage
+\section*{Question 4}
+\subsection*{a}
+\textit{Insert figures of function evaluations vs. maximum error}
+\subsection*{b}
+\textit{Modify figures in (a) to indicate the two selected integrators}\\
+\\
+Integrator choice for orbit phase: \textit{Provide answer}\\
+\\
+Integrator choice for flyby phase: 
+\textit{Provide answer}\\
+\\
+Reasons for your integrator choices:
+\textit{\textbf{Provide answer}}\\
+\\
+\textit{Insert figures of error as a function of time}
+
+\clearpage
+\section*{Question 5}
+\subsection*{a}
+\textit{Insert figure}
+\subsection*{b}
+\textit{Provide derivation for (use text only to specify and explain assumptions)}
+\begin{equation}
+||\mathbf{K}_{\mathbf{r}}(t)||=... 
+\end{equation}
+\textit{Insert figure}
+\subsection*{c}
+\textit{Provide derivation for (use text only to specify and explain assumptions)}
+\begin{equation}
+||\mathbf{K}_{\mathbf{r}}(t)||=... 
+\end{equation}
+\textit{Insert figure}
+\subsection*{d}
+\textit{\textbf{Provide reasons for difference in validity of analytical result for Euler and RKF results}}\\
+
+\end{document}
