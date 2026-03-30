@@ -18,12 +18,13 @@ from tudatpy.interface import spice
 from tudatpy.math import interpolators
 
 # Define departure/arrival epoch - in seconds since J2000
-flyby_initial_time = ...
+flyby_initial_time = 1033164677.05888
 
 # student number: 1244779 --> 1244ABC
-A = ...
-B = ...
-C = ...
+# 6541356
+A = 3
+B = 5
+C = 6
 
 orbit_initial_time = (
     35.4 * constants.JULIAN_YEAR
