@@ -4,3 +4,12 @@
 # PyCharm files
 .idea/
 
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+
+# environment
+.vscode/
