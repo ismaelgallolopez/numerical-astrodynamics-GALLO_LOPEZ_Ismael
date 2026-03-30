@@ -435,8 +435,21 @@ def get_unperturbed_accelerations(
     Acceleration models for the perturbed trajectory.
     """
 
+    acceleration_settings_on_vehicle_unperturbed = dict(Ganymede=[propagation_setup.acceleration.point_mass_gravity()],
+                                                        Callisto=[propagation_setup.acceleration.point_mass_gravity()])
+
+    bodies_to_propagate=["JUICE"]
+
+    acceleration_settings_unperturbed = {"JUICE": acceleration_settings_on_vehicle_unperturbed}
+
+
     # Create acceleration models.
-    acceleration_models = ...
+    acceleration_models = propagation_setup.create_acceleration_models(
+        bodies, 
+        acceleration_settings_unperturbed, 
+        bodies_to_propagate, 
+        [central_body]
+    )
 
     return acceleration_models
 

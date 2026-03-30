@@ -21,9 +21,11 @@ spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 
 # Create the bodies for the numerical simulation
 bodies = create_bodies()
+# print(bodies)  # debugging
 
 # Define list of step size for integrator to take
-step_sizes = ...
+step_sizes = [2**i for i in range(3, 10)]
+# print(step_sizes) # debugging
 
 # Iterate over phases
 for current_phase in range(len(central_bodies_per_phase)):
@@ -50,8 +52,16 @@ for current_phase in range(len(central_bodies_per_phase)):
         ephemeris_time=current_phase_start_time,
     )
 
+    bodies_to_propagate = ["JUICE"]
+
     # Retrieve acceleration settings without perturbations
     acceleration_models = get_unperturbed_accelerations(current_central_body, bodies)
+
+    dependent_variables_to_save = [
+        propagation_setup.dependent_variable.relative_position( "JUICE", "Callisto" ),
+        propagation_setup.dependent_variable.relative_velocity( "JUICE", "Ganymede" )
+    ]
+
 
     # Iterate over step size
     for step_size in step_sizes:
@@ -60,7 +70,16 @@ for current_phase in range(len(central_bodies_per_phase)):
         integrator_settings = get_fixed_step_size_integrator_settings(step_size)
 
         # Define propagator settings
-        propagator_settings = ...
+        propagator_settings = propagation_setup.propagator.translational(
+            [current_central_body],
+            acceleration_models,
+            bodies_to_propagate,
+            initial_state,
+            current_phase_start_time,
+            integrator_settings,
+            termination_settings,
+            output_variables=dependent_variables_to_save,
+        )
 
         # Propagate dynamics
         dynamics_simulator = ...
