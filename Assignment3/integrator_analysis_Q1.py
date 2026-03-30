@@ -10,6 +10,8 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import os
+import numpy as np
+import matplotlib.pyplot as plt
 
 from integrator_analysis_helper_functions import *
 
@@ -104,3 +106,79 @@ for current_phase in range(len(central_bodies_per_phase)):
             file_output_identifier,
             bodies.get_body(current_central_body).gravitational_parameter,
         )
+# Create figures directory if it doesn't exist
+figures_dir = "figures"
+if not os.path.exists(figures_dir):
+    os.makedirs(figures_dir)
+
+# Configuration matching your script's setup
+step_sizes = [2**i for i in range(3, 10)]
+phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
+
+# Lists to store the maximum errors for Question 1b
+max_errors_phase_0 = []
+max_errors_phase_1 = []
+
+# --- Plotting 1a: Error vs Time (Separate Figures) ---
+for current_phase in range(2):
+    # Create a new figure for each phase
+    plt.figure(figsize=(10, 6))
+    
+    for step_size in step_sizes:
+        # Construct the file name 
+        file_name = f"SimulationOutput/Q1_step_size_{step_size}_phase_index{current_phase}_keplerian_difference.dat"
+        
+        if os.path.exists(file_name):
+            # Load data
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            
+            # Calculate the magnitude of the position error
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            
+            # Normalize time to start at 0 and convert to hours
+            time_hours = (time - time[0]) / 3600.0
+            
+            # Plot Error vs Time on the current figure
+            plt.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
+            
+            # Extract and store the maximum error for the 1b plot
+            max_error = np.max(pos_error_mag)
+            if current_phase == 0:
+                max_errors_phase_0.append(max_error)
+            else:
+                max_errors_phase_1.append(max_error)
+        else:
+            print(f"Warning: File {file_name} not found. Check the file path and extension.")
+
+    # Format and save the current phase's figure
+    plt.title(f"Integration Error vs Time: {phase_names[current_phase]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    
+    # Place legend outside the plot
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
+    
+    # Save with a dynamic name based on the phase
+    phase_label = "flyby" if current_phase == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q1_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close() # Close the figure to free up memory before the next loop iteration
+
+# --- Plotting 1b: Max Error vs Time Step ---
+plt.figure(figsize=(8, 6))
+
+if max_errors_phase_0:
+    plt.loglog(step_sizes, max_errors_phase_0, marker='o', label=phase_names[0])
+if max_errors_phase_1:
+    plt.loglog(step_sizes, max_errors_phase_1, marker='s', label=phase_names[1])
+
+plt.title("Maximum Position Error vs. Time Step")
+plt.xlabel(r"Time Step $\Delta t$ [s]")
+plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]")
+plt.grid(True, which="both", ls="--", alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.savefig(f"{figures_dir}/Q1_max_error_vs_timestep.pdf", format='pdf', dpi=150)
+plt.close()
