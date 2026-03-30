@@ -1,0 +1,36 @@
+# Git ignore rules for LaTeX auxiliary files
+# Keep source `.tex` and final outputs (like `.pdf`) under version control.
+
+# LaTeX aux files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ind
+*.ilg
+*.inx
+*.run.xml
+*.nav
+*.snm
+*.vrb
+
+# latexmk / build artifacts
+.latexmk
+SimulationOutput/
+documents_deliverable/**/build/
+
+# editor/temp files
+*~
+.#*
+# OS files
+.DS_Store
