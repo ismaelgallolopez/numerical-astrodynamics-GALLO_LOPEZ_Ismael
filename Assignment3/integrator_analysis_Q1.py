@@ -82,7 +82,9 @@ for current_phase in range(len(central_bodies_per_phase)):
         )
 
         # Propagate dynamics
-        dynamics_simulator = ...
+        dynamics_simulator = simulator.create_dynamics_simulator(
+            bodies, propagator_settings
+        )
         state_history = dynamics_simulator.propagation_results.state_history
 
         # Compute difference w.r.t. analytical solution to file
