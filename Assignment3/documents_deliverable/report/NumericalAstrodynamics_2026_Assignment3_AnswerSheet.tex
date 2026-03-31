@@ -12,8 +12,9 @@
 \usepackage{float}
 
 
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{.6in}
+% \addtolength{\topmargin}{-.7in}
+% \addtolength{\textheight}{.6in}
+\usepackage[a4paper, left=1.80cm, right=1.80cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry} 
 
 
 \begin{document}
@@ -52,27 +53,47 @@ People you worked with (if none, state this):
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/Q1_error_vs_time_combined.pdf}
+    \includegraphics[width=0.8\textwidth]{../../figures/Q1_error_vs_time_combined.pdf}
     \caption{Integration error as a function of time for both the Flyby and GCO500 phases, for the different time steps.}
+    \label{fig:Q1_error_vs_time_combined}
 \end{figure}
 
 \subsection*{b}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../../figures/Q1_max_error_vs_timestep.pdf}
+    \includegraphics[width=0.7\textwidth]{../../figures/Q1_max_error_vs_timestep.pdf}
     \caption{Maximum error as a function of time step for the GCO500 and flyby phases.}
+    \label{fig:Q1_max_error_vs_timestep}
 \end{figure}
 
 \subsection*{c}
-i. Mathematical equation that describes behavior in maximum truncation error with time step: \textit{provide answer}\\
+i. Mathematical equation that describes behavior in maximum truncation error with time step:\\
+
+\begin{equation} \label{eq:trunc_error_RK}
+    \epsilon_{max}(\Delta t) \approx K (\Delta t)^N
+\end{equation}
+
+where $K$ is a constant and $N$ is the order of the integrator, $N=7$ for RKF7(8) with fixed step size.
+
+ii. Range of time steps where truncation error is dominant (GCO500): $\Delta t \in \{32, 64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
 \\
-ii. Range of time steps where truncation error is dominant (GCO500): {\textit{Provide answer}}\\
+iii. Range of time steps where truncation error is dominant (flyby): $\Delta t \in \{32, 64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
 \\
-ii. Range of time steps where truncation error is dominant (flyby): {\textit{Provide answer}}\\
-\\
-iii. \textbf{\textit{Explain why these results are (not) consistent with question (a)}}.
-\\
+iv. From the error behaviour in Fig.~\ref{fig:Q1_error_vs_time_combined}, it can be inferred that the maximum erorr is driven by the truncation error, at least, for $\Delta t \geq 64 \mathrm{ s}$. 
+To confirm this, and to analyze the limit case observed in Fig.~\ref{fig:Q1_max_error_vs_timestep}, the integration error is plotted only for $\Delta t \in \{32, 16, 8\} \mathrm{ s}$ in Fig.~\ref{fig:Q1_error_vs_time_low_timesteps}. 
+From the quasi-random evolution for all the timesteps plotted for the flyby it can be stated that the dominant error source is not truncation error. 
+On the other hand, for the GCO500 integration, the highest error is not for the biggest timestep, and together with the unpredictable behaviour of the error for $\Delta t = 32 \mathrm{ s}$ forms a proof of the fact that the truncating error is not dominant (Eq.~\ref{eq:trunc_error_RK}).  
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q1_error_vs_time_low_timesteps.pdf}
+    \caption{Integration error as a function of time for both the Flyby and GCO500 phases, only for the 3 smallest time steps.}
+    \label{fig:Q1_error_vs_time_low_timesteps}
+\end{figure}
+
+% \textbf{\textit{Explain why these results are (not) consistent with question (a)}}.
+
 \clearpage
 
 \section*{Question 2}
