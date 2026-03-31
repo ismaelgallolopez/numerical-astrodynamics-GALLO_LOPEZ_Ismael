@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{xkcdcolors}
 \usepackage[]{algorithm2e}
+\usepackage{float}
 
 
 \addtolength{\topmargin}{-.7in}
@@ -48,9 +49,21 @@ People you worked with (if none, state this):
 \section*{Question 1}
 
 \subsection*{a}
-\textit{Insert figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/Q1_error_vs_time_combined.pdf}
+    \caption{Integration error as a function of time for both the Flyby and GCO500 phases, for the different time steps.}
+\end{figure}
+
 \subsection*{b}
-\textit{Insert figure(s)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../../figures/Q1_max_error_vs_timestep.pdf}
+    \caption{Maximum error as a function of time step for the GCO500 and flyby phases.}
+\end{figure}
+
 \subsection*{c}
 i. Mathematical equation that describes behavior in maximum truncation error with time step: \textit{provide answer}\\
 \\

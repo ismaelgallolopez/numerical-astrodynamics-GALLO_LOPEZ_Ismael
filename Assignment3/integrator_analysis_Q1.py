@@ -119,10 +119,11 @@ phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
 max_errors_phase_0 = []
 max_errors_phase_1 = []
 
-# --- Plotting 1a: Error vs Time (Separate Figures) ---
+# --- Plotting 1a: Error vs Time (Combined Figure with Shared Legend) ---
+fig, axes = plt.subplots(1, 2, figsize=(12, 8))
+
 for current_phase in range(2):
-    # Create a new figure for each phase
-    plt.figure(figsize=(10, 6))
+    ax = axes[current_phase]
     
     for step_size in step_sizes:
         # Construct the file name 
@@ -139,8 +140,8 @@ for current_phase in range(2):
             # Normalize time to start at 0 and convert to hours
             time_hours = (time - time[0]) / 3600.0
             
-            # Plot Error vs Time on the current figure
-            plt.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
+            # Plot Error vs Time on the current subplot
+            ax.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s", linewidth=2)
             
             # Extract and store the maximum error for the 1b plot
             max_error = np.max(pos_error_mag)
@@ -151,34 +152,37 @@ for current_phase in range(2):
         else:
             print(f"Warning: File {file_name} not found. Check the file path and extension.")
 
-    # Format and save the current phase's figure
-    plt.title(f"Integration Error vs Time: {phase_names[current_phase]}")
-    plt.xlabel("Time [hours]")
-    plt.ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]")
-    plt.grid(True, which="both", ls="--", alpha=0.5)
-    
-    # Place legend outside the plot
-    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    plt.tight_layout()
-    
-    # Save with a dynamic name based on the phase
-    phase_label = "flyby" if current_phase == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q1_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
-    plt.close() # Close the figure to free up memory before the next loop iteration
+    # Format the current phase's subplot
+    ax.set_title(f"{phase_names[current_phase]}", fontsize=25, fontweight='bold')
+    ax.set_xlabel("Time [hours]", fontsize=22)
+    ax.set_ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]", fontsize=22)
+    ax.tick_params(labelsize=20)
+    ax.grid(True, which="both", ls="--", alpha=0.5)
+
+# Create a shared legend for both subplots
+handles, labels = axes[0].get_legend_handles_labels()
+fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=4, frameon=True, fontsize=20)
+plt.tight_layout()
+plt.subplots_adjust(bottom=0.25)
+
+# Save the combined figure
+plt.savefig(f"{figures_dir}/Q1_error_vs_time_combined.pdf", format='pdf', dpi=150, bbox_inches='tight')
+plt.close() # Close the figure to free up memory before the next loop iteration
 
 # --- Plotting 1b: Max Error vs Time Step ---
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(8, 8))
 
 if max_errors_phase_0:
-    plt.loglog(step_sizes, max_errors_phase_0, marker='o', label=phase_names[0])
+    plt.loglog(step_sizes, max_errors_phase_0, marker='o', label=phase_names[0], linewidth=2, markersize=8)
 if max_errors_phase_1:
-    plt.loglog(step_sizes, max_errors_phase_1, marker='s', label=phase_names[1])
+    plt.loglog(step_sizes, max_errors_phase_1, marker='s', label=phase_names[1], linewidth=2, markersize=8)
 
-plt.title("Maximum Position Error vs. Time Step")
-plt.xlabel(r"Time Step $\Delta t$ [s]")
-plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]")
+plt.title("Maximum Position Error vs. Time Step", fontsize=15, fontweight='bold')
+plt.xlabel(r"Time Step $\Delta t$ [s]", fontsize=12)
+plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]", fontsize=12)
+plt.tick_params(labelsize=11)
 plt.grid(True, which="both", ls="--", alpha=0.5)
-plt.legend()
+plt.legend(fontsize=11)
 plt.tight_layout()
 plt.savefig(f"{figures_dir}/Q1_max_error_vs_timestep.pdf", format='pdf', dpi=150)
 plt.close()
