@@ -24,7 +24,10 @@ bodies = create_bodies()
 
 # Define list of step size for integrator to take
 step_sizes = [2**i for i in range(2, 10)]
+# print(step_sizes) # debugging
 benchmark_time_step = [10, 20]
+
+errors_comparison = {}
 
 # Iterate over phases
 for current_phase in range(len(central_bodies_per_phase)):
@@ -130,4 +133,18 @@ for current_phase in range(len(central_bodies_per_phase)):
             benchmark_interpolator,
         )
 
-
+    for i, step_size in enumerate(step_sizes[1:]): 
+        dt_coarse = step_size
+        dt_fine = step_sizes[i]
+        # print(dt_coarse, dt_fine) # debugging
+        
+        times, errors = compare_different_timesteps(dt_coarse, dt_fine, current_phase)
+        
+        key = f"Phase {current_phase} (dt={dt_coarse} vs {dt_fine})"
+        errors_comparison[key] = {
+            'phase': current_phase,
+            'dt_coarse': dt_coarse,
+            'dt_fine': dt_fine,
+            'times': times,
+            'errors': errors,
+        }

@@ -507,3 +507,44 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
     )
 
     return acceleration_models
+
+
+def compare_different_timesteps(dt_coarse, dt_fine, current_phase):
+    """
+    Computes Richardson error: ϵr(t; ∆t) ≈ r(t; ∆t) − r(t; ∆t/2)
+
+    Parameters
+    ----------
+    dt_coarse : float
+        Coarser step size (larger)
+    dt_fine : float
+        Finer step size (smaller)
+    current_phase : int
+        Phase index for file names
+
+    Return
+    ------
+    Tuple of (times, errors) where errors are Richardson error magnitudes
+    """
+    
+    file_id_coarse = f"Q2_step_size_{dt_coarse}_phase_index{current_phase}"
+    data_coarse = np.loadtxt(output_directory + file_id_coarse + "_numerical_states.dat")
+    times_coarse = data_coarse[:, 0]
+    pos_coarse = data_coarse[:, 1:4]
+    
+    file_id_fine = f"Q2_step_size_{dt_fine}_phase_index{current_phase}"
+    data_fine = np.loadtxt(output_directory + file_id_fine + "_numerical_states.dat")
+    times_fine = data_fine[:, 0]
+    pos_fine = data_fine[:, 1:4]
+    
+    common_times = np.intersect1d(times_coarse, times_fine)
+    
+    errors = []
+    for t in common_times:
+        pos_coarse_t = pos_coarse[np.where(times_coarse == t)[0][0]]
+        pos_fine_t = pos_fine[np.where(times_fine == t)[0][0]]
+        error = np.linalg.norm(pos_coarse_t - pos_fine_t)
+        errors.append(error)
+    
+    return common_times, np.array(errors)
+    
