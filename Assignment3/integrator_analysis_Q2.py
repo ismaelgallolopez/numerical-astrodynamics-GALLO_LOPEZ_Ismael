@@ -91,15 +91,21 @@ for current_phase in range(len(central_bodies_per_phase)):
     benchmark_state_history = dynamics_simulator.propagation_results.state_history
     # print(benchmark_state_history) # debugging
     
+    benchmark_times = sorted(list(benchmark_state_history.keys()))
+    points_to_trim_benchmark = 4
+    benchmark_times_trimmed = benchmark_times[points_to_trim_benchmark:-points_to_trim_benchmark]
+    benchmark_state_history_trimmed = {t: benchmark_state_history[t] for t in benchmark_times_trimmed}
+    
     interpolator_settings = interpolators.lagrange_interpolation(8) # 8th order lagrange interpolation, as requested
     
     benchmark_interpolator = interpolators.create_one_dimensional_vector_interpolator(
-        benchmark_state_history, 
+        benchmark_state_history_trimmed, 
         interpolator_settings
     )
     
-    min_epoch = min(benchmark_state_history.keys())
-    max_epoch = max(benchmark_state_history.keys())
+    margin = 50  
+    min_epoch = benchmark_times[points_to_trim_benchmark + margin]
+    max_epoch = benchmark_times[-(points_to_trim_benchmark + margin)]
     time_limits = (min_epoch, max_epoch)
 
     # Iterate over step size
@@ -218,17 +224,9 @@ for phase_idx in range(2):
             data = np.loadtxt(file_name)
             time = data[:, 0]
             
-            points_to_trim = 10
-            if len(time) > 2 * points_to_trim:
-                time_trimmed = time[points_to_trim:-points_to_trim]
-                error_data_trimmed = data[points_to_trim:-points_to_trim, 1:4]
-            else:
-                time_trimmed = time
-                error_data_trimmed = data[:, 1:4]
-            
             # Calculate Cartesian magnitude
-            pos_error_mag = np.linalg.norm(error_data_trimmed, axis=1)
-            time_hours = (time_trimmed - data[0, 0]) / 3600.0
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            time_hours = (time - time[0]) / 3600.0
             
             plt.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
         else:
