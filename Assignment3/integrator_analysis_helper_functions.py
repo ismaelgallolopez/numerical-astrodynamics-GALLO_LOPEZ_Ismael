@@ -10,6 +10,7 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 from tudatpy import constants
 from tudatpy.astro import element_conversion, two_body_dynamics
 from tudatpy.dynamics import environment_setup, environment, propagation_setup, simulator
@@ -130,6 +131,7 @@ def get_difference_wrt_kepler_orbit(
 def get_difference_wrt_benchmarks(
     state_history: dict,
     benchmark_interpolator: interpolators.OneDimensionalInterpolatorVector,
+    time_limits: tuple = None,
 ):
     """
     This function takes a Cartesian state history (dict of time as key and state as value), and
@@ -142,6 +144,8 @@ def get_difference_wrt_benchmarks(
         Cartesian state history
     benchmark_interpolator : OneDimensionalInterpolatorVector
         Interpolator that provides a benchmark (e.g. high-accuracy solution) for the dynamical model from which state_history is obtained
+    time_limits : tuple, optional
+        Tuple containing (min_epoch, max_epoch) of the interpolator's domain. Epochs outside this range are skipped.
 
     Return
     ------
@@ -151,10 +155,14 @@ def get_difference_wrt_benchmarks(
     """
 
     benchmark_difference = dict()
+
     for epoch in state_history.keys():
-        benchmark_difference[epoch] = state_history[
-            epoch
-        ] - benchmark_interpolator.interpolate(epoch)
+        if time_limits is not None:
+            if epoch < time_limits[0] or epoch > time_limits[1]:
+                continue
+                
+        benchmark_difference[epoch] = state_history[epoch] - benchmark_interpolator.interpolate(epoch)
+
     return benchmark_difference
 
 
@@ -237,6 +245,7 @@ def write_propagation_results_and_benchmark_difference_to_file(
     dynamics_simulator: simulator.SingleArcSimulator,
     file_output_identifier: str,
     benchmark_interpolator: interpolators.OneDimensionalInterpolatorVector,
+    time_limits: tuple = None,
 ):
     """
     This function will write the results of a numerical propagation, as well as the difference w.r.t. a benchmark
@@ -252,6 +261,8 @@ def write_propagation_results_and_benchmark_difference_to_file(
         Directory and file name that will be used to save the output data files
     benchmark_interpolator : OneDimensionalInterpolatorVector
         Interpolator that provides a benchmark (e.g. high-accuracy solution) for the dynamical model from which state_history is obtained
+    time_limits : tuple, optional
+        Tuple containing (min_epoch, max_epoch) of the interpolator's domain.
 
     Files written
     -------------
@@ -271,7 +282,7 @@ def write_propagation_results_and_benchmark_difference_to_file(
 
     # Compute difference w.r.t. benchmark
     benchmark_difference = get_difference_wrt_benchmarks(
-        numerical_solution, benchmark_interpolator
+        numerical_solution, benchmark_interpolator, time_limits
     )
 
     # Save numerical states
@@ -512,7 +523,6 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
 def compare_different_timesteps(dt_coarse, dt_fine, current_phase):
     """
     Computes Richardson error: ϵr(t; ∆t) ≈ r(t; ∆t) − r(t; ∆t/2)
-
     Parameters
     ----------
     dt_coarse : float
