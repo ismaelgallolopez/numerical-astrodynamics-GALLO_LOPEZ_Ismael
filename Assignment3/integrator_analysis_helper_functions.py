@@ -35,7 +35,7 @@ orbit_initial_time = (
 
 output_directory = "./SimulationOutput/"
 
-central_bodies_per_phase = ["Callisto", "Ganymede"]
+central_bodies_per_phase = ["Callisto", "Ganymede"] # flyby, GCO500
 initial_times_per_phase = [flyby_initial_time, orbit_initial_time]
 propagation_times_per_phase = [8.0 * 3600.0, 24.0 * 3600.0]
 
@@ -483,14 +483,14 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
     }
 
     if central_body == "Callisto": # flyby
-        acceleration_settings_on_vehicle_perturbed += {
+        acceleration_settings_on_vehicle_perturbed.update({
             "Ganymede": [propagation_setup.acceleration.point_mass_gravity()]
-        }
+        })
     elif central_body == "Ganymede": # GCO500
-        acceleration_settings_on_vehicle_perturbed += {
+        acceleration_settings_on_vehicle_perturbed.update({
             "Callisto": [propagation_setup.acceleration.point_mass_gravity()],
             "Ganymede": [propagation_setup.acceleration.aerodynamic()]
-        }
+        })
     else:
         raise ValueError("Error with central body")
 
