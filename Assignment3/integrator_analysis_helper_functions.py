@@ -472,6 +472,38 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
     """
 
     # Create acceleration models.
-    acceleration_models = ...
+    acceleration_settings_on_vehicle_perturbed = {
+        central_body: [propagation_setup.acceleration.spherical_harmonic_gravity(2, 2)],
+        "Jupiter": [propagation_setup.acceleration.spherical_harmonic_gravity(6, 0)],
+        "Io": [propagation_setup.acceleration.point_mass_gravity()],
+        "Europa": [propagation_setup.acceleration.point_mass_gravity()],
+        "Sun": [propagation_setup.acceleration.point_mass_gravity(),
+                propagation_setup.acceleration.radiation_pressure()],
+        "Saturn": [propagation_setup.acceleration.point_mass_gravity()],
+    }
+
+    if central_body == "Callisto": # flyby
+        acceleration_settings_on_vehicle_perturbed += {
+            "Ganymede": [propagation_setup.acceleration.point_mass_gravity()]
+        }
+    elif central_body == "Ganymede": # GCO500
+        acceleration_settings_on_vehicle_perturbed += {
+            "Callisto": [propagation_setup.acceleration.point_mass_gravity()],
+            "Ganymede": [propagation_setup.acceleration.aerodynamic()]
+        }
+    else:
+        raise ValueError("Error with central body")
+
+    bodies_to_propagate=["JUICE"]
+
+    acceleration_settings_perturbed = {"JUICE": acceleration_settings_on_vehicle_perturbed}
+
+    
+    acceleration_models = propagation_setup.create_acceleration_models(
+        bodies, 
+        acceleration_settings_perturbed, 
+        bodies_to_propagate, 
+        [central_body]
+    )
 
     return acceleration_models
