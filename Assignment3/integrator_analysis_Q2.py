@@ -148,3 +148,78 @@ for current_phase in range(len(central_bodies_per_phase)):
             'times': times,
             'errors': errors,
         }
+
+
+figures_dir = "figures"
+if not os.path.exists(figures_dir):
+    os.makedirs(figures_dir)
+
+phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
+# Use your standard step sizes (ignoring the 4s step used only for calculating the 8s error)
+standard_step_sizes = [2**i for i in range(3, 10)]
+
+# =====================================================================
+# Plotting 2a: Error vs Time (Delta t / 2 Method) from Dictionary
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    for step_size in standard_step_sizes:
+        # Reconstruct the exact dictionary key you created in your loop
+        # Note: dt_fine is the smaller step (step_size / 2)
+        key = f"Phase {phase_idx} (dt={step_size} vs {int(step_size/2)})"
+        
+        if key in errors_comparison:
+            data = errors_comparison[key]
+            
+            # Normalize time to hours
+            time_hours = (np.array(data['times']) - data['times'][0]) / 3600.0
+            
+            plt.semilogy(time_hours, data['errors'], label=f"$\Delta t$ = {step_size} s")
+        else:
+            print(f"Warning: Dictionary key '{key}' not found for 2a plotting.")
+            
+    plt.title(f"Integration Error ($\Delta t/2$ Method): {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"$||\epsilon_r(t; \Delta t)|| \approx ||r(\Delta t) - r(\Delta t/2)||$ [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
+    
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q2a_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
+
+
+# =====================================================================
+# Plotting 2b: Error vs Time (Benchmark Method) from Files
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    for step_size in standard_step_sizes:
+        # Verify this suffix matches exactly what your helper function outputs!
+        file_name = f"SimulationOutput/Q2_step_size_{step_size}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            
+            # Calculate Cartesian magnitude
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            time_hours = (time - time[0]) / 3600.0
+            
+            plt.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
+        else:
+            print(f"Warning: File {file_name} not found for 2b plotting.")
+            
+    plt.title(f"Integration Error (Benchmark Method): {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"$||\epsilon_r(t; \Delta t)|| \approx ||r(\Delta t) - \bar{r}(t)||$ [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
+    
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q2b_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
