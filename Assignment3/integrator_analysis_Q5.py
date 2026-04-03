@@ -153,3 +153,56 @@ K_r_euler = local_truncation_error_euler / (time_step_euler ** 2) # euler is 1st
 # print(state_differences_euler.shape) # debugging
 # print(state_history) # debugging
 # print(keplerian_solution_difference) # debugging
+
+figures_dir = "figures"
+if not os.path.exists(figures_dir):
+    os.makedirs(figures_dir)
+
+# Normalize time array to hours for plotting (20 steps, separated by 600 seconds)
+# t = 0 represents the start of the GCO500 orbit phase
+times_seconds = np.array([i * 600.0 for i in range(n_prop)])
+times_hours = times_seconds / 3600.0
+
+# =====================================================================
+# PLACEHOLDERS: You must compute these mathematically for Q5(b) and 5(c)
+# =====================================================================
+# theoretical_K_r_rk = ...   # Your derived analytical K_r for RKF7(8)
+# theoretical_K_r_euler = ... # Your derived analytical K_r for Euler
+
+# (Dummy arrays used here just so the plotting script runs without crashing)
+theoretical_K_r_rk = np.zeros(n_prop) 
+theoretical_K_r_euler = np.zeros(n_prop) 
+
+# =====================================================================
+# Plotting 5a & 5b: Error Constant Kr(t) for RKF7(8)
+# =====================================================================
+plt.figure(figsize=(10, 6))
+
+plt.semilogy(times_hours, K_r_rk, marker='o', linestyle='-', color='blue', label='Numerical $||K_r(t)||$')
+plt.semilogy(times_hours, theoretical_K_r_rk, marker='s', linestyle='--', color='orange', label='Theoretical $||K_r(t)||$')
+
+plt.title("Local Truncation Error Constant $K_r(t)$: RKF7(8)")
+plt.xlabel("Time since start of phase [hours]")
+plt.ylabel(r"Error Constant $||K_r(t)||$")
+plt.grid(True, which="both", ls="--", alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.savefig(f"{figures_dir}/Q5_Kr_RKF78.pdf", format='pdf', dpi=150)
+plt.close()
+
+# =====================================================================
+# Plotting 5c: Error Constant Kr(t) for Euler
+# =====================================================================
+plt.figure(figsize=(10, 6))
+
+plt.semilogy(times_hours, K_r_euler, marker='o', linestyle='-', color='green', label='Numerical $||K_r(t)||$')
+plt.semilogy(times_hours, theoretical_K_r_euler, marker='s', linestyle='--', color='purple', label='Theoretical $||K_r(t)||$')
+
+plt.title("Local Truncation Error Constant $K_r(t)$: Euler")
+plt.xlabel("Time since start of phase [hours]")
+plt.ylabel(r"Error Constant $||K_r(t)||$")
+plt.grid(True, which="both", ls="--", alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.savefig(f"{figures_dir}/Q5_Kr_Euler.pdf", format='pdf', dpi=150)
+plt.close()
