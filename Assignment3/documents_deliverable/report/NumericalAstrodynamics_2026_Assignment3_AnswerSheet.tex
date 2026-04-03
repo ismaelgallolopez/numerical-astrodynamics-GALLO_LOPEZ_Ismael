@@ -32,7 +32,7 @@ Github link: \textit{\href{https://github.com/ismaelgallolopez/numerical-astrody
 
 Time spent per exercise:
 \begin{enumerate}
-    \item \ldots
+    \item 6
     \item \ldots
     \item \ldots
     \item \ldots
@@ -76,9 +76,9 @@ i. Mathematical equation that describes behavior in maximum truncation error wit
 
 where $K$ is a constant and $N$ is the order of the integrator, $N=7$ for RKF7(8) with fixed step size.
 
-ii. Range of time steps where truncation error is dominant (GCO500): $\Delta t \in \{32, 64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
+ii. Range of time steps where truncation error is dominant (GCO500): $\Delta t \in \{64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
 \\
-iii. Range of time steps where truncation error is dominant (flyby): $\Delta t \in \{32, 64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
+iii. Range of time steps where truncation error is dominant (flyby): $\Delta t \in \{64, 128, 256, 512 \} \mathrm{ s}$ \footnote{As per the behaviour observed in \autoref{fig:Q1_max_error_vs_timestep}}\\
 \\
 iv. From the error behaviour in Fig.~\ref{fig:Q1_error_vs_time_combined}, it can be inferred that the maximum erorr is driven by the truncation error, at least, for $\Delta t \geq 64 \mathrm{ s}$. 
 To confirm this, and to analyze the limit case observed in Fig.~\ref{fig:Q1_max_error_vs_timestep}, the integration error is plotted only for $\Delta t \in \{32, 16, 8\} \mathrm{ s}$ in Fig.~\ref{fig:Q1_error_vs_time_low_timesteps}. 
@@ -99,9 +99,30 @@ On the other hand, for the GCO500 integration, the highest error is not for the 
 \section*{Question 2}
 
 \subsection*{a}
-\textit{Insert figure(s)}\\
-\\
-Mathematical assumption behind error quantification: {\textit{Provide answer}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q2a_error_vs_time_flyby.pdf}
+    \caption{Integration error as a function of time for both the Flyby phase, computed as $\mbox{\(\epsilon (t; \Delta t) \approx \mathbf{r} (t; \Delta t) - \mathbf{r} (t; \Delta t/2)\)}$.}
+    \label{fig:Q2a_error_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q2a_error_vs_time_orbit.pdf}
+    \caption{Integration error as a function of time for both the GCO500 phase, computed as $\mbox{\(\epsilon (t; \Delta t) \approx \mathbf{r} (t; \Delta t) - \mathbf{r} (t; \Delta t/2)\)}$.}
+    \label{fig:Q2a_error_vs_time_orbit}
+\end{figure}
+
+Mathematical assumption behind error quantification: 
+
+\begin{equation}
+    \mathbf{r}_{true} \approx \mathbf{r}(t; \Delta t) + C (\Delta t)^{p+1},
+\end{equation} \label{eq:half_step_error_assumption}
+
+which implies that the dominant error term is the truncation error, and that the error can be approximated by the difference between two solutions with different time steps, as long as the time steps are sufficiently small. 
+Hence, the error of the solution with the bigger time step is much bigger than the error of the solution with the smaller time step.
+
 \subsection*{b}
 \textit{Insert figure(s)}\\
 \\

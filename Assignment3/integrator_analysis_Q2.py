@@ -184,7 +184,7 @@ for phase_idx in range(2):
             data = errors_comparison[key]
             
             points_to_trim = 0
-            if len(data['times']) > 2 * points_to_trim:
+            if points_to_trim > 0 and len(data['times']) > 2 * points_to_trim:
                 times_trimmed = data['times'][points_to_trim:-points_to_trim]
                 errors_trimmed = data['errors'][points_to_trim:-points_to_trim]
             else:
