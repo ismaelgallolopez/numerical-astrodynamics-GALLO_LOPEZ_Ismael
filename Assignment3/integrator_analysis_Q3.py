@@ -15,6 +15,8 @@ from integrator_analysis_helper_functions import *
 
 current_directory = os.getcwd()
 
+prop_count = 0 # debugging
+
 spice.load_standard_kernels()
 spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 
@@ -150,3 +152,83 @@ for current_phase in range(len(central_bodies_per_phase)):
         write_propagation_results_and_benchmark_difference_to_file(
             perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
         )
+
+        prop_count += 1 # debugging
+        # print('propagation number', prop_count) # debugging
+
+
+figures_dir = "figures"
+if not os.path.exists(figures_dir):
+    os.makedirs(figures_dir)
+
+phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
+integration_tolerances = [1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6]
+
+# =====================================================================
+# Plotting 3a: Error vs Time for different tolerances
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    for tol_idx, tolerance in enumerate(integration_tolerances):
+        file_name = f"SimulationOutput/Q3_tolerance_index_{tol_idx}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            time_hours = (time - time[0]) / 3600.0
+            
+            # Cartesian position error magnitude
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            
+            plt.semilogy(time_hours, pos_error_mag, label=f"Tol = {tolerance}")
+        else:
+            print(f"Warning: {file_name} not found.")
+
+    plt.title(f"Integration Error (Variable Step RKF45): {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
+    
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q3a_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
+
+# =====================================================================
+# Plotting 3b: Time Step Size vs Time for different tolerances
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    for tol_idx, tolerance in enumerate(integration_tolerances):
+        file_name = f"SimulationOutput/Q3_tolerance_index_{tol_idx}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            time_hours = (time - time[0]) / 3600.0
+            
+            # Compute time steps (dt = t_{i+1} - t_i)
+            # The time array represents epochs, so np.diff gives the step taken to reach the next epoch
+            dt_array = np.diff(time)
+            time_plot = time_hours[:-1] # Match array lengths
+            
+            plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
+
+    plt.title(f"Time Step History: {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"Time Step $\Delta t$ [s]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    
+    # Restrict the x-axis for GCO500 to show a single orbit (185 minutes) 
+    # Source https://spiftp.esac.esa.int/data/ANCDR/JUICE/man/JUICE_CReMA_Issue_4_Revision_2/Memo_20200429_JUICE_GCO_Cycles.pdf
+    if phase_idx == 1:
+        plt.xlim(0, 185/60) 
+        
+    plt.tight_layout()
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q3b_timestep_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
