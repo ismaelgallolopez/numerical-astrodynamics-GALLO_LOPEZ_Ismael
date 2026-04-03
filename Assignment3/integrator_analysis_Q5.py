@@ -28,14 +28,18 @@ central_bodies = [central_body]
 current_phase_start_time = initial_times_per_phase[current_phase]
 acceleration_models = get_unperturbed_accelerations(central_body, bodies)
 
-state_differences_rkf = np.zeros((6, 20))
-state_differences_euler = np.zeros((6, 20))
+n_prop = 20
+
+state_differences_rkf = np.zeros((6, n_prop))
+state_differences_euler = np.zeros((6, n_prop))
 
 step_per_run = 600.0
-time_step = 300.0
+
+# local_truncation_error_rk = np.zeros(n_prop)
+# local_truncation_error_euler = np.zeros(n_prop)
 
 # Perform 20 individual steps
-for i in range(20):
+for i in range(n_prop):
 
     # Compute initial time of current step
     current_start_time = initial_times_per_phase[current_phase] + i * step_per_run
@@ -91,12 +95,61 @@ for i in range(20):
         state_history, central_body_gravitational_parameter
     )
 
+    final_state_difference = list(keplerian_solution_difference.values())[-1]
+    # local_truncation_error_rk[i] = np.linalg.norm(keplerian_solution_difference[:3])
 
-    local_truncation_error = ...
+    state_differences_rkf[:, i] = final_state_difference
 
     """
     Euler
     """
 
+    # Get fixed step euler integrator settings
+    time_step_euler = 10.0
+
+    coefficient_set_euler = propagation_setup.integrator.euler_forward 
+    integrator_settings_euler = propagation_setup.integrator.runge_kutta_fixed_step_size(
+        time_step_euler, coefficient_set_euler
+    )
+
+    # Define propagator settings, terminate after 10 s.
+    termination_time_euler = current_start_time + time_step_euler
+    termination_settings_euler = propagation_setup.propagator.time_termination(
+        termination_time_euler, terminate_exactly_on_final_condition=True
+    )
+    propagator_settings_euler = propagation_setup.propagator.translational(
+            [current_central_body],
+            acceleration_models,
+            bodies_to_integrate,
+            initial_state,
+            current_start_time,
+            integrator_settings_euler,
+            termination_settings_euler,
+            output_variables=[],
+        )
+
+    # Propagate Dynamics
+    dynamics_simulator_euler = simulator.create_dynamics_simulator(
+            bodies, propagator_settings_euler
+        )
+    
+    state_history_euler = dynamics_simulator_euler.propagation_results.state_history
+
+    # Compute difference w.r.t. analytical solution to file
+    keplerian_solution_difference_euler = get_difference_wrt_kepler_orbit(
+        state_history_euler, central_body_gravitational_parameter
+    )
+
+    final_state_difference_euler = list(keplerian_solution_difference_euler.values())[-1]
+
+    state_differences_euler[:, i] = final_state_difference_euler
+
+local_truncation_error_rk = np.linalg.norm(state_differences_rkf[:3, :], axis=0)
+local_truncation_error_euler = np.linalg.norm(state_differences_euler[:3, :], axis=0)
+
+K_r_rk = local_truncation_error_rk / (time_step ** 9) # rk8 is 8th order, p+1=9
+K_r_euler = local_truncation_error_euler / (time_step_euler ** 2) # euler is 1st order, p+1=2
+
+# print(state_differences_euler.shape) # debugging
 # print(state_history) # debugging
 # print(keplerian_solution_difference) # debugging
