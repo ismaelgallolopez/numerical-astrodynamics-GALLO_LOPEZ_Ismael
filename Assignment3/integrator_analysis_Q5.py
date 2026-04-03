@@ -32,41 +32,71 @@ state_differences_rkf = np.zeros((6, 20))
 state_differences_euler = np.zeros((6, 20))
 
 step_per_run = 600.0
+time_step = 300.0
 
 # Perform 20 individual steps
 for i in range(20):
 
     # Compute initial time of current step
-    current_start_time = ...
+    current_start_time = initial_times_per_phase[current_phase] + i * step_per_run
+    # Define central body of propagation
+    current_central_body = central_bodies_per_phase[current_phase]
+
 
     # Compute initial state of current step
-    initial_state = ...
+    initial_state = spice.get_body_cartesian_state_at_epoch(
+        target_body_name="JUICE",
+        observer_body_name=current_central_body,
+        reference_frame_name=global_frame_orientation,
+        aberration_corrections="NONE",
+        ephemeris_time=current_start_time,
+    )
 
     """
     RKF
     """
 
     # Get fixed step RKF78 integrator settings
-    integrator_settings = ...
+    time_step = 300.0
+    integrator_settings = get_fixed_step_size_integrator_settings(time_step)
 
     # Define propagator settings, terminate after 300 s.
-    time_step = 300.0
     termination_time = current_start_time + time_step
     termination_settings = propagation_setup.propagator.time_termination(
         termination_time, terminate_exactly_on_final_condition=True
     )
     propagator_settings = propagation_setup.propagator.translational(
-        central_bodies,
-        acceleration_models,
-        bodies_to_integrate,
-        initial_state,
-        termination_settings,
-    )
+            [current_central_body],
+            acceleration_models,
+            bodies_to_integrate,
+            initial_state,
+            current_start_time,
+            integrator_settings,
+            termination_settings,
+            output_variables=[],
+        )
 
     # Propagate Dynamics
-    dynamics_simulator = ...
+    dynamics_simulator = simulator.create_dynamics_simulator(
+            bodies, propagator_settings
+        )
+    
+    state_history = dynamics_simulator.propagation_results.state_history
+
+    # Compute difference w.r.t. analytical solution to file
+    central_body_gravitational_parameter = bodies.get_body(
+        current_central_body
+    ).gravitational_parameter
+    keplerian_solution_difference = get_difference_wrt_kepler_orbit(
+        state_history, central_body_gravitational_parameter
+    )
+
+
     local_truncation_error = ...
 
     """
     Euler
     """
+
+# print(state_history) # debugging
+# print(keplerian_solution_difference) # debugging
