@@ -85,27 +85,21 @@ for current_phase in range(len(central_bodies_per_phase)):
 
     benchmark_state_history = benchmark_dynamics_simulator.propagation_results.state_history
 
-    # Perform integration of dynamics with different tolerances
-    for current_tolerance in integration_tolerances:
-
-        # Define integrator step settings
-        initial_time_step = 10.0
-        minimum_step_size = 1.0e-12
-        maximum_step_size = np.inf
+    # Define integrator step settings
+    initial_time_step = 10.0
+    minimum_step_size = 1.0e-12
+    maximum_step_size = np.inf
 
         # Create integrator settings
-        step_size_validation_settings = propagation_setup.integrator.step_size_validation(
+        # Create integrator settings
+    step_size_validation_settings = propagation_setup.integrator.step_size_validation(
             minimum_step = minimum_step_size,
             maximum_step = maximum_step_size
         )
 
+    for current_tolerance in integration_tolerances:
         for coefficient_set in coefficient_set_options:
-        #             # Retrieve coefficient set
-        # coefficient_set = propagation_setup.integrator.CoefficientSets.rkf_56 
-            print(coefficient_set) # debugging 
-            print(current_tolerance) # debugging
-
-            # Create integrator settings
+            # Create step size control settings
             step_size_control_settings = (
                 propagation_setup.integrator.step_size_control_elementwise_scalar_tolerance(
                     relative_error_tolerance = current_tolerance,
@@ -134,13 +128,33 @@ for current_phase in range(len(central_bodies_per_phase)):
                 output_variables=[],
             )
 
-        for step_size in step_sizes:
-            order_to_use = propagation_setup.integrator.OrderToIntegrate.higher
-            if coefficient_set == propagation_setup.integrator.CoefficientSets.rkf_45:
-                order_to_use = propagation_setup.integrator.OrderToIntegrate.lower 
+            # Define output file name
+            file_output_identifier = (
+                "Q4_variable_tolerance_index_"
+                + str(integration_tolerances.index(current_tolerance))
+                + "_coeff_"
+                + str(coefficient_set_options.index(coefficient_set))
+                + "_phase_"
+                + str(current_phase)
+            )
 
-            # Define integrator settings
-            # coefficient_set = propagation_setup.integrator.rkf_78
+            perturbed_dynamics_simulator = simulator.create_dynamics_simulator(
+                bodies, perturbed_propagator_settings
+            )
+
+            write_propagation_results_and_benchmark_difference_to_file(
+                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
+            )
+
+            prop_count += 1
+
+    for coefficient_set in coefficient_set_options:
+        order_to_use = propagation_setup.integrator.OrderToIntegrate.higher
+        if coefficient_set == propagation_setup.integrator.CoefficientSets.rkf_45:
+            order_to_use = propagation_setup.integrator.OrderToIntegrate.lower
+
+        for step_size in step_sizes:
+            # Create fixed step-size integrator settings
             integrator_settings = propagation_setup.integrator.runge_kutta_fixed_step_size(
                 step_size, coefficient_set, order_to_use
             )
@@ -156,23 +170,24 @@ for current_phase in range(len(central_bodies_per_phase)):
                 output_variables=[],
             )
 
-        # Define output file name
-        file_output_identifier = (
-            "Q3_tolerance_index_"
-            + str(integration_tolerances.index(current_tolerance))
-            + "_phase_index"
-            + str(current_phase)
-        )
+            # Define output file name
+            file_output_identifier = (
+                "Q4_fixed_step_size_"
+                + str(step_size)
+                + "_coeff_"
+                + str(coefficient_set_options.index(coefficient_set))
+                + "_phase_"
+                + str(current_phase)
+            )
 
-        # Propagate dynamics for perturbed and unperturbed case
-        perturbed_dynamics_simulator = simulator.create_dynamics_simulator(
-            bodies, perturbed_propagator_settings
-        )
+            # Propagate dynamics and save results
+            perturbed_dynamics_simulator = simulator.create_dynamics_simulator(
+                bodies, propagator_settings
+            )
 
-        write_propagation_results_and_benchmark_difference_to_file(
-            perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
-        )
+            write_propagation_results_and_benchmark_difference_to_file(
+                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
+            )
 
-        prop_count += 1 # debugging
-        # print('propagation number', prop_count) # debugging
+            prop_count += 1
 
