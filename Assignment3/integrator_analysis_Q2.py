@@ -170,6 +170,39 @@ phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
 standard_step_sizes = [2**i for i in range(3, 10)]
 
 # =====================================================================
+# Collect data for both 2a and 2b to determine shared axis limits
+# =====================================================================
+phase_axis_limits = {}  # Store min/max for each phase
+
+for phase_idx in range(2):
+    all_errors_2a = []
+    all_errors_2b = []
+    
+    # Collect 2a errors
+    for step_size in standard_step_sizes:
+        key = f"Phase {phase_idx} (dt={step_size} vs {int(step_size/2)})"
+        if key in errors_comparison:
+            data = errors_comparison[key]
+            all_errors_2a.extend(data['errors'])
+    
+    # Collect 2b errors
+    for step_size in standard_step_sizes:
+        file_name = f"SimulationOutput/Q2_step_size_{step_size}_phase_index{phase_idx}_benchmark_difference.dat"
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            all_errors_2b.extend(pos_error_mag)
+    
+    # Determine axis limits for this phase
+    all_errors_combined = all_errors_2a + all_errors_2b
+    if all_errors_combined:
+        y_min = np.min(all_errors_combined)
+        y_max = np.max(all_errors_combined)
+        phase_axis_limits[phase_idx] = (y_min, y_max)
+    else:
+        phase_axis_limits[phase_idx] = None
+
+# =====================================================================
 # Plotting 2a: Error vs Time (Delta t / 2 Method) from Dictionary
 # =====================================================================
 for phase_idx in range(2):
@@ -197,6 +230,10 @@ for phase_idx in range(2):
             plt.semilogy(time_hours, errors_trimmed, label=f"$\Delta t$ = {step_size} s")
         else:
             print(f"Warning: Dictionary key '{key}' not found for 2a plotting.")
+    
+    if phase_axis_limits[phase_idx] is not None:
+        y_min, y_max = phase_axis_limits[phase_idx]
+        plt.ylim([y_min * 0.8, y_max * 1.2])  # Add 20% margin for visibility
             
     plt.title(f"Integration Error ($\Delta t/2$ Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
@@ -231,6 +268,10 @@ for phase_idx in range(2):
             plt.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
         else:
             print(f"Warning: File {file_name} not found for 2b plotting.")
+    
+    if phase_axis_limits[phase_idx] is not None:
+        y_min, y_max = phase_axis_limits[phase_idx]
+        plt.ylim([y_min * 0.8, y_max * 1.2])  # Add 20% margin for visibility
             
     plt.title(f"Integration Error (Benchmark Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
