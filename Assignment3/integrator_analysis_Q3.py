@@ -10,8 +10,13 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import os
+import matplotlib.pyplot as plt
 
+# Set uniform plotting style for all figures
 from integrator_analysis_helper_functions import *
+
+# Setup uniform plotting style
+setup_uniform_plotting_style()
 
 current_directory = os.getcwd()
 
@@ -239,7 +244,7 @@ for phase_idx in range(2):
         else:
             print(f"Warning: {file_name} not found.")
 
-    plt.title(f"Integration Error (Variable Step RKF78): {phase_names[phase_idx]}")
+
     plt.xlabel("Time [hours]")
     plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -247,7 +252,7 @@ for phase_idx in range(2):
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q3a_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q3a_error_vs_time_{phase_label}.pdf")
     plt.close()
 
 # =====================================================================
@@ -271,7 +276,7 @@ for phase_idx in range(2):
             
             plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
 
-    plt.title(f"Time Step History: {phase_names[phase_idx]}")
+
     plt.xlabel("Time [hours]")
     plt.ylabel(r"Time Step $\Delta t$ [s]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -286,7 +291,7 @@ for phase_idx in range(2):
         
     plt.tight_layout()
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q3b_timestep_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q3b_timestep_vs_time_{phase_label}.pdf")
     plt.close()
 
 
@@ -323,15 +328,12 @@ for phase_idx in range(2):
         else:
             print(f"Warning: {file_name} not found.")
 
-    plt.title(f"Integration Error (Blockwise Step Control): {phase_names[phase_idx]}")
-    plt.xlabel("Time [hours]")
-    plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q3c_blockwise_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q3c_blockwise_error_vs_time_{phase_label}.pdf")
     plt.close()
 
 # =====================================================================
@@ -354,9 +356,7 @@ for phase_idx in range(2):
             
             plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
 
-    plt.title(f"Time Step History (Blockwise): {phase_names[phase_idx]}")
-    plt.xlabel("Time [hours]")
-    plt.ylabel(r"Time Step $\Delta t$ [s]")
+
     plt.grid(True, which="both", ls="--", alpha=0.5)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     
@@ -367,5 +367,5 @@ for phase_idx in range(2):
         
     plt.tight_layout()
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q3d_blockwise_timestep_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q3d_blockwise_timestep_vs_time_{phase_label}.pdf")
     plt.close()

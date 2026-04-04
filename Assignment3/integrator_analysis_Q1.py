@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 
 from integrator_analysis_helper_functions import *
 
+# Setup uniform plotting style
+setup_uniform_plotting_style()
+
 current_directory = os.getcwd()
 
 # Load spice kernels.
@@ -120,7 +123,7 @@ max_errors_phase_0 = []
 max_errors_phase_1 = []
 
 # --- Plotting 1a: Error vs Time (Combined Figure with Shared Legend) ---
-fig, axes = plt.subplots(1, 2, figsize=(12, 8))
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 for current_phase in range(2):
     ax = axes[current_phase]
@@ -153,29 +156,27 @@ for current_phase in range(2):
             print(f"Warning: File {file_name} not found. Check the file path and extension.")
 
     # Format the current phase's subplot
-    ax.set_title(f"{phase_names[current_phase]}", fontsize=25, fontweight='bold')
-    ax.set_xlabel("Time [hours]", fontsize=22)
-    ax.set_ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]", fontsize=22)
-    ax.tick_params(labelsize=20)
+    ax.set_xlabel("Time [hours]")
+    ax.set_ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]")
     ax.grid(True, which="both", ls="--", alpha=0.5)
 
 # Create a shared legend for both subplots
 handles, labels = axes[0].get_legend_handles_labels()
-fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=4, frameon=True, fontsize=20)
+fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=4, frameon=True)
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.25)
 
 # Save the combined figure
-plt.savefig(f"{figures_dir}/Q1_error_vs_time_combined.pdf", format='pdf', dpi=150, bbox_inches='tight')
+save_figure("Q1_error_vs_time_combined.pdf", bbox_inches="tight")
 plt.close() # Close the figure to free up memory before the next loop iteration
 
 # --- Plotting 1b: Max Error vs Time Step ---
-plt.figure(figsize=(8, 8))
+plt.figure(figsize=(7, 5))
 
 if max_errors_phase_0:
-    plt.loglog(step_sizes, max_errors_phase_0, marker='o', label=phase_names[0], linewidth=2, markersize=8)
+    plt.loglog(step_sizes, max_errors_phase_0, marker='o', label=phase_names[0])
 if max_errors_phase_1:
-    plt.loglog(step_sizes, max_errors_phase_1, marker='s', label=phase_names[1], linewidth=2, markersize=8)
+    plt.loglog(step_sizes, max_errors_phase_1, marker='s', label=phase_names[1])
 # Add reference line for order of global truncation error (RKF7(8) has order 7)
 # y = C * x^7, use last data point to set the constant
 order = 7
@@ -192,24 +193,22 @@ if max_errors_phase_0 and max_errors_phase_1:
     x_extended = np.logspace(np.log10(xlim_before[0]), np.log10(xlim_before[1]), 100)
     reference_line = C * (x_extended ** order)
     
-    plt.loglog(x_extended, reference_line, 'k--', linewidth=2, label=f'Order {order} (theoretical)', alpha=0.7)
+    plt.loglog(x_extended, reference_line, 'k--', label=f'Order {order} (theoretical)', alpha=0.7)
     
     # Restore original axis limits
     ax.set_xlim(xlim_before)
     ax.set_ylim(ylim_before)
-plt.title("Maximum Position Error vs. Time Step", fontsize=20, fontweight='bold')
-plt.xlabel(r"Time Step $\Delta t$ [s]", fontsize=22)
-plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]", fontsize=22)
-plt.tick_params(labelsize=20)
+plt.xlabel(r"Time Step $\Delta t$ [s]")
+plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]")
 plt.grid(True, which="both", ls="--", alpha=0.5)
-plt.legend(fontsize=20)
+plt.legend()
 plt.tight_layout()
-plt.savefig(f"{figures_dir}/Q1_max_error_vs_timestep.pdf", format='pdf', dpi=150)
+save_figure("Q1_max_error_vs_timestep.pdf")
 plt.close()
 
 
 # --- Additional Plot: Both phases with 3 lowest time steps (same style as big plot) ---
-fig, axes = plt.subplots(1, 2, figsize=(12, 8))
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 # Use only the 3 lowest time steps
 lowest_step_sizes = [8, 16, 32]
@@ -234,23 +233,21 @@ for current_phase in range(2):
             time_hours = (time - time[0]) / 3600.0
             
             # Plot Error vs Time on the current subplot
-            ax.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s", linewidth=2)
+            ax.semilogy(time_hours, pos_error_mag, label=f"$\Delta t$ = {step_size} s")
         else:
             print(f"Warning: File {file_name} not found.")
 
     # Format the current phase's subplot
-    ax.set_title(f"{phase_names_low[current_phase]}", fontsize=25, fontweight='bold')
-    ax.set_xlabel("Time [hours]", fontsize=22)
-    ax.set_ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]", fontsize=22)
-    ax.tick_params(labelsize=20)
+    ax.set_xlabel("Time [hours]")
+    ax.set_ylabel(r"$||\epsilon_r(t; \Delta t)||$ [m]")
     ax.grid(True, which="both", ls="--", alpha=0.5)
 
 # Create a shared legend for both subplots
 handles, labels = axes[0].get_legend_handles_labels()
-fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=3, frameon=True, fontsize=20)
+fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=3, frameon=True)
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.25)
 
 # Save the combined figure
-plt.savefig(f"{figures_dir}/Q1_error_vs_time_low_timesteps.pdf", format='pdf', dpi=150, bbox_inches='tight')
+save_figure("Q1_error_vs_time_low_timesteps.pdf", bbox_inches="tight")
 plt.close()

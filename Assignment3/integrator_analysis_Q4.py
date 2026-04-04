@@ -2,6 +2,11 @@ import glob
 import os
 
 from integrator_analysis_helper_functions import *
+
+# Setup uniform plotting style
+import matplotlib.pyplot as plt
+setup_uniform_plotting_style()
+
 current_directory = os.getcwd()
 
 
@@ -239,7 +244,7 @@ best_evals = {0: float('inf'), 1: float('inf')}
 chosen_data = {0: None, 1: None}  # Store (evals, max_err) for marking
 
 for phase_idx in range(2):
-    plt.figure(figsize=(10, 7))
+    plt.figure(figsize=(10, 6))
     
     # 1. Variable Step Propagations
     for coeff_idx in range(3):
@@ -296,11 +301,10 @@ for phase_idx in range(2):
     # Add marker for chosen integrator
     if chosen_data[phase_idx]:
         chosen_evals, chosen_error = chosen_data[phase_idx]
-        plt.scatter(chosen_evals, chosen_error, color='gold', edgecolor='black', marker='*', s=800, 
+        plt.scatter(chosen_evals, chosen_error, color='gold', edgecolor='black', marker='*', s=300, 
                    zorder=5, label='Chosen Setting (<1m)', linewidth=2)
     
     # Formatting 4a
-    plt.title(f"Integrator Performance: {phase_names[phase_idx]}")
     plt.xlabel("Total Number of Function Evaluations")
     plt.ylabel(r"Maximum Position Error $\epsilon_{max}$ [m]")
     
@@ -308,11 +312,11 @@ for phase_idx in range(2):
     plt.axhline(y=1.0, color='black', linestyle=':', label='1m Accuracy Requirement')
     
     plt.grid(True, which="both", ls="--", alpha=0.5)
-    plt.legend(loc='upper right', fontsize=9)
+    plt.legend(loc='upper right', fontsize=13)
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q4a_workload_diagram_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q4a_workload_diagram_{phase_label}.pdf")
     plt.close()
 
 # =====================================================================
@@ -341,18 +345,15 @@ for phase_idx in range(2):
             integrator_type = f"Fixed Step {labels_fix[coeff_idx]}"
             param_value = f"Step Size: {step_size} s"
         
-        plt.semilogy(time_hours, pos_error_mag, color='purple', linewidth=2)
+        plt.semilogy(time_hours, pos_error_mag, color='purple')
         
-        title = f"Integration Error for Chosen Setting: {phase_names[phase_idx]}\n"
-        title += f"{integrator_type} | {param_value}\nMax Error: {max_error:.2e} m"
-        plt.title(title, fontsize=11)
         plt.xlabel("Time [hours]")
         plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
         plt.grid(True, which="both", ls="--", alpha=0.5)
         plt.tight_layout()
         
         phase_label = "flyby" if phase_idx == 0 else "orbit"
-        plt.savefig(f"{figures_dir}/Q4b_chosen_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+        save_figure(f"Q4b_chosen_error_vs_time_{phase_label}.pdf")
         plt.close()
         
         print(f"\n{'='*70}")

@@ -44,6 +44,51 @@ global_frame_origin = "Jupiter"
 global_frame_orientation = "ECLIPJ2000"
 
 
+def setup_uniform_plotting_style():
+    """
+    Configure matplotlib with uniform plotting style for all report figures.
+    Optimized for A4 paper readability.
+    
+    This function should be called at the start of each plotting script (Q1-Q5).
+    """
+
+    plt.rcParams['font.size'] = 17
+    plt.rcParams['axes.labelsize'] = 17
+    plt.rcParams['axes.titlesize'] = 17
+    plt.rcParams['xtick.labelsize'] = 17
+    plt.rcParams['ytick.labelsize'] = 17
+    plt.rcParams['legend.fontsize'] = 17
+    plt.rcParams['figure.titlesize'] = 17
+    plt.rcParams['lines.linewidth'] = 1.5
+    plt.rcParams['lines.markersize'] = 6
+
+
+def save_figure(filename: str, figures_dir: str = "figures", format_type: str = "pdf", dpi: int = 150, bbox_inches: str = None):
+    """
+    Save a matplotlib figure with centralized, consistent settings.
+    All figure saving parameters can be changed in one place.
+    
+    Parameters
+    ----------
+    filename : str
+        Name of the file (without directory path)
+    figures_dir : str, optional
+        Directory where figures are saved. Default: "figures"
+    format_type : str, optional
+        File format. Default: "pdf"
+    dpi : int, optional
+        Resolution in dots per inch. Default: 150
+    bbox_inches : str, optional
+        Bounding box setting. Default: None (matplotlib default)
+        Use "tight" for tight layout.
+    """
+    filepath = f"{figures_dir}/{filename}"
+    kwargs = {"format": format_type, "dpi": dpi}
+    if bbox_inches is not None:
+        kwargs["bbox_inches"] = bbox_inches
+    plt.savefig(filepath, **kwargs)
+
+
 ################ HELPER FUNCTIONS: DO NOT MODIFY ########################################
 
 

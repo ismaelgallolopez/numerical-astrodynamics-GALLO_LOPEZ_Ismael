@@ -11,8 +11,12 @@ http://tudat.tudelft.nl/LICENSE.
 
 import math
 import os
+import matplotlib.pyplot as plt
 
 from integrator_analysis_helper_functions import *
+
+# Setup uniform plotting style
+setup_uniform_plotting_style()
 
 current_directory = os.getcwd()
 
@@ -183,13 +187,12 @@ plt.figure(figsize=(10, 6))
 plt.semilogy(times_hours, K_r_rk, marker='o', linestyle='-', color='blue', label='Numerical $||K_r(t)||$')
 plt.semilogy(times_hours, theoretical_K_r_rk, marker='s', linestyle='--', color='orange', label='Theoretical $||K_r(t)||$')
 
-plt.title("Local Truncation Error Constant $K_r(t)$: RKF7(8)")
 plt.xlabel("Time since start of phase [hours]")
 plt.ylabel(r"Error Constant $||K_r(t)||$")
 plt.grid(True, which="both", ls="--", alpha=0.5)
 plt.legend()
 plt.tight_layout()
-plt.savefig(f"{figures_dir}/Q5_Kr_RKF78.pdf", format='pdf', dpi=150)
+save_figure("Q5_Kr_RKF78.pdf")
 plt.close()
 
 # =====================================================================
@@ -200,13 +203,12 @@ plt.figure(figsize=(10, 6))
 plt.semilogy(times_hours, K_r_euler, marker='o', linestyle='-', color='green', label='Numerical $||K_r(t)||$')
 plt.semilogy(times_hours, theoretical_K_r_euler, marker='s', linestyle='--', color='purple', label='Theoretical $||K_r(t)||$')
 
-plt.title("Local Truncation Error Constant $K_r(t)$: Euler")
 plt.xlabel("Time since start of phase [hours]")
 plt.ylabel(r"Error Constant $||K_r(t)||$")
 plt.grid(True, which="both", ls="--", alpha=0.5)
 plt.legend()
 plt.tight_layout()
-plt.savefig(f"{figures_dir}/Q5_Kr_Euler.pdf", format='pdf', dpi=150)
+save_figure("Q5_Kr_Euler.pdf")
 plt.close()
 
 # =====================================================================
@@ -222,11 +224,10 @@ rel_error_euler = np.abs(K_r_euler - theoretical_K_r_euler) / theoretical_K_r_eu
 plt.semilogy(times_hours, rel_error_rk * 100, marker='o', linestyle='-', color='blue', label='RKF7(8) Relative Error')
 plt.semilogy(times_hours, rel_error_euler * 100, marker='s', linestyle='-', color='green', label='Euler Relative Error')
 
-plt.title("Relative Error of Analytical $K_r(t)$ Approximations")
 plt.xlabel("Time since start of phase [hours]")
 plt.ylabel("Relative Error [%]")
 plt.grid(True, which="both", ls="--", alpha=0.5)
 plt.legend()
 plt.tight_layout()
-plt.savefig(f"{figures_dir}/Q5_Relative_Error_Comparison.pdf", format='pdf', dpi=150)
+save_figure("Q5_Relative_Error_Comparison.pdf")
 plt.close()

@@ -10,8 +10,13 @@ http://tudat.tudelft.nl/LICENSE.
 """
 
 import os
+import matplotlib.pyplot as plt
 
+# Set uniform plotting style for all figures
 from integrator_analysis_helper_functions import *
+
+# Setup uniform plotting style
+setup_uniform_plotting_style()
 
 current_directory = os.getcwd()
 
@@ -235,7 +240,6 @@ for phase_idx in range(2):
         if lower > 0 and upper > 0:
             plt.ylim([lower, upper])  
             
-    plt.title(f"Integration Error ($\Delta t/2$ Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
     plt.ylabel(r"$||\epsilon_r(t; \Delta t)|| \approx ||r(\Delta t) - r(\Delta t/2)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -243,7 +247,7 @@ for phase_idx in range(2):
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q2a_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q2a_error_vs_time_{phase_label}.pdf")
     plt.close()
 
 
@@ -278,7 +282,6 @@ for phase_idx in range(2):
         else:
             pass
             
-    plt.title(f"Integration Error (Benchmark Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
     plt.ylabel(r"$||\epsilon_r(t; \Delta t)|| \approx ||r(\Delta t) - \bar{r}(t)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -286,7 +289,7 @@ for phase_idx in range(2):
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q2b_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q2b_error_vs_time_{phase_label}.pdf")
     plt.close()
 
 # =====================================================================
@@ -330,7 +333,6 @@ for phase_idx in range(2):
         plt.loglog(step_sizes_2b, rms_errors_2b, marker='s', linewidth=2, 
                   label='Method 2b (Benchmark)', color='red')
     
-    plt.title(f"Convergence Comparison: {phase_names[phase_idx]}")
     plt.xlabel("Step Size Δt [s]")
     plt.ylabel("RMS Error [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -338,5 +340,5 @@ for phase_idx in range(2):
     plt.tight_layout()
     
     phase_label = "flyby" if phase_idx == 0 else "orbit"
-    plt.savefig(f"{figures_dir}/Q2c_convergence_{phase_label}.pdf", format='pdf', dpi=150)
+    save_figure(f"Q2c_convergence_{phase_label}.pdf")
     plt.close()
