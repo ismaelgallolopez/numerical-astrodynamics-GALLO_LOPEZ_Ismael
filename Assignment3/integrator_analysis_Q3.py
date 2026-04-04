@@ -117,12 +117,28 @@ for current_phase in range(len(central_bodies_per_phase)):
             )
         )
 
+        block_indices = [(0, 0, 3, 1), (3, 0, 3, 1)]
+        step_size_control_settings_blockwise = (
+            propagation_setup.integrator.step_size_control_blockwise_scalar_tolerance(
+                block_indices, current_tolerance, current_tolerance
+            )
+        )
+
         # Create variable step-size integrator settings
         integrator_settings = (
             propagation_setup.integrator.runge_kutta_variable_step(
                 initial_time_step = initial_time_step,
                 coefficient_set = coefficient_set,
                 step_size_control_settings = step_size_control_settings, 
+                step_size_validation_settings = step_size_validation_settings
+            )
+        )
+
+        blockwise_integrator_settings = (
+            propagation_setup.integrator.runge_kutta_variable_step(
+                initial_time_step = initial_time_step,
+                coefficient_set = coefficient_set,
+                step_size_control_settings = step_size_control_settings_blockwise, 
                 step_size_validation_settings = step_size_validation_settings
             )
         )
@@ -138,9 +154,27 @@ for current_phase in range(len(central_bodies_per_phase)):
             output_variables=[],
         )
 
+        blockwise_propagator_settings = propagation_setup.propagator.translational(
+            [current_central_body],
+            perturbed_acceleration_models,
+            bodies_to_propagate,
+            initial_state,
+            current_phase_start_time,
+            blockwise_integrator_settings,
+            termination_condition,
+            output_variables=[],
+        )
+
         # Define output file name
         file_output_identifier = (
             "Q3_tolerance_index_"
+            + str(integration_tolerances.index(current_tolerance))
+            + "_phase_index"
+            + str(current_phase)
+        )
+
+        blockwise_file_output_identifier = (
+            "Q3_blockwise_tolerance_index_"
             + str(integration_tolerances.index(current_tolerance))
             + "_phase_index"
             + str(current_phase)
@@ -151,8 +185,16 @@ for current_phase in range(len(central_bodies_per_phase)):
             bodies, perturbed_propagator_settings
         )
 
+        blockwise_dynamics_simulator = simulator.create_dynamics_simulator(
+            bodies, blockwise_propagator_settings
+        )
+
         write_propagation_results_and_benchmark_difference_to_file(
             perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
+        )
+
+        write_propagation_results_and_benchmark_difference_to_file(
+            blockwise_dynamics_simulator, blockwise_file_output_identifier, benchmark_interpolator
         )
 
         prop_count += 1 # debugging
@@ -171,6 +213,8 @@ phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
 for phase_idx in range(2):
     plt.figure(figsize=(10, 6))
     
+    points_to_trim = 5 if phase_idx == 1 else 0  # Only trim for orbit, not flyby
+    
     for tol_idx, tolerance in enumerate(integration_tolerances):
         file_name = f"SimulationOutput/Q3_tolerance_index_{tol_idx}_phase_index{phase_idx}_benchmark_difference.dat"
         
@@ -179,10 +223,19 @@ for phase_idx in range(2):
             time = data[:, 0]
             time_hours = (time - time[0]) / 3600.0
             
+            if points_to_trim > 0:
+                time_hours_trimmed = time_hours[points_to_trim:-points_to_trim]
+            else:
+                time_hours_trimmed = time_hours
+            
             # Cartesian position error magnitude
             pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            if points_to_trim > 0:
+                pos_error_mag_trimmed = pos_error_mag[points_to_trim:-points_to_trim]
+            else:
+                pos_error_mag_trimmed = pos_error_mag
             
-            plt.semilogy(time_hours, pos_error_mag, label=f"Tol = {tolerance}")
+            plt.semilogy(time_hours_trimmed, pos_error_mag_trimmed, label=f"Tol = {tolerance}")
         else:
             print(f"Warning: {file_name} not found.")
 
@@ -216,7 +269,7 @@ for phase_idx in range(2):
             dt_array = np.diff(time)
             time_plot = time_hours[1:]  # Plot timestep at the endpoint of the interval
             
-            plt.plot(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
+            plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
 
     plt.title(f"Time Step History: {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
@@ -234,4 +287,85 @@ for phase_idx in range(2):
     plt.tight_layout()
     phase_label = "flyby" if phase_idx == 0 else "orbit"
     plt.savefig(f"{figures_dir}/Q3b_timestep_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
+
+
+# =====================================================================
+# Plotting 3c: Error vs Time for blockwise tolerances
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    points_to_trim = 5 if phase_idx == 1 else 0  # Only trim for orbit, not flyby
+    
+    for tol_idx, tolerance in enumerate(integration_tolerances):
+        # Fetch the blockwise files specifically
+        file_name = f"SimulationOutput/Q3_blockwise_tolerance_index_{tol_idx}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            time_hours = (time - time[0]) / 3600.0
+            
+            if points_to_trim > 0:
+                time_hours_trimmed = time_hours[points_to_trim:-points_to_trim]
+            else:
+                time_hours_trimmed = time_hours
+            
+            # Cartesian position error magnitude
+            pos_error_mag = np.linalg.norm(data[:, 1:4], axis=1)
+            if points_to_trim > 0:
+                pos_error_mag_trimmed = pos_error_mag[points_to_trim:-points_to_trim]
+            else:
+                pos_error_mag_trimmed = pos_error_mag
+            
+            plt.semilogy(time_hours_trimmed, pos_error_mag_trimmed, label=f"Tol = {tolerance}")
+        else:
+            print(f"Warning: {file_name} not found.")
+
+    plt.title(f"Integration Error (Blockwise Step Control): {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
+    
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q3c_blockwise_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
+
+# =====================================================================
+# Plotting 3d: Time Step Size vs Time for blockwise tolerances
+# =====================================================================
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    for tol_idx, tolerance in enumerate(integration_tolerances):
+        file_name = f"SimulationOutput/Q3_blockwise_tolerance_index_{tol_idx}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if os.path.exists(file_name):
+            data = np.loadtxt(file_name)
+            time = data[:, 0]
+            time_hours = (time - time[0]) / 3600.0
+            
+            # Compute time steps (dt = t_{i+1} - t_i)
+            dt_array = np.diff(time)
+            time_plot = time_hours[1:]  # Plot timestep at the endpoint of the interval
+            
+            plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
+
+    plt.title(f"Time Step History (Blockwise): {phase_names[phase_idx]}")
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"Time Step $\Delta t$ [s]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    
+    initial_plot_time_limit = 3
+    GCO500_period_hours = 185 / 60
+    if phase_idx == 1:
+        plt.xlim(initial_plot_time_limit, initial_plot_time_limit + GCO500_period_hours) 
+        
+    plt.tight_layout()
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q3d_blockwise_timestep_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
     plt.close()
