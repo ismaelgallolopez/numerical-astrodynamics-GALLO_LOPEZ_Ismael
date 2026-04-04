@@ -25,7 +25,7 @@ flyby_initial_time = 1033164677.05888
 # 6541356
 A = 3
 B = 5
-C = 6
+C = 8
 
 orbit_initial_time = (
     35.4 * constants.JULIAN_YEAR
@@ -484,7 +484,6 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
 
     # Create acceleration models.
     acceleration_settings_on_vehicle_perturbed = {
-        central_body: [propagation_setup.acceleration.spherical_harmonic_gravity(2, 2)],
         "Jupiter": [propagation_setup.acceleration.spherical_harmonic_gravity(6, 0)],
         "Io": [propagation_setup.acceleration.point_mass_gravity()],
         "Europa": [propagation_setup.acceleration.point_mass_gravity()],
@@ -493,15 +492,21 @@ def get_perturbed_accelerations(central_body: str, bodies: environment.SystemOfB
         "Saturn": [propagation_setup.acceleration.point_mass_gravity()],
     }
 
-    if central_body == "Callisto": # flyby
-        acceleration_settings_on_vehicle_perturbed.update({
-            "Ganymede": [propagation_setup.acceleration.point_mass_gravity()]
-        })
-    elif central_body == "Ganymede": # GCO500
-        acceleration_settings_on_vehicle_perturbed.update({
-            "Callisto": [propagation_setup.acceleration.point_mass_gravity()],
-            "Ganymede": [propagation_setup.acceleration.aerodynamic()]
-        })
+    if central_body == "Callisto":
+        acceleration_settings_on_vehicle_perturbed["Callisto"] = [
+            propagation_setup.acceleration.spherical_harmonic_gravity(2, 2)
+        ]
+        acceleration_settings_on_vehicle_perturbed["Ganymede"] = [
+            propagation_setup.acceleration.point_mass_gravity()
+        ]
+    elif central_body == "Ganymede":
+        acceleration_settings_on_vehicle_perturbed["Ganymede"] = [
+            propagation_setup.acceleration.spherical_harmonic_gravity(2, 2),
+            propagation_setup.acceleration.aerodynamic()
+        ]
+        acceleration_settings_on_vehicle_perturbed["Callisto"] = [
+            propagation_setup.acceleration.point_mass_gravity()
+        ]
     else:
         raise ValueError("Error with central body")
 
