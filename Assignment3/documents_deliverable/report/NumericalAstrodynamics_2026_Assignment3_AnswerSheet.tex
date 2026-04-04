@@ -326,17 +326,53 @@ Reasons for your integrator choices: the chosen integrators are the ones with th
 \end{figure}
 
 \subsection*{b}
-\textit{Provide derivation for (use text only to specify and explain assumptions)}
+
+The Cartesian position, assuming circular motion in XY plane, can be expressed as:
+
 \begin{equation}
-||\mathbf{K}_{\mathbf{r}}(t)||=... 
+    \mathbf{r}(t) = \begin{bmatrix}r(\tilde{t_0}) \cos{(n t)} \\ r(\tilde{t_0}) \sin{(n t)} \\ 0\end{bmatrix},
+\end{equation}
+where $n$ is the mean motion, and $r(\tilde{t_0})$ is the radius at the initial time $\tilde{t_0}$.
+
+Thus, the 8th derivative of the position can be expressed as:
+
+\begin{equation}
+    \frac{\mathrm{d}^8 \mathbf{r}(t)}{\mathrm{d}t^8} = r(\tilde{t_0}) n^8 \begin{bmatrix} \cos{(n t)} \\ \sin{(n t)} \\ 0\end{bmatrix} \Rightarrow ||\frac{\mathrm{d}^8 \mathbf{r}(t)}{\mathrm{d}t^8}|| = r(\tilde{t_0}) n^8,
+\end{equation}
+
+Also, the Taylor expansion around $\tilde{t_0}$ of the position up to 8th order can be expressed as:
+
+\begin{equation}
+    \mathbf{r}(\tilde{t_0} + \Delta t) = \sum_{k=0}^8 \frac{1}{k!} \frac{\mathrm{d}^k \mathbf{r}(t)}{\mathrm{d}t^k} (\Delta t)^k + \mathcal{O}((\Delta t)^9),
+\end{equation}
+
+So, since the RK7 method can be approximated by the Taylor expansion up to 7th order \cite{hernandez2020interpolacion}, the local truncation error can be expressed as:
+
+\begin{equation}
+    \epsilon(t) = \mathbf{r}(\tilde{t_0} + \Delta t) - \sum_{k=0}^7 \frac{1}{k!} \frac{\mathrm{d}^k \mathbf{r}(t)}{\mathrm{d}t^k} (\Delta t)^k = \frac{1}{8!} \frac{\mathrm{d}^8 \mathbf{r}(t)}{\mathrm{d}t^8} (\Delta t)^8 + \mathcal{O}((\Delta t)^9) \Rightarrow ||\epsilon(t)|| \approx \frac{1}{8!} ||\frac{\mathrm{d}^8 \mathbf{r}(t)}{\mathrm{d}t^8}|| (\Delta t)^8,
+\end{equation}
+
+\begin{equation} \label{eq:kr_rk7}
+||\mathbf{K}_{\mathbf{r}}(t)|| = \frac{r(\tilde{t_0}) n^8}{8!}.
 \end{equation}
 
 The plot for the analytical $||\mathbf{K}_{\mathbf{r}}(t)||$ is also included in \autoref{fig:Q5_Kr_RKF78}.
 
 \subsection*{c}
-\textit{Provide derivation for (use text only to specify and explain assumptions)}
+
+Following the same reasoning as in question (b), the second derivative of the position can be expressed as:
 \begin{equation}
-||\mathbf{K}_{\mathbf{r}}(t)||=... 
+    \frac{\mathrm{d}^2 \mathbf{r}(t)}{\mathrm{d}t^2} = - r(\tilde{t_0}) n^2 \begin{bmatrix} \cos{(n t)} \\ \sin{(n t)} \\ 0\end{bmatrix} \Rightarrow ||\frac{\mathrm{d}^2 \mathbf{r}(t)}{\mathrm{d}t^2}|| = r(\tilde{t_0}) n^2,
+\end{equation}
+
+and the Taylor expansion around $\tilde{t_0}$ of the position up to 2nd order can be expressed as:
+
+\begin{equation}
+    \epsilon(t) = \mathbf{r}(\tilde{t_0} + \Delta t) - \sum_{k=0}^1 \frac{1}{k!} \frac{\mathrm{d}^k \mathbf{r}(t)}{\mathrm{d}t^k} (\Delta t)^k = \frac{1}{2!} \frac{\mathrm{d}^2 \mathbf{r}(t)}{\mathrm{d}t^2} (\Delta t)^2 + \mathcal{O}((\Delta t)^3) \Rightarrow ||\epsilon(t)|| \approx \frac{1}{2!} ||\frac{\mathrm{d}^2 \mathbf{r}(t)}{\mathrm{d}t^2}|| (\Delta t)^2,
+\end{equation}
+
+\begin{equation} \label{eq:kr_euler}
+||\mathbf{K}_{\mathbf{r}}(t)||= \frac{r(\tilde{t_0}) n^2}{2!}. 
 \end{equation}
 
 \begin{figure}[H]
@@ -346,6 +382,22 @@ The plot for the analytical $||\mathbf{K}_{\mathbf{r}}(t)||$ is also included in
     \label{fig:Q5_Kr_Euler}
 \end{figure}\subsection*{d}
 
-\textit{\textbf{Provide reasons for difference in validity of analytical result for Euler and RKF results}}\\
+% \textit{\textbf{Provide reasons for difference in validity of analytical result for Euler and RKF results}}\\
+
+First, it has to be noted that the analytical condition number calculated is much more similar to the one obtained for the Euler method compared with the RKF7(8) method, as it can be observed in \autoref{fig:Q5_Relative_Error_Comparison}.
+
+The main reason for the difference in the approximation between the Euler and RKF7(8) methods is that the condition number is calculated with an approximation of the mean motion $n$ under the assumptions listed. 
+Since $|\mathbf{K}_{\mathbf{r}}(t)||$ is proportional to $n^{p+1}$, where $p$ is the order of the method, any error in the estimation of $n$ will be amplified by a factor of $p+1$ in the condition number, which leads to a the bigger error observed for the higher-order method.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q5_Relative_Error_Comparison.pdf}
+    \caption{Relative errors in the condition numbers for the RKF7(8) and Euler fixed step integrators, for the conditions described in the assignment.}
+    \label{fig:Q5_Relative_Error_Comparison}
+\end{figure}
+
+\clearpage
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}

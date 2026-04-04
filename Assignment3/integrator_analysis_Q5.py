@@ -208,3 +208,25 @@ plt.legend()
 plt.tight_layout()
 plt.savefig(f"{figures_dir}/Q5_Kr_Euler.pdf", format='pdf', dpi=150)
 plt.close()
+
+# =====================================================================
+# Plotting 5d: Relative Error of Analytical Approximations
+# =====================================================================
+plt.figure(figsize=(10, 6))
+
+# Calculate relative errors
+rel_error_rk = np.abs(K_r_rk - theoretical_K_r_rk) / theoretical_K_r_rk
+rel_error_euler = np.abs(K_r_euler - theoretical_K_r_euler) / theoretical_K_r_euler
+
+# Plotting as percentages (using log scale for Y since the difference in scale between RK and Euler might be massive)
+plt.semilogy(times_hours, rel_error_rk * 100, marker='o', linestyle='-', color='blue', label='RKF7(8) Relative Error')
+plt.semilogy(times_hours, rel_error_euler * 100, marker='s', linestyle='-', color='green', label='Euler Relative Error')
+
+plt.title("Relative Error of Analytical $K_r(t)$ Approximations")
+plt.xlabel("Time since start of phase [hours]")
+plt.ylabel("Relative Error [%]")
+plt.grid(True, which="both", ls="--", alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.savefig(f"{figures_dir}/Q5_Relative_Error_Comparison.pdf", format='pdf', dpi=150)
+plt.close()
