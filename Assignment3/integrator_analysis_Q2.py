@@ -288,3 +288,55 @@ for phase_idx in range(2):
     phase_label = "flyby" if phase_idx == 0 else "orbit"
     plt.savefig(f"{figures_dir}/Q2b_error_vs_time_{phase_label}.pdf", format='pdf', dpi=150)
     plt.close()
+
+# =====================================================================
+# Plotting 2c: Convergence Plot (Method 2a vs 2b)
+# =====================================================================
+# For each phase, plot RMS error vs step size on log-log to compare convergence rates
+for phase_idx in range(2):
+    plt.figure(figsize=(10, 6))
+    
+    # Collect RMS errors for both methods across all step sizes
+    step_sizes_2a = []
+    rms_errors_2a = []
+    step_sizes_2b = []
+    rms_errors_2b = []
+    
+    for step_size in standard_step_sizes:
+        key = f"Phase {phase_idx} (dt={step_size} vs {int(step_size/2)})"
+        file_name = f"SimulationOutput/Q2_step_size_{step_size}_phase_index{phase_idx}_benchmark_difference.dat"
+        
+        if key in errors_comparison:
+            # Method 2a: Δt/2 estimation
+            data_2a = errors_comparison[key]
+            errors_2a = np.array(data_2a['errors'])
+            rms_2a = np.sqrt(np.mean(errors_2a**2))
+            step_sizes_2a.append(step_size)
+            rms_errors_2a.append(rms_2a)
+        
+        if os.path.exists(file_name):
+            # Method 2b: Benchmark comparison
+            data_2b = np.loadtxt(file_name)
+            errors_2b = np.linalg.norm(data_2b[:, 1:4], axis=1)
+            rms_2b = np.sqrt(np.mean(errors_2b**2))
+            step_sizes_2b.append(step_size)
+            rms_errors_2b.append(rms_2b)
+    
+    # Plot both methods
+    if step_sizes_2a and rms_errors_2a:
+        plt.loglog(step_sizes_2a, rms_errors_2a, marker='o', linewidth=2, 
+                  label='Method 2a (Δt/2 Estimation)', color='blue')
+    if step_sizes_2b and rms_errors_2b:
+        plt.loglog(step_sizes_2b, rms_errors_2b, marker='s', linewidth=2, 
+                  label='Method 2b (Benchmark)', color='red')
+    
+    plt.title(f"Convergence Comparison: {phase_names[phase_idx]}")
+    plt.xlabel("Step Size Δt [s]")
+    plt.ylabel("RMS Error [m]")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend(loc='upper left')
+    plt.tight_layout()
+    
+    phase_label = "flyby" if phase_idx == 0 else "orbit"
+    plt.savefig(f"{figures_dir}/Q2c_convergence_{phase_label}.pdf", format='pdf', dpi=150)
+    plt.close()
