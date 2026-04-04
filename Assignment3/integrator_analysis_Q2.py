@@ -92,20 +92,17 @@ for current_phase in range(len(central_bodies_per_phase)):
     # print(benchmark_state_history) # debugging
     
     benchmark_times = sorted(list(benchmark_state_history.keys()))
-    points_to_trim_benchmark = 4
-    benchmark_times_trimmed = benchmark_times[points_to_trim_benchmark:-points_to_trim_benchmark]
-    benchmark_state_history_trimmed = {t: benchmark_state_history[t] for t in benchmark_times_trimmed}
     
     interpolator_settings = interpolators.lagrange_interpolation(8) # 8th order lagrange interpolation, as requested
     
     benchmark_interpolator = interpolators.create_one_dimensional_vector_interpolator(
-        benchmark_state_history_trimmed, 
+        benchmark_state_history, 
         interpolator_settings
     )
     
-    margin = 50  
-    min_epoch = benchmark_times[points_to_trim_benchmark + margin]
-    max_epoch = benchmark_times[-(points_to_trim_benchmark + margin)]
+    points_to_trim_benchmark = 5
+    min_epoch = benchmark_times[points_to_trim_benchmark]
+    max_epoch = benchmark_times[-points_to_trim_benchmark]
     time_limits = (min_epoch, max_epoch)
 
     # Iterate over step size
