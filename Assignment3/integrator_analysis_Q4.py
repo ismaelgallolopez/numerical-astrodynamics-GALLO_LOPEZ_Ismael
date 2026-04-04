@@ -92,6 +92,12 @@ for current_phase in range(len(central_bodies_per_phase)):
     )
 
     benchmark_state_history = benchmark_dynamics_simulator.propagation_results.state_history
+    benchmark_times = sorted(list(benchmark_state_history.keys()))
+    
+    points_to_trim_benchmark = 5
+    min_epoch = benchmark_times[points_to_trim_benchmark]
+    max_epoch = benchmark_times[-points_to_trim_benchmark]
+    time_limits = (min_epoch, max_epoch)
 
     # Define integrator step settings
     initial_time_step = 10.0
@@ -154,7 +160,7 @@ for current_phase in range(len(central_bodies_per_phase)):
             func_evals_dict[file_output_identifier] = max(func_evals.values())
 
             write_propagation_results_and_benchmark_difference_to_file(
-                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
+                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator, time_limits
             )
 
             prop_count += 1
@@ -200,7 +206,7 @@ for current_phase in range(len(central_bodies_per_phase)):
             func_evals_dict[file_output_identifier] = max(func_evals.values())
 
             write_propagation_results_and_benchmark_difference_to_file(
-                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
+                perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator, time_limits
             )
 
             prop_count += 1
