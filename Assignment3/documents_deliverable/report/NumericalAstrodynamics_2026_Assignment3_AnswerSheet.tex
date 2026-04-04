@@ -291,16 +291,14 @@ For propagation using Cartesian state vector, a typical choice is to use a block
 \end{figure}
 
 \subsection*{b}
-\textit{Modify figures in (a) to indicate the two selected integrators}\\
-\\
-Integrator choice for orbit phase: \textit{Provide answer}\\
-\\
-Integrator choice for flyby phase: 
-\textit{Provide answer}\\
-\\
-Reasons for your integrator choices:
-\textit{\textbf{Provide answer}}\\
-\\
+
+The chosen integrators are indicated in \autoref{fig:Q4b_chosen_error_vs_time_flyby} and \autoref{fig:Q4b_chosen_error_vs_time_orbit} by a star marker.
+
+Integrator choice for orbit phase: RK8 with fixed step size of 256 s.
+
+Integrator choice for flyby phase: RKF5(6) with tolerance of $10^{-10}$.
+
+Reasons for your integrator choices: the chosen integrators are the ones with the lowest number of function evaluations for the position accuracy requirement of 1 m. 
 
 \begin{figure}[H]
     \centering
