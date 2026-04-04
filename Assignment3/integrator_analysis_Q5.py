@@ -9,6 +9,7 @@ a copy of the license with this file. If not, please or visit:
 http://tudat.tudelft.nl/LICENSE.
 """
 
+import math
 import os
 
 from integrator_analysis_helper_functions import *
@@ -29,6 +30,8 @@ current_phase_start_time = initial_times_per_phase[current_phase]
 acceleration_models = get_unperturbed_accelerations(central_body, bodies)
 
 n_prop = 20
+
+initial_position_norm = np.zeros(n_prop)
 
 state_differences_rkf = np.zeros((6, n_prop))
 state_differences_euler = np.zeros((6, n_prop))
@@ -55,6 +58,9 @@ for i in range(n_prop):
         aberration_corrections="NONE",
         ephemeris_time=current_start_time,
     )
+    initial_position_norm[i] = np.linalg.norm(initial_state[0:3])
+    # print(np.linalg.norm(initial_state[0:3])) # debugging
+
 
     """
     RKF
@@ -147,7 +153,7 @@ for i in range(n_prop):
 local_truncation_error_rk = np.linalg.norm(state_differences_rkf[:3, :], axis=0)
 local_truncation_error_euler = np.linalg.norm(state_differences_euler[:3, :], axis=0)
 
-K_r_rk = local_truncation_error_rk / (time_step ** 9) # rk8 is 8th order, p+1=9
+K_r_rk = local_truncation_error_rk / (time_step ** 8) # rk7 is 7th order, p+1=8
 K_r_euler = local_truncation_error_euler / (time_step_euler ** 2) # euler is 1st order, p+1=2
 
 # print(state_differences_euler.shape) # debugging
@@ -166,12 +172,8 @@ times_hours = times_seconds / 3600.0
 # =====================================================================
 # PLACEHOLDERS: You must compute these mathematically for Q5(b) and 5(c)
 # =====================================================================
-# theoretical_K_r_rk = ...   # Your derived analytical K_r for RKF7(8)
-# theoretical_K_r_euler = ... # Your derived analytical K_r for Euler
-
-# (Dummy arrays used here just so the plotting script runs without crashing)
-theoretical_K_r_rk = np.zeros(n_prop) 
-theoretical_K_r_euler = np.zeros(n_prop) 
+theoretical_K_r_rk = central_body_gravitational_parameter**4/(math.factorial(8) * initial_position_norm**11)   # Your derived analytical K_r for RKF7(8)
+theoretical_K_r_euler = central_body_gravitational_parameter / (2*initial_position_norm**2) # Your derived analytical K_r for Euler
 
 # =====================================================================
 # Plotting 5a & 5b: Error Constant Kr(t) for RKF7(8)
