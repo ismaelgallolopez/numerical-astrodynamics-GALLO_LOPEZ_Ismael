@@ -124,15 +124,41 @@ which implies that the dominant error term is the truncation error, and that the
 Hence, the error of the solution with the bigger time step is much bigger than the error of the solution with the smaller time step.
 
 \subsection*{b}
-\textit{Insert figure(s)}\\
-\\
-Mathematical assumption behind error quantification: {\textit{Provide answer}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q2b_error_vs_time_flyby.pdf}
+    \caption{Integration error as a function of time for both the Flyby phase, computed as $\mbox{\(\epsilon (t; \Delta t) \approx \mathbf{r} (t; \Delta t) - \mathbf{\overline{r}} (t)\)}$.}
+    \label{fig:Q2b_error_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q2b_error_vs_time_orbit.pdf}
+    \caption{Integration error as a function of time for both the GCO500 phase, computed as $\mbox{\(\epsilon (t; \Delta t) \approx \mathbf{r} (t; \Delta t) - \mathbf{\overline{r}} (t)\)}$.}
+    \label{fig:Q2b_error_vs_time_orbit}
+\end{figure}
+
+Mathematical assumption behind error quantification: the benchmark solution $\mathbf{\overline{r}} (t)$ is sufficiently accurate such that the error of the solution with time step $\Delta t$ can be approximated by the difference between the solution and the benchmark, or the interpolated benchmark if no data is available at that epoch.
+
 \subsection*{c}
-Range of time steps where results match reasonably well between questions (a) and (b), per phase: {\textit{Provide answer}}\\
-\\
-Range of time steps where results do not match reasonably well between questions (a) and (b), per phase: {\textit{Provide answer}}\\
-\\
-\textbf{\textit{Briefly explain the underlying reasons why the results from (a) and (b) do (not) match well where they do.}}
+Range of time steps where results match reasonably well between questions (a) and (b), per phase: 
+
+\begin{itemize}
+    \item GCO500: $\Delta t \leq 64 \mathrm{ s}$
+    \item Flyby: $\Delta t \leq 32 \mathrm{ s}$
+    \end{itemize}
+
+Range of time steps where results do not match reasonably well between questions (a) and (b), per phase: 
+
+\begin{itemize}
+    \item GCO500: $\Delta t \in \{ 8 \} \mathrm{ s}$
+    \item Flyby: $\Delta t \in \{\emptyset \} \mathrm{ s}$
+    \end{itemize}
+
+% \textbf{\textit{Briefly explain the underlying reasons why the results from (a) and (b) do (not) match well where they do.}}
+Most of the examples fall under the assumption 
+
 \subsection*{d}
 For the time steps where truncation error is dominant, do the error estimates obtained in questions 1 and 2b correspond well: yes/no.\\
 \\
@@ -154,7 +180,21 @@ Visible presence of truncation/rounding error in the figures:
 % \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
 \end{itemize}
 \subsection*{b}
-\textit{Insert figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3b_timestep_vs_time_flyby.pdf}
+    \caption{Time step as a function of time for the flyby phase, for the different tolerances.}
+    \label{fig:Q3b_time_step_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3b_timestep_vs_time_orbit.pdf}
+    \caption{Time step as a function of time for the GCO500 phase, for the different tolerances.}
+    \label{fig:Q3b_time_step_vs_time_orbit}
+\end{figure}
+
 \subsection*{c}
 % Reason for once-per-orbit trend in time step: \textbf{\textit{Provide answer}}\\
 % \\
@@ -168,7 +208,21 @@ Reason for sharp decreases in time step: \textbf{\textit{Provide answer}}
 \clearpage
 \section*{Question 4}
 \subsection*{a}
-\textit{Insert figures of function evaluations vs. maximum error}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q4a_workload_diagram_flyby.pdf}
+    \caption{Number of function evaluations versus maximum error for the flyby phase, for the different integrators.}
+    \label{fig:Q4a_workload_diagram_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q4a_workload_diagram_orbit.pdf}
+    \caption{Number of function evaluations versus maximum error for the GCO500 phase, for the different integrators.}
+    \label{fig:Q4a_workload_diagram_orbit}
+\end{figure}
+
 \subsection*{b}
 \textit{Modify figures in (a) to indicate the two selected integrators}\\
 \\
@@ -180,25 +234,53 @@ Integrator choice for flyby phase:
 Reasons for your integrator choices:
 \textit{\textbf{Provide answer}}\\
 \\
-\textit{Insert figures of error as a function of time}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q4b_chosen_error_vs_time_flyby.pdf}
+    \caption{Number of function evaluations versus maximum error for the flyby phase, for the different integrators.}
+    \label{fig:Q4b_chosen_error_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q4b_chosen_error_vs_time_orbit.pdf}
+    \caption{Number of function evaluations versus maximum error for the GCO500 phase, for the different integrators.}
+    \label{fig:Q4b_chosen_error_vs_time_orbit}
+\end{figure}
 
 \clearpage
 \section*{Question 5}
 \subsection*{a}
-\textit{Insert figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q5_Kr_RKF78.pdf}
+    \caption{Condition numbers for the RKF7(8) fixed step integrator, for the conditions described in the assignment.}
+    \label{fig:Q5_Kr_RKF78}
+\end{figure}
+
 \subsection*{b}
 \textit{Provide derivation for (use text only to specify and explain assumptions)}
 \begin{equation}
 ||\mathbf{K}_{\mathbf{r}}(t)||=... 
 \end{equation}
-\textit{Insert figure}
+
+The plot for the analytical $||\mathbf{K}_{\mathbf{r}}(t)||$ is also included in \autoref{fig:Q5_Kr_RKF78}.
+
 \subsection*{c}
 \textit{Provide derivation for (use text only to specify and explain assumptions)}
 \begin{equation}
 ||\mathbf{K}_{\mathbf{r}}(t)||=... 
 \end{equation}
-\textit{Insert figure}
-\subsection*{d}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q5_Kr_Euler.pdf}
+    \caption{Condition numbers for the Euler fixed step integrator, for the conditions described in the assignment.}
+    \label{fig:Q5_Kr_Euler}
+\end{figure}\subsection*{d}
+
 \textit{\textbf{Provide reasons for difference in validity of analytical result for Euler and RKF results}}\\
 
 \end{document}
