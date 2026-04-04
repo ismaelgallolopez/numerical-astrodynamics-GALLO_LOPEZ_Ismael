@@ -10,6 +10,17 @@
 \usepackage{xkcdcolors}
 \usepackage[]{algorithm2e}
 \usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true
+}
 
 
 % \addtolength{\topmargin}{-.7in}
@@ -187,16 +198,31 @@ Same reasoning applies to the benchmark method, where the time step difference a
 \clearpage
 \section*{Question 3}
 \subsection*{a}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3a_error_vs_time_flyby.pdf}
+    \caption{Integration error as a function of time for the flyby phase and for different error tolerances.}
+    \label{fig:Q3a_error_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3a_error_vs_time_orbit.pdf}
+    \caption{Integration error as a function of time for the GCO500 phase and for different error tolerances.}
+    \label{fig:Q3a_error_vs_time_orbit}
+\end{figure}
+
 Influence of tolerance on observed error:
 \begin{itemize}
-\item Expected behaviour: \textbf{\textit{Provide answer}}
-\item Observed behaviour: \textbf{\textit{Provide answer}}
+\item Expected behaviour: smaller tolerance values should yield lower error values. 
+\item Observed behaviour: the error values decrease as the tolerance decreases.
 % \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
 \end{itemize}
 Visible presence of truncation/rounding error in the figures:
 \begin{itemize}
-\item Expected behaviour: \textbf{\textit{Provide answer}}
-\item Observed behaviour: \textbf{\textit{Provide answer}}
+\item Expected behaviour: because the time step control method assumes dominant truncation error, it will reduce the timestep up to a minimum imposed of $10^{-12}$ s if needed, likely incurring in rounding errors. 
+\item Observed behaviour: the cases with the smallest tolerances show an error evolution indicative of rounding-driven error. 
 % \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
 \end{itemize}
 \subsection*{b}
@@ -218,12 +244,33 @@ Visible presence of truncation/rounding error in the figures:
 \subsection*{c}
 % Reason for once-per-orbit trend in time step: \textbf{\textit{Provide answer}}\\
 % \\
-Reason for sharp decreases in time step: \textbf{\textit{Provide answer}}
+Reason for sharp decreases in time step: local variations in the acceleration field (faster variations of the dynamics), where the step size control method needs to reduce the time step to keep the error within the specified tolerance.
 \subsection*{d}
-\textbf{\textit{Explain your choice of modification to time step control (provide exact lines of code in report)}}\\
-\\
-\textit{Insert figure for corrected time step as function of time}\\
-\\
+
+For propagation using Cartesian state vector, a typical choice is to use a block-wise step size control method, where the state vector is divided into blocks of position and velocity components, and the error is controlled separately for each block.\footnote{\url{https://py.api.tudat.space/en/latest/dynamics/propagation_setup/integrator.html\#tudatpy.dynamics.propagation_setup.integrator.step_size_control_blockwise_scalar_tolerance}}
+
+\begin{lstlisting}
+    block_indices = [(0, 0, 3, 1), (3, 0, 3, 1)]
+    step_size_control_settings_blockwise = (
+        propagation_setup.integrator.step_size_control_blockwise_scalar_tolerance(
+            block_indices, current_tolerance, current_tolerance
+        )
+    )
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3d_blockwise_timestep_vs_time_flyby.pdf}
+    \caption{Time step as a function of time for the flyby phase, for the different tolerances, with block-wise step size control.}
+    \label{fig:Q3d_blockwise_timestep_vs_time_flyby}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../figures/Q3d_blockwise_timestep_vs_time_orbit.pdf}
+    \caption{Time step as a function of time for the GCO500 phase, for the different tolerances, with block-wise step size control.}
+    \label{fig:Q3d_blockwise_timestep_vs_time_orbit}
+\end{figure}
 
 \clearpage
 \section*{Question 4}
