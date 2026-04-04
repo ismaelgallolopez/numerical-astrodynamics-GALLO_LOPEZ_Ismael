@@ -1,6 +1,12 @@
+import glob
 import os
 
 from integrator_analysis_helper_functions import *
+current_directory = os.getcwd()
+
+
+for f in glob.glob(os.path.join(current_directory, "SimulationOutput", "Q4*")):
+    os.remove(f)
 
 current_directory = os.getcwd()
 
@@ -12,7 +18,7 @@ spice.load_kernel(current_directory + "/juice_mat_crema_5_1_150lb_v01.bsp")
 bodies = create_bodies()
 
 # Define list of integrator tolerances
-integration_tolerances = [1.0e-14, 1.0e-13, 1.0e-12, 1.0e-11, 1.0e-10, 1.0e-8, 1.0e-6]
+integration_tolerances = [1.0e-14, 1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6]
 coefficient_set_options = [
     propagation_setup.integrator.CoefficientSets.rkf_45,
     propagation_setup.integrator.CoefficientSets.rkf_56,
@@ -23,6 +29,8 @@ benchmark_time_step = [10, 20]
 step_sizes = [2**i for i in range(3, 10)]
 
 bodies_to_propagate = ["JUICE"]
+
+func_evals_dict = {}
 
 # Iterate over the mission phases
 for current_phase in range(len(central_bodies_per_phase)):
@@ -141,6 +149,9 @@ for current_phase in range(len(central_bodies_per_phase)):
             perturbed_dynamics_simulator = simulator.create_dynamics_simulator(
                 bodies, perturbed_propagator_settings
             )
+            
+            func_evals = perturbed_dynamics_simulator.cumulative_number_of_function_evaluations
+            func_evals_dict[file_output_identifier] = max(func_evals.values())
 
             write_propagation_results_and_benchmark_difference_to_file(
                 perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
@@ -184,6 +195,9 @@ for current_phase in range(len(central_bodies_per_phase)):
             perturbed_dynamics_simulator = simulator.create_dynamics_simulator(
                 bodies, propagator_settings
             )
+            
+            func_evals = perturbed_dynamics_simulator.cumulative_number_of_function_evaluations
+            func_evals_dict[file_output_identifier] = max(func_evals.values())
 
             write_propagation_results_and_benchmark_difference_to_file(
                 perturbed_dynamics_simulator, file_output_identifier, benchmark_interpolator
@@ -200,8 +214,8 @@ if not os.path.exists(figures_dir):
     os.makedirs(figures_dir)
 
 # Data matching your simulation loops
-integration_tolerances = [1.0e-14, 1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6]
-step_sizes = [2**i for i in range(3, 10)]
+# integration_tolerances = [1.0e-14, 1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6]
+# step_sizes = [2**i for i in range(3, 10)]
 phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
 
 # Mapping indices to names and stage counts
@@ -233,8 +247,8 @@ for phase_idx in range(2):
                 data = np.loadtxt(file_name)
                 # Max position error
                 max_err = np.max(np.linalg.norm(data[:, 1:4], axis=1))
-                # Approximate function evaluations: steps * stages
-                num_evals = len(data) * stages_dict[coeff_idx]
+                # Get actual function evaluations
+                num_evals = func_evals_dict.get(file_name.replace("_benchmark_difference.dat", "").replace("SimulationOutput/", ""), len(data) * stages_dict[coeff_idx])
                 
                 max_err_list.append(max_err)
                 evals_list.append(num_evals)
@@ -258,7 +272,8 @@ for phase_idx in range(2):
             if os.path.exists(file_name):
                 data = np.loadtxt(file_name)
                 max_err = np.max(np.linalg.norm(data[:, 1:4], axis=1))
-                num_evals = len(data) * stages_dict[coeff_idx]
+                # Get actual function evaluations
+                num_evals = func_evals_dict.get(file_name.replace("_benchmark_difference.dat", "").replace("SimulationOutput/", ""), len(data) * stages_dict[coeff_idx])
                 
                 max_err_list.append(max_err)
                 evals_list.append(num_evals)

@@ -54,12 +54,6 @@ for current_phase in range(len(central_bodies_per_phase)):
     # Define integrator settings for benchmark
     benchmark_integrator_settings = get_fixed_step_size_integrator_settings(benchmark_time_step[current_phase])
 
-    # Create integrator settings
-    step_size_validation_settings = propagation_setup.integrator.step_size_validation(
-        minimum_step = 1e-12,
-        maximum_step = np.infty
-    )
-
 
     # Retrieve JUICE initial state
     initial_state = spice.get_body_cartesian_state_at_epoch(
@@ -104,10 +98,18 @@ for current_phase in range(len(central_bodies_per_phase)):
         minimum_step_size = 1.0e-12
         maximum_step_size = np.inf
 
+        # Create integrator settings
+        step_size_validation_settings = propagation_setup.integrator.step_size_validation(
+            minimum_step = minimum_step_size,
+            maximum_step = maximum_step_size
+        )
+
         # Retrieve coefficient set
-        coefficient_set = propagation_setup.integrator.rkf_78
+        coefficient_set = propagation_setup.integrator.CoefficientSets.rkf_78 
+        # print(coefficient_set) # debugging 
 
         # Create integrator settings
+        # print(current_tolerance) # debugging
         step_size_control_settings = (
             propagation_setup.integrator.step_size_control_elementwise_scalar_tolerance(
                 relative_error_tolerance = current_tolerance,
@@ -118,7 +120,7 @@ for current_phase in range(len(central_bodies_per_phase)):
         # Create variable step-size integrator settings
         integrator_settings = (
             propagation_setup.integrator.runge_kutta_variable_step(
-                initial_time_step = 10,
+                initial_time_step = initial_time_step,
                 coefficient_set = coefficient_set,
                 step_size_control_settings = step_size_control_settings, 
                 step_size_validation_settings = step_size_validation_settings
@@ -162,7 +164,6 @@ if not os.path.exists(figures_dir):
     os.makedirs(figures_dir)
 
 phase_names = ["Flyby (Callisto)", "Orbit (GCO500)"]
-integration_tolerances = [1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6]
 
 # =====================================================================
 # Plotting 3a: Error vs Time for different tolerances
@@ -185,7 +186,7 @@ for phase_idx in range(2):
         else:
             print(f"Warning: {file_name} not found.")
 
-    plt.title(f"Integration Error (Variable Step RKF45): {phase_names[phase_idx]}")
+    plt.title(f"Integration Error (Variable Step RKF78): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
     plt.ylabel(r"$||\epsilon_r(t)|| \approx ||r(t) - \bar{r}(t)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
@@ -213,9 +214,9 @@ for phase_idx in range(2):
             # Compute time steps (dt = t_{i+1} - t_i)
             # The time array represents epochs, so np.diff gives the step taken to reach the next epoch
             dt_array = np.diff(time)
-            time_plot = time_hours[:-1] # Match array lengths
+            time_plot = time_hours[1:]  # Plot timestep at the endpoint of the interval
             
-            plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
+            plt.plot(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
 
     plt.title(f"Time Step History: {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
@@ -225,8 +226,10 @@ for phase_idx in range(2):
     
     # Restrict the x-axis for GCO500 to show a single orbit (185 minutes) 
     # Source https://spiftp.esac.esa.int/data/ANCDR/JUICE/man/JUICE_CReMA_Issue_4_Revision_2/Memo_20200429_JUICE_GCO_Cycles.pdf
+    initial_plot_time_limit = 3
+    GCO500_period_hours = 185 / 60
     if phase_idx == 1:
-        plt.xlim(0, 185/60) 
+        plt.xlim(initial_plot_time_limit, initial_plot_time_limit + GCO500_period_hours) 
         
     plt.tight_layout()
     phase_label = "flyby" if phase_idx == 0 else "orbit"

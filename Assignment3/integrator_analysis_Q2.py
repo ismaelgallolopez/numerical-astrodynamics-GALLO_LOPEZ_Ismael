@@ -233,7 +233,10 @@ for phase_idx in range(2):
     
     if phase_axis_limits[phase_idx] is not None:
         y_min, y_max = phase_axis_limits[phase_idx]
-        plt.ylim([y_min * 0.8, y_max * 1.2])  # Add 20% margin for visibility
+        lower = y_min * 0.8
+        upper = y_max * 1.2
+        if lower > 0 and upper > 0:
+            plt.ylim([lower, upper])  
             
     plt.title(f"Integration Error ($\Delta t/2$ Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
@@ -271,7 +274,12 @@ for phase_idx in range(2):
     
     if phase_axis_limits[phase_idx] is not None:
         y_min, y_max = phase_axis_limits[phase_idx]
-        plt.ylim([y_min * 0.8, y_max * 1.2])  # Add 20% margin for visibility
+        lower = y_min * 0.8
+        upper = y_max * 1.2
+        if lower > 0 and upper > 0:
+            plt.ylim([lower, upper])
+        else:
+            pass
             
     plt.title(f"Integration Error (Benchmark Method): {phase_names[phase_idx]}")
     plt.xlabel("Time [hours]")
