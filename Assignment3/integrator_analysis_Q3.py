@@ -328,6 +328,8 @@ for phase_idx in range(2):
         else:
             print(f"Warning: {file_name} not found.")
 
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"||\\epsilon_r(t)|| \\approx ||r(t) - \\bar{r}(t)||$ [m]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
@@ -357,6 +359,8 @@ for phase_idx in range(2):
             plt.semilogy(time_plot, dt_array, label=f"Tol = {tolerance}", alpha=0.8)
 
 
+    plt.xlabel("Time [hours]")
+    plt.ylabel(r"Time Step $\Delta t$ [s]")
     plt.grid(True, which="both", ls="--", alpha=0.5)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     

@@ -136,6 +136,22 @@ People you worked with (if none, state this):
 
 Mathematical assumption behind error quantification: 
 
+The mathematical assumption behind this error quantification is as follows:
+
+\begin{align}
+    \mathbf{r}_{\text{true}} &\approx \mathbf{r}(t; \Delta t) + C (\Delta t)^{p+1} \\
+    \mathbf{r}_{\text{true}} &\approx \mathbf{r}(t; \Delta t/2) + C (\Delta t/2)^{p+1}
+\end{align}
+
+Subtracting the two expressions gives:
+\begin{align}
+    \mathbf{r}(t; \Delta t) - \mathbf{r}(t; \Delta t/2) &\approx C (\Delta t)^{p+1} - C (\Delta t/2)^{p+1} \\
+    &\approx C (\Delta t)^{p+1} \quad \text{since} \ (\Delta t/2)^{p+1} \ll (\Delta t)^{p+1} \\
+    &\approx \epsilon(t; \Delta t)
+\end{align}
+
+This shows that the error can be approximated by the difference between two solutions with different time steps, provided the truncation error dominates.
+
 \begin{equation}
     \mathbf{r}_{true} \approx \mathbf{r}(t; \Delta t) + C (\Delta t)^{p+1},
 \end{equation} \label{eq:half_step_error_assumption}
@@ -159,7 +175,7 @@ Hence, the error of the solution with the bigger time step is much bigger than t
     \label{fig:Q2b_error_vs_time_orbit}
 \end{figure}
 
-Mathematical assumption behind error quantification: the benchmark solution $\mathbf{\overline{r}} (t)$ is sufficiently accurate such that the error of the solution with time step $\Delta t$ can be approximated by the difference between the solution and the benchmark, or the interpolated benchmark if no data is available at that epoch.
+Mathematical assumption behind error quantification: the benchmark solution $\mathbf{\overline{r}} (t)$ is much more accurate such that the error of the solution with time step $\Delta t$ can be approximated by the difference between the solution and the benchmark, or the interpolated benchmark if no data is available at that epoch.
 
 \subsection*{c}
 
@@ -270,6 +286,7 @@ For propagation using Cartesian state vector, a typical choice is to use a block
 
 This is achieved because the \texttt{block\_indices} partition the $6 \times 1$ Cartesian state vector into independent $3 \times 1$ position and velocity groups. 
 This allows the integrator to evaluate their error norms separately, preventing the inherently different magnitudes of spatial and kinematic errors from skewing the step-size adaptation.
+The effect can be seen comparing \autoref{fig:Q3b_time_step_vs_time_flyby} with \autoref{fig:Q3d_blockwise_timestep_vs_time_flyby} and \autoref{fig:Q3b_time_step_vs_time_orbit} with \autoref{fig:Q3d_blockwise_timestep_vs_time_orbit}, where the block-wise step size control method elliminates the dips in time step size.
 \begin{lstlisting}
     block_indices = [(0, 0, 3, 1), (3, 0, 3, 1)]
     step_size_control_settings_blockwise = (
@@ -321,7 +338,7 @@ The chosen integrators are indicated in \autoref{fig:Q4b_chosen_error_vs_time_fl
 \end{itemize}
 
 Reasons for your integrator choices: the chosen integrators are the ones with the lowest number of function evaluations that also match the position accuracy requirement of 1 m. 
-Hence, they are the most efficient integrators for the problem considered that comply with the accuracy requirement.
+Hence, they are the most efficient integrators for the problem considered that comply with the accuracy requirement. \footnote{It is the expected behaviour, since the orbit phase (with low eccentricity) has less varying dynamics compared to the flyby one; allowing for a fixed step integrator throught the whole simulation.}
 
 \begin{figure}[H]
     \centering
@@ -344,7 +361,7 @@ Hence, they are the most efficient integrators for the problem considered that c
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{../../figures/Q5_Kr_RKF78.pdf}
-    \caption{Condition numbers for the RKF7(8) fixed step integrator, for the conditions described in the assignment.}
+    \caption{Condition numbers for the RKF7(8) fixed step integrator, for the GCO500 unperturbed phase.}
     \label{fig:Q5_Kr_RKF78}
 \end{figure}
 
@@ -376,7 +393,7 @@ So, since the RK7 method can be approximated by the Taylor expansion up to 7th o
 \end{equation}
 
 \begin{equation} \label{eq:kr_rk7}
-||\mathbf{K}_{\mathbf{r}}(t)|| = \frac{r(\tilde{t_0}) n^8}{8!}.
+||\mathbf{K}_{\mathbf{r}}(t=\tilde{t_0})|| = \frac{r(\tilde{t_0}) n^8}{8!}.
 \end{equation}
 
 The plot for the analytical $||\mathbf{K}_{\mathbf{r}}(t)||$ is also included in \autoref{fig:Q5_Kr_RKF78}.
@@ -395,27 +412,28 @@ and the Taylor expansion around $\tilde{t_0}$ of the position up to 2nd order ca
 \end{equation}
 
 \begin{equation} \label{eq:kr_euler}
-||\mathbf{K}_{\mathbf{r}}(t)||= \frac{r(\tilde{t_0}) n^2}{2!}. 
+||\mathbf{K}_{\mathbf{r}}(t=\tilde{t_0})||= \frac{r(\tilde{t_0}) n^2}{2!}. 
 \end{equation}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{../../figures/Q5_Kr_Euler.pdf}
-    \caption{Condition numbers for the Euler fixed step integrator, for the conditions described in the assignment.}
+    \caption{Condition numbers for the Euler fixed step integrator, for the GCO500 unperturbed phase.}
     \label{fig:Q5_Kr_Euler}
 \end{figure}\subsection*{d}
 
 % \textit{\textbf{Provide reasons for difference in validity of analytical result for Euler and RKF results}}\\
 
-First, it has to be noted that the analytical condition number calculated is much more similar to the one obtained for the Euler method compared with the RKF7(8) method, as it can be observed in \autoref{fig:Q5_Relative_Error_Comparison}.
+First, it has to be noted that the analytical condition number is much more similar to the one obtained for the Euler method compared with the RKF7(8) method, as shown in \autoref{fig:Q5_Relative_Error_Comparison}.
 
-The main reason for the difference in the approximation between the Euler and RKF7(8) methods is that the condition number is calculated with an approximation of the mean motion $n$ under the assumptions listed. 
-Since $|\mathbf{K}_{\mathbf{r}}(t)||$ is proportional to $n^{p+1}$, where $p$ is the order of the method, any error in the estimation of $n$ will be amplified by a factor of $p+1$ in the condition number, which leads to a the bigger error observed for the higher-order method.
-
+The analytical $||\mathbf{K}_{\mathbf{r}}(t)||$ retains only the leading-order truncation error term $\mathcal{O}((\Delta t)^{p+1})$, neglecting higher-order contributions. 
+For Euler ($p=1$), this term dominates overwhelmingly, so the approximation is accurate. 
+For RKF7(8) ($p=7$), the leading coefficient is deliberately suppressed, making higher-order terms non-negligible by comparison and increasing the mismatch. 
+Furthermore, since $||\mathbf{K}_{\mathbf{r}}(t)||$ scales as $n^{p+1}$, any error in the circular-orbit approximation of $n$ is amplified more strongly for the higher-order method, further increasing the discrepancy.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{../../figures/Q5_Relative_Error_Comparison.pdf}
-    \caption{Relative errors in the condition numbers for the RKF7(8) and Euler fixed step integrators, for the conditions described in the assignment.}
+    \caption{Relative errors in the condition numbers for the RKF7(8) and Euler fixed step integrators, for the GCO500 unperturbed phase.}
     \label{fig:Q5_Relative_Error_Comparison}
 \end{figure}
 
