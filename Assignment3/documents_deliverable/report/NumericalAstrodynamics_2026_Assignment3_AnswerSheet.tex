@@ -101,10 +101,10 @@ People you worked with (if none, state this):
     \item Range of time steps where truncation error is dominant (flyby): $\Delta t \in \{32, 64, 128, 256, 512 \} \mathrm{ s}$
 
     \item From the error behaviour in Fig.~\ref{fig:Q1_error_vs_time_combined}, it can be inferred that the maximum error is driven by the truncation error, at least, for $\Delta t \geq 64 \mathrm{ s}$. 
-    To confirm this, and to analyze the limit case observed in Fig.~\ref{fig:Q1_max_error_vs_timestep}, the integration error is plotted only for $\Delta t \in \{32, 16, 8\} \mathrm{ s}$ in Fig.~\ref{fig:Q1_error_vs_time_low_timesteps}. 
-    From the quasi-random evolution for all the timesteps plotted for the flyby it can be stated that the dominant error source is not truncation error. 
-    On the other hand, for the GCO500 integration, the $\Delta t = 32 \mathrm{ s}$ case shows a behavior consistent with the truncation error model (Eq.~\ref{eq:trunc_error_RK}).
-    However, even thought the $\Delta t = 16 \mathrm{ s}$ and $\Delta t = 8 \mathrm{ s}$ cases show a similar behaviour, the error magnitude should be much smaller if it were truncation-driven, so it can be inferred that the dominant error source is rounding error.
+    To confirm this, the error is plotted only for $\Delta t \in \{32, 16, 8\} \mathrm{ s}$ in Fig.~\ref{fig:Q1_error_vs_time_low_timesteps}. 
+    From the evolution for all the timesteps for the flyby it can be stated that the dominant error source is rounding error. 
+    For the GCO500 integration, the $\Delta t = 32 \mathrm{ s}$ phase shows a behavior consistent with the truncation error model.
+    However, although $\Delta t = 16 \text{ \& } 8 \mathrm{ s}$ show a similar behaviour, the error magnitude should be much smaller if it were truncation-driven, so it can be inferred that the dominant error source is rounding error.
 \end{enumerate}
 
 \begin{figure}
@@ -222,14 +222,22 @@ Same reasoning applies to the benchmark method, where the time step difference a
 
 Influence of tolerance on observed error:
 \begin{itemize}
-\item Expected behaviour: smaller tolerance values should yield lower error values. 
-\item Observed behaviour: the error values decrease as the tolerance decreases.
+\item Expected behaviour: 
+
+smaller tolerance values should yield lower error values. 
+\item Observed behaviour:
+
+the error values decrease as the tolerance decreases.
 % \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
 \end{itemize}
 Visible presence of truncation/rounding error in the figures:
 \begin{itemize}
-\item Expected behaviour: because the time step control method assumes dominant truncation error, it will reduce the timestep up to a minimum imposed of $10^{-12}$ s if needed, likely incurring in rounding errors. 
-\item Observed behaviour: the cases with the smallest tolerances show an error evolution indicative of rounding-driven error. 
+\item Expected behaviour: 
+
+because the time step control method assumes dominant truncation error, it will reduce the timestep up to a minimum imposed of $10^{-12}$ s if needed, likely incurring in rounding errors. 
+\item Observed behaviour: 
+
+the cases with the smallest tolerances show an error evolution indicative of rounding-driven error. 
 % \item Explanation for significant discrepancy (if any): \textbf{\textit{Provide answer}}
 \end{itemize}
 \subsection*{b}
@@ -251,11 +259,17 @@ Visible presence of truncation/rounding error in the figures:
 \subsection*{c}
 % Reason for once-per-orbit trend in time step: \textbf{\textit{Provide answer}}\\
 % \\
-Reason for sharp decreases in time step: local variations in the acceleration field (faster variations of the dynamics), where the step size control method needs to reduce the time step to keep the error within the specified tolerance.
+Reason for sharp decreases in time step: 
+
+local variations in the acceleration field (faster variations of the dynamics), where the step size control method needs to reduce the time step to keep the error within the specified tolerance.
+This is specially visible for the flyby phase, where the time step decreases significantly during the epoch around the Time of Closest Approach, given that is the time with the fastest variations in the dynamics, and thus, the need for a smaller time step to keep the error within the specified tolerance.
+
 \subsection*{d}
 
 For propagation using Cartesian state vector, a typical choice is to use a block-wise step size control method, where the state vector is divided into blocks of position and velocity components, and the error is controlled separately for each block.\footnote{\url{https://py.api.tudat.space/en/latest/dynamics/propagation_setup/integrator.html\#tudatpy.dynamics.propagation_setup.integrator.step_size_control_blockwise_scalar_tolerance}}
 
+This is achieved because the \texttt{block\_indices} partition the $6 \times 1$ Cartesian state vector into independent $3 \times 1$ position and velocity groups. 
+This allows the integrator to evaluate their error norms separately, preventing the inherently different magnitudes of spatial and kinematic errors from skewing the step-size adaptation.
 \begin{lstlisting}
     block_indices = [(0, 0, 3, 1), (3, 0, 3, 1)]
     step_size_control_settings_blockwise = (
@@ -301,11 +315,13 @@ For propagation using Cartesian state vector, a typical choice is to use a block
 
 The chosen integrators are indicated in \autoref{fig:Q4b_chosen_error_vs_time_flyby} and \autoref{fig:Q4b_chosen_error_vs_time_orbit} by a star marker.
 
-Integrator choice for orbit phase: RK8 with fixed step size of 256 s.
+\begin{itemize}
+    \item Integrator choice for orbit phase: RK8 with fixed step size of 256 s.
+    \item Integrator choice for flyby phase: RKF5(6) with tolerance of $10^{-10}$.
+\end{itemize}
 
-Integrator choice for flyby phase: RKF5(6) with tolerance of $10^{-10}$.
-
-Reasons for your integrator choices: the chosen integrators are the ones with the lowest number of function evaluations for the position accuracy requirement of 1 m. 
+Reasons for your integrator choices: the chosen integrators are the ones with the lowest number of function evaluations that also match the position accuracy requirement of 1 m. 
+Hence, they are the most efficient integrators for the problem considered that comply with the accuracy requirement.
 
 \begin{figure}[H]
     \centering
