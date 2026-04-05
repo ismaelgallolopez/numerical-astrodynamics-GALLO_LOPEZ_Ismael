@@ -77,23 +77,23 @@
 
 \maketitle
 
+Gemini ha dicho
 \section*{AI Usage Summary}
 
 \section*{AI Usage Declaration}
 
 \subsection*{Description of Usage}
 
-For this assignment, AI tools were used exclusively for debugging assistance, conceptual verification, plotting architecture, and LaTeX formatting. 
+For this assignment, AI tools were used exclusively for debugging assistance, conceptual verification, plotting architecture, and LaTeX formatting.
 
 Specifically, AI was consulted to:
 
 \begin{itemize}
-  \item Debug numerical artifacts, specifically array misalignment issues caused by slight epoch differences at the boundaries of the integration steps.
-  \item Verify the mathematical derivations for isolating correction variables using partitions of the State Transition Matrix ($\Phi_{rv}$) and the Sensitivity Matrix ($S_r$).
-  \item Conceptually discuss the limits of orbital linearity when evaluating the Figure of Merit for Solar Radiation Pressure (SRP) perturbations.
-  \item Structure advanced `matplotlib` figures, including 3D plane projections, 2x2 grid layouts using `minipage`, and multi-panel subplots with shared axes.
-  \item Condense and optimize written physics explanations to ensure strict compliance with assignment line limits while preserving academic rigor.
-  \item Write this very document, summarizing the AI interactions and their role in the assignment.
+\item Clarify underlying Tudatpy C++ API structures and resolve argument TypeError crashes.
+\item Differentiate between API classes (e.g., step size validation vs. control settings) and debug structural logic in nested simulation loops.
+\item Generate Python matplotlib boilerplate code to extract, format, and visualize the numerical propagation data in accordance with the course's AI visualization exception.
+\item Conceptually discuss the mathematical behavior of integrators, such as truncation error dominance, Lagrange interpolator boundaries, and the "accuracy floor" of benchmarks.
+\item Format specific mathematical notations and cross-referencing commands in LaTeX.
 \end{itemize}
 
 AI was not used to blindly generate the core propagation algorithms, solve the differential correctors from scratch, or bypass the fundamental learning objectives. All mathematical formulations, implementation logic, and final physics analyses were developed independently and only refined through discussion.
@@ -101,24 +101,34 @@ AI was not used to blindly generate the core propagation algorithms, solve the d
 \section*{Question 1 - AI Usage}
 
 \subsection*{Description of Usage}
-For Question 1, AI was used to assist with the visualization of the trajectories. This included replacing manual 3D plotting with Tudat's integrated `trajectory_3d` function, fixing a known `matplotlib` bug where the Z-axis label gets cropped out of the figure, and writing the specific syntax to project the 3D trajectory shadows onto the 2D Cartesian planes using the `zdir` argument.
+AI was used to review the initial script to identify missing assignment requirements (extracting maximum error arrays). It was heavily utilized to generate the Python matplotlib code for plotting the error over time (1a) and maximum error versus step size (1b). Additionally, AI provided LaTeX syntax corrections for rendering discrete mathematical subsets (Δt∈{...}) and reusing footnote references.
 
 \section*{Question 2 - AI Usage}
 
 \subsection*{Description of Usage}
-For Question 2, AI was consulted to help diagnose a massive numerical spike in the position difference arrays. The AI identified this as an epoch misalignment boundary artifact and suggested slicing the arrays (`[1:-1]`) to remove the mismatched termination events. AI was also used to verify the mathematical logic of the Figure of Merit (FoM) scaling linearly with the differences in inverse mass ($1/m$).
+AI acted as a conceptual sounding board to structure the logic for comparing the Δt/2 method and the benchmark method without generating the underlying Tudat execution code. It provided the logical framework for avoiding crashes caused by the 8th-order Lagrange interpolator boundary conditions. Finally, AI generated the plotting scripts for 2a, 2b, and 2c, including suggesting a conceptual shift from plotting the absolute error difference to plotting the relative error ratio for clearer physical analysis.
 
 \section*{Question 3 - AI Usage}
 
 \subsection*{Description of Usage}
-For Question 3, AI was used to verify the analytical derivation isolating the $\Delta \mathbf{v}_i$ correction using the inverted $\Phi_{rv}$ submatrix. Additionally, AI provided the plotting logic to dynamically alternate line colors for consecutive arcs and add distinct endpoint markers to visualize the discontinuous boundaries.
+AI was consulted to identify a structural logic flaw in the provided skeleton code regarding the placement of variable tolerance settings outside the iteration loop. It generated the plotting scripts for the variable step size error and step-history (3a and 3b), and later adapted them for the blockwise step control requirements (3c and 3d). AI was also used to conceptually discuss methods for accurately computing the GCO500 orbital period from initial state data, and to verify that sharp drops in step sizes were a physically expected behavior of the control algorithm rather than a software bug.
 
 \section*{Question 4 - AI Usage}
 
 \subsection*{Description of Usage}
-For Question 4, AI was used to verify the slicing of the sensitivity matrix ($S_r$) for the continuous low-thrust model. During the Monte Carlo implementation, AI identified a logical flaw where non-converging runs were still being recorded, and suggested the correct loop control (`continue`) to skip them. Finally, AI was heavily utilized to condense the written explanations of the optimal thrust profile to strictly comply with the 30-line limit without losing the core physical arguments.
+AI was used for theoretical discussions regarding the "U-curve" of numerical integration and why a rounding-error-dominated setup is mathematically invalid as a benchmark. It generated the complex plotting architecture for the workload diagram (Q4a), estimating function evaluations based on Runge-Kutta stages. Additionally, AI was consulted to explain the "accuracy floor" phenomenon observed when comparing highly precise integrators (10 
+−14
+  tolerance) against the fixed 10s/20s benchmark assigned for grading coherence.
+
+\section*{Question 5 - AI Usage}
+
+\subsection*{Description of Usage}
+AI was used to debug the numerical extraction loop, successfully identifying a variable assignment error that was causing the Euler integrator to take a 300-second step instead of a 10-second step. In accordance with the conceptual discussion guidelines, AI assisted in transcribing and structuring the analytical Taylor series derivations for the theoretical error constants (K 
+r
+​
+ ) for both the RKF7(8) and Euler integrators in circular orbits. Finally, AI provided the plotting code to compare the numerical extractions to these theoretical derivations, including a relative percentage error plot.
 \subsection*{General Chat Transcript}
 
-\includepdf[pages=-,pagecommand={},scale=0.95,frame=false]{Gemini-_22.pdf}
+\includepdf[pages=-,pagecommand={},scale=0.95,frame=false]{_NA - Assignment 3 Conversación fijada.pdf}
 
 \end{document}
